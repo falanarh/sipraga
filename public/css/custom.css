@@ -1,0 +1,15 @@
+.bg-rounded-prior {
+    padding: 5px 10px; /* Untuk memberikan ruang di dalam elemen */
+    color: #fff; /* Untuk mengubah warna teks agar lebih terlihat di latar belakang oranye */
+    display: inline-block;
+}
+
+.bg-rounded-status {
+    padding: 5px 10px; /* Untuk memberikan ruang di dalam elemen */
+    color: #fff; /* Untuk mengubah warna teks agar lebih terlihat di latar belakang oranye */
+    display: inline-block;
+}
+
+#example td {
+    vertical-align: middle;
+}
