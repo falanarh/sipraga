@@ -17,7 +17,7 @@
                     <span class="hide-menu">PENCATATAN</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="#1" aria-expanded="false">
+                    <a class="sidebar-link" href="#" aria-expanded="false">
                         <span>
                             <img src="{{ asset('images/icons/folder-cog.svg') }}" width="25px" height="25px">
                         </span>
@@ -45,7 +45,7 @@
                     <span class="hide-menu">PEMINJAMAN</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="#4" aria-expanded="false">
+                    <a class="sidebar-link" href="/admin/data-ruangan" aria-expanded="false">
                         <span>
                             <img src="{{ asset('images/icons/building.svg') }}" width="25px" height="25px">
                         </span>
@@ -53,7 +53,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="#5" aria-expanded="false">
+                    <a class="sidebar-link" href="/admin/ketersediaan-ruangan" aria-expanded="false">
                         <span>
                             <img src="{{ asset('images/icons/checkbox.svg') }}" width="25px" height="25px">
                         </span>
@@ -61,7 +61,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="#6" aria-expanded="false">
+                    <a class="sidebar-link" href="/admin/pengelolaan-peminjaman" aria-expanded="false">
                         <span>
                             <img src="{{ asset('images/icons/calendar-event.svg') }}" width="25px" height="25px">
                         </span>

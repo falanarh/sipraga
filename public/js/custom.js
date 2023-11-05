@@ -22,3 +22,14 @@ elements2.forEach((element) => {
     }
 });
 
+let elements3 = document.querySelectorAll(".bg-rounded-status-pengelolaan");
+elements3.forEach((element) => {
+    if (element.textContent === "Menunggu") {
+        element.style.backgroundColor = "#FFAE1F";
+    } else if (element.textContent === "Disetujui") {
+        element.style.backgroundColor = "#13DEB9";
+    } else if (element.textContent === "Ditolak") {
+        element.style.backgroundColor = "#FF2C1F";
+    }
+});
+

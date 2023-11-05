@@ -215,3 +215,17 @@ $navbar-light-color: rgba($gray-600, 1) !default;
 $navbar-light-hover-color: rgba($primary, 1) !default;
 $navbar-dark-color: rgba($gray-300, 1) !default;
 $navbar-dark-hover-color: rgba($primary, 1) !default;
+
+.text-fluid {
+  @include media-breakpoint-down(lg) {
+    padding: rfs-fluid-value(2rem);
+    font-size: rfs-fluid-value(1.125rem);
+  }
+}
+
+@media (max-width: 991.98px) {
+  .text-fluid {
+    padding: calc(1.325rem + 0.9vw);
+    font-size: 1.125rem; /* 1.125rem is small enough, so RFS won't rescale this */
+  }
+}

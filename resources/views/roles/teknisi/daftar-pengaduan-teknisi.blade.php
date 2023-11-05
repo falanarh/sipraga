@@ -15,9 +15,8 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <p class="table-title text-dark" style="font-size:18px; font-weight: 600;">DAFTAR PENGADUAN SARANA DAN PRASARANA
-                KELAS</p>
-            <table id="example" class="table table-striped">
+            <p class="table-title text-dark">DAFTAR PENGADUAN SARANA DAN PRASARANA KELAS</p>
+            <table id="example" class="table table-striped responsive" style="width: 100%;">
                 <thead class="text-dark" style="border: 1px solid #000;">
                     <tr>
                         <th>No</th>
