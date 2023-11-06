@@ -15,11 +15,10 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <p class="table-title text-dark" style="font-size:18px; font-weight: 600; text-align: center;"> Formulir Pengaduan Sarana dan 
-            Prasarana Kelas</p>
+            <p class="table-title text-dark text-uppercase" style="font-size:18px; font-weight: 600; text-align: center;"> Formulir Pengaduan Sarana dan Prasarana Kelas</p>
             <form>
                 <div class="mb-3">
-                    <label for="nup" class="form-label">Jenis Sarana dan Prasarana Barang</label>
+                    <label for="nup" class="form-label">Jenis Barang</label>
                     <select id="nup" class="form-select">
                         <option value="">Pilih Jenis Barang</option>
                         <option value="barang1">Barang 1</option>
@@ -54,7 +53,7 @@
                     <label for="lampiran" class="form-label">Bukti Pengaduan</label>
                     <input type="file" class="form-control" id="lampiran">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary mt-4">Submit</button>
               </form> 
         </div>
     </div>
