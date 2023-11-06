@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -62,7 +63,9 @@
     </script>
     <script>
         new DataTable('#example');
-                    
+        new DataTable('#example2');
+
+       
         $(function() {
             $(document).on('click', '#terima', function(e) {
                 e.preventDefault();

@@ -12,11 +12,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/dashboard', function () {
-    return view('layouts.dashboard');
-});
-
+//Falana
 Route::get('/teknisi/daftar-pengaduan', function () {
     return view('roles.teknisi.daftar-pengaduan-teknisi');
 });
@@ -72,4 +68,29 @@ Route::get('/admin/data-master/edit-sarpras', function () {
 
 Route::get('/admin/data-master/detail', function () {
     return view('roles.admin.data-master-detail-admin');
+});
+
+//Gita
+Route::get('/admin/jadwal-pengecekan-kelas', function () {
+    return view('roles.admin.jadwal-pengecekan-kelas-admin');
+});
+
+Route::get('/admin/barang-habis-pakai', function () {
+    return view('roles.admin.barang-habis-pakai-admin');
+});
+
+Route::get('/admin/barang-habis-pakai/tambah-bhp', function () {
+    return view('roles.admin.tambah-bhp-admin');
+});
+
+Route::get('/koordinator/jadwal-pengecekan-kelas', function () {
+    return view('roles.koordinator.jadwal-pengecekan-kelas-koordinator');
+});
+
+Route::get('/koordinator/jadwal-pengecekan-kelas/penugasan', function () {
+    return view('roles.koordinator.penugasan-admin');
+});
+
+Route::get('/pemakaibhp/pengambilan', function () {
+    return view('roles.pemakaibhp.pengambilan-pemakaibhp');
 });

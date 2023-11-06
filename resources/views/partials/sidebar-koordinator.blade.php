@@ -17,7 +17,7 @@
             <span class="hide-menu">PENCATATAN</span>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="#1" aria-expanded="false">
+            <a class="sidebar-link" href="/koordinator/jadwal-pengecekan-kelas" aria-expanded="false">
               <span>
                 <img src="{{ asset('images/icons/calendar-time.svg') }}" width="25px" height="25px">
               </span>

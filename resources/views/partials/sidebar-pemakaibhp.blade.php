@@ -17,7 +17,7 @@
             <span class="hide-menu">PENGAMBILAN BHP</span>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="#1" aria-expanded="false">
+            <a class="sidebar-link" href="/pemakaibhp/pengambilan" aria-expanded="false">
               <span>
                 <img src="{{ asset('images/icons/notes.svg') }}" width="25px" height="25px">
               </span>

@@ -44,3 +44,41 @@ elements4.forEach((element) => {
     }
 });
 
+let elements5 = document.querySelectorAll(".bg-rounded-status-pengecekan");
+elements5.forEach((element) => {
+    if (element.textContent === "Belum dikerjakan") {
+        element.style.backgroundColor = "#FFAE1F";
+    } else if (element.textContent === "Sudah dikerjakan") {
+        element.style.backgroundColor = "#13DEB9";
+    }
+});
+
+// Fungsi untuk menampilkan SweetAlert konfirmasi
+function showConfirmUbahDialog() {
+    Swal.fire({
+        title: "Yakin ingin mengubah status jadwal?",
+        text: "Anda tidak dapat mengembalikan ini!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, ubah!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Aksi yang ingin Anda lakukan ketika konfirmasi diterima
+            Swal.fire(
+                "Diubah!",
+                "Status jadwal telah berhasil diubah.",
+                "success"
+            );
+        }
+    });
+}
+
+// Menambahkan event listener ke tombol "Ubah"
+document.querySelectorAll(".ubahButton").forEach(function (button) {
+    button.addEventListener("click", function (e) {
+        e.preventDefault(); // Untuk mencegah aksi bawaan dari hyperlink
+        showConfirmUbahDialog(); // Menampilkan konfirmasi saat tombol "Ubah" diklik
+    });
+});

@@ -1,12 +1,6 @@
 {{-- Mewarisi semua konten dari view dashboard --}}
 @extends('layouts.dashboard')
 
-{{-- @section('DataTables')
-    <script>
-       
-    </script>
-@endsection --}}
-
 {{-- Menambahkan sidebar untuk teknisi --}}
 @section('sidebar')
     @include('partials.sidebar-admin')

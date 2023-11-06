@@ -25,7 +25,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="#2" aria-expanded="false">
+                    <a class="sidebar-link" href="/admin/barang-habis-pakai" aria-expanded="false">
                         <span>
                             <img src="{{ asset('images/icons/books.svg') }}" width="25px" height="25px">
                         </span>
@@ -33,7 +33,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="#3" aria-expanded="false">
+                    <a class="sidebar-link" href="/admin/jadwal-pengecekan-kelas" aria-expanded="false">
                         <span>
                             <img src="{{ asset('images/icons/calendar-time.svg') }}" width="25px" height="25px">
                         </span>
