@@ -1,4 +1,4 @@
-.bg-rounded-prior, .bg-rounded-status, .bg-rounded-status-pengelolaan , .bg-rounded-jenis, .bg-rounded-status-pengecekan{
+.bg-rounded-prior, .bg-rounded-status, .bg-rounded-status-pengelolaan , .bg-rounded-jenis, .bg-rounded-status-pengecekan, .bg-rounded-status-monitoring{
     padding: 2px 10px; /* Untuk memberikan ruang di dalam elemen */
     color: #fff; /* Untuk mengubah warna teks agar lebih terlihat di latar belakang */
     text-align: center;
@@ -28,6 +28,13 @@
 @media (max-width: 525px) {
     .fluid-text, .fluid-text-display, .table-title {
         font-size: 16px; /* Ubah ukuran font sesuai kebutuhan Anda */
+    }
+}
+
+/* CSS untuk layar berukuran <= 525px */
+@media (max-width: 445px) {
+    .fluid-text, .fluid-text-display, .table-title {
+        font-size: 12px; /* Ubah ukuran font sesuai kebutuhan Anda */
     }
 }
 

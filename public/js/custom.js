@@ -53,6 +53,18 @@ elements5.forEach((element) => {
     }
 });
 
+let elements6 = document.querySelectorAll(".bg-rounded-status-monitoring");
+elements6.forEach((element) => {
+    if (element.textContent === "Belum Dikerjakan") {
+        element.style.backgroundColor = "#FFAE1F";
+    } else if (element.textContent === "Sedang Dikerjakan") {
+        element.style.backgroundColor = "#539BFF";
+    } else if (element.textContent === "Selesai Dikerjakan") {
+        element.style.backgroundColor = "#13DEB9";
+    }
+});
+
+
 // Fungsi untuk menampilkan SweetAlert konfirmasi
 function showConfirmUbahDialog() {
     Swal.fire({

@@ -94,3 +94,12 @@ Route::get('/koordinator/jadwal-pengecekan-kelas/penugasan', function () {
 Route::get('/pemakaibhp/pengambilan', function () {
     return view('roles.pemakaibhp.pengambilan-pemakaibhp');
 });
+
+//Sari
+Route::get('/teknisi/jadwal-pemeliharaan', function () {
+    return view('roles.teknisi.jadwal-pemeliharaan-teknisi');
+});
+
+Route::get('/teknisi/jadwal-pemeliharaan/pemeliharaan', function () {
+    return view('roles.teknisi.pemeliharaan-teknisi');
+});
