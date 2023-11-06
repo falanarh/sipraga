@@ -17,7 +17,7 @@
                     <span class="hide-menu">PENCATATAN</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="#" aria-expanded="false">
+                    <a class="sidebar-link" href="/admin/data-master" aria-expanded="false">
                         <span>
                             <img src="{{ asset('images/icons/folder-cog.svg') }}" width="25px" height="25px">
                         </span>

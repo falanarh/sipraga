@@ -33,3 +33,14 @@ elements3.forEach((element) => {
     }
 });
 
+let elements4 = document.querySelectorAll(".bg-rounded-jenis");
+elements4.forEach((element) => {
+    if (element.textContent === "Kursi") {
+        element.style.backgroundColor = "#2EC586";
+    } else if (element.textContent === "Meja Dosen") {
+        element.style.backgroundColor = "#2E86C5";
+    } else if (element.textContent === "Papan Tulis") {
+        element.style.backgroundColor = "#FFAE1F";
+    }
+});
+

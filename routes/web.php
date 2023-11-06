@@ -57,4 +57,19 @@ Route::get('/admin/data-ruangan/tambah-ruang', function () {
     return view('roles.admin.tambah-ruangan-admin');
 });
 
+//Anggy
+Route::get('/admin/data-master', function () {
+    return view('roles.admin.data-master-admin');
+});
 
+Route::get('/admin/data-master/tambah-sarpras', function () {
+    return view('roles.admin.tambah-sarpras-admin');
+});
+
+Route::get('/admin/data-master/edit-sarpras', function () {
+    return view('roles.admin.edit-sarpras-admin');
+});
+
+Route::get('/admin/data-master/detail', function () {
+    return view('roles.admin.data-master-detail-admin');
+});
