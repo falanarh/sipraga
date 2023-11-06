@@ -103,3 +103,12 @@ Route::get('/teknisi/jadwal-pemeliharaan', function () {
 Route::get('/teknisi/jadwal-pemeliharaan/pemeliharaan', function () {
     return view('roles.teknisi.pemeliharaan-teknisi');
 });
+
+//Haykal
+Route::get('/teknisi/daftar-pemeliharaan', function () {
+    return view('roles.teknisi.daftar-pemeliharaan-teknisi');
+});
+
+Route::get('/teknisi/daftar-pemeliharaan/detail', function () {
+    return view('roles.teknisi.daftar-pemeliharaan-detail-teknisi');
+});

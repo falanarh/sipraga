@@ -25,7 +25,7 @@
           </a>
         </li>
         <li class="sidebar-item">
-          <a class="sidebar-link" href="#2" aria-expanded="false">
+          <a class="sidebar-link" href="/teknisi/daftar-pemeliharaan" aria-expanded="false">
             <span>
               <img src="{{ asset('images/icons/settings-plus.svg') }}" width="25px" height="25px">
             </span>
