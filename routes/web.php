@@ -112,3 +112,44 @@ Route::get('/teknisi/daftar-pemeliharaan', function () {
 Route::get('/teknisi/daftar-pemeliharaan/detail', function () {
     return view('roles.teknisi.daftar-pemeliharaan-detail-teknisi');
 });
+
+//Sindu
+Route::get('/teknisi/daftar-pengaduan/detail/catat', function () {
+    return view('roles.teknisi.perbaikan-teknisi');
+});
+
+Route::get('/teknisi/daftar-perbaikan', function () {
+    return view('roles.teknisi.daftar-perbaikan-teknisi');
+});
+
+Route::get('/teknisi/daftar-perbaikan/detail', function () {
+    return view('roles.teknisi.daftar-perbaikan-detail-teknisi');
+});
+
+Route::get('/koordinator/daftar-pengaduan', function () {
+    return view('roles.koordinator.daftar-pengaduan-koordinator');
+}); 
+
+Route::get('/koordinator/daftar-pengaduan/detail', function () {
+    return view('roles.koordinator.daftar-pengaduan-detail-koordinator');
+}); 
+
+Route::get('/koordinator/daftar-perbaikan', function () {
+    return view('roles.koordinator.daftar-perbaikan-koordinator');
+}); 
+
+Route::get('/koordinator/daftar-perbaikan/detail', function () {
+    return view('roles.koordinator.daftar-perbaikan-detail-koordinator');
+}); 
+
+Route::get('/pelapor/buat-pengaduan', function () {
+    return view('roles.pelapor.form-pengaduan-pelapor');
+});
+
+Route::get('/pelapor/daftar-pengaduan', function () {
+    return view('roles.pelapor.daftar-pengaduan-pelapor');
+});
+
+Route::get('/pelapor/daftar-pengaduan/detail', function () {
+    return view('roles.pelapor.daftar-pengaduan-detail-pelapor');
+});

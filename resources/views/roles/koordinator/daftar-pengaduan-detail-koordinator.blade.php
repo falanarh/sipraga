@@ -1,29 +1,25 @@
 {{-- Mewarisi semua konten dari view dashboard --}}
 @extends('layouts.dashboard')
 
-{{-- Menambahkan sidebar untuk teknisi --}}
+{{-- Menambahkan sidebar untuk koordinator --}}
 @section('sidebar')
-    @include('partials.sidebar-teknisi')
+    @include('partials.sidebar-koordinator')
 @endsection
 
-{{-- Menambahkan header untuk teknisi --}}
+{{-- Menambahkan header untuk koordinator --}}
 @section('header')
-    @include('partials.header-teknisi')
+    @include('partials.header-koordinator')
 @endsection
 
 {{-- Menambahkan konten yang sesuai --}}
 @section('content')
     <div class="card">
         <div class="card-body">
-            <div class="title d-flex mb-4">
-                <a href="/teknisi/daftar-pengaduan" class="table-title d-flex text-dark">
-                    DAFTAR PENGADUAN SARANA DAN PRASARANA KELAS 
-                </a>
-                <img class="mx-2" src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
-                <a href="/teknisi/daftar-pengaduan/detail" class="table-title d-flex text-dark">
-                    101
-                </a>            
-            </div>
+            <p class="table-title text-dark" style="font-size:18px; font-weight: 600;">
+                DAFTAR PENGADUAN SARANA DAN PRASARANA KELAS 
+                <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="arrow-right" width="33px" height="25px">
+                101
+            </p>
             <table class="table table-striped mt-5" style="width: 100%;">
                 <tr>
                     <th class="fw-bolder">Nomor</th>
@@ -51,7 +47,18 @@
                 </tr>
                 <tr>
                     <th class="fw-bolder">Teknisi</th>
-                    <td>Falana Rofako</td>
+                    <td>
+                        <select id="prioritas" class="form-select border-0 px-0">
+                            <option value="">Pilih Nama Admin</option>
+                            <option value="Falana">Falana</option>
+                            <option value="Sindu">Sindu</option>
+                            <option value="Sari">Sari</option>
+                        </select>   
+                    </td>
+                </tr>
+                <tr>
+                    <th class="fw-bolder">Deskripsi</th>
+                    <td>Proyektor tidak menyala</td>
                 </tr>
                 <tr>
                     <th class="fw-bolder">Bukti</th>
@@ -60,7 +67,8 @@
                     </td>
                 </tr>
             </table>
-            <a href="/teknisi/daftar-pengaduan/detail/catat" class="btn btn-success">Catat Perbaikan</a>
+            <a href="" class="btn btn-primary mt-4">Terima</a>
+            <a href="" class="btn btn-danger mt-4 mx-2">Tolak</a>
         </div>
     </div>
 @endsection

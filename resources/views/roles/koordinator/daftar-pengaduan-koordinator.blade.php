@@ -1,21 +1,21 @@
 {{-- Mewarisi semua konten dari view dashboard --}}
 @extends('layouts.dashboard')
 
-{{-- Menambahkan sidebar untuk teknisi --}}
+{{-- Menambahkan sidebar untuk koordinator --}}
 @section('sidebar')
-    @include('partials.sidebar-teknisi')
+    @include('partials.sidebar-koordinator')
 @endsection
 
-{{-- Menambahkan header untuk teknisi --}}
+{{-- Menambahkan header untuk koordinator --}}
 @section('header')
-    @include('partials.header-teknisi')
+    @include('partials.header-koordinator')
 @endsection
 
 {{-- Menambahkan konten yang sesuai --}}
 @section('content')
     <div class="card">
         <div class="card-body">
-            <p class="table-title text-dark">DAFTAR PENGADUAN SARANA DAN PRASARANA KELAS</p>
+            <p class="table-title text-dark" style="font-size:18px; font-weight: 600;">DAFTAR PENGADUAN SARANA DAN PRASARANA KELAS</p>
             <table id="example" class="table table-striped responsive" style="width: 100%;">
                 <thead class="text-dark" style="border: 1px solid #000;">
                     <tr>
@@ -25,6 +25,7 @@
                         <th>Ruang</th>
                         <th>Prioritas</th>
                         <th>Status</th>
+                        <th>Teknisi</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -40,8 +41,9 @@
                         <td>
                             <div class="bg-rounded-status rounded-pill">Dikerjakan</div>
                         </td>
+                        <td>-</td>
                         <td>
-                            <a href="/teknisi/daftar-pengaduan/detail" class="btn btn-dark">Detail</a>
+                            <a href="/koordinator/daftar-pengaduan/detail" class="btn btn-dark">Detail</a>
                         </td>
                     </tr>
                     <tr>
@@ -55,8 +57,9 @@
                         <td>
                             <div class="bg-rounded-status rounded-pill">Selesai</div>
                         </td>
+                        <td>Falana Rofako</td>
                         <td>
-                            <a href="/teknisi/daftar-pengaduan/detail" class="btn btn-dark">Detail</a>
+                            <a href="/koordinator/daftar-pengaduan/detail" class="btn btn-dark">Detail</a>
                         </td>
                     </tr>
                     <tr>
@@ -70,8 +73,9 @@
                         <td>
                             <div class="bg-rounded-status rounded-pill">Selesai</div>
                         </td>
+                        <td>Sindu Dinar</td>
                         <td>
-                            <a href="/teknisi/daftar-pengaduan/detail" class="btn btn-dark">Detail</a>
+                            <a href="/koordinator/daftar-pengaduan/detail" class="btn btn-dark">Detail</a>
                         </td>
                     </tr>
                 </tbody>
@@ -83,6 +87,7 @@
                         <th>Ruang</th>
                         <th>Prioritas</th>
                         <th>Status</th>
+                        <th>Teknisi</th>
                         <th>Aksi</th>
                     </tr>
                 </tfoot>

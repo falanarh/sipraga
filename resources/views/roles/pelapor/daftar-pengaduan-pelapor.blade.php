@@ -1,27 +1,28 @@
 {{-- Mewarisi semua konten dari view dashboard --}}
 @extends('layouts.dashboard')
 
-{{-- Menambahkan sidebar untuk teknisi --}}
+{{-- Menambahkan sidebar untuk pelapor --}}
 @section('sidebar')
-    @include('partials.sidebar-teknisi')
+    @include('partials.sidebar-pelapor')
 @endsection
 
-{{-- Menambahkan header untuk teknisi --}}
+{{-- Menambahkan header untuk pelapor --}}
 @section('header')
-    @include('partials.header-teknisi')
+    @include('partials.header-pelapor')
 @endsection
 
 {{-- Menambahkan konten yang sesuai --}}
 @section('content')
     <div class="card">
         <div class="card-body">
-            <p class="table-title text-dark">DAFTAR PENGADUAN SARANA DAN PRASARANA KELAS</p>
+            <p class="table-title text-dark" style="font-size:18px; font-weight: 600;">DAFTAR PENGADUAN SARANA DAN PRASARANA
+                KELAS</p>
             <table id="example" class="table table-striped responsive" style="width: 100%;">
                 <thead class="text-dark" style="border: 1px solid #000;">
                     <tr>
                         <th>No</th>
                         <th>Tanggal</th>
-                        <th>Kode</th>
+                        <th>NUP</th>
                         <th>Ruang</th>
                         <th>Prioritas</th>
                         <th>Status</th>
@@ -41,7 +42,7 @@
                             <div class="bg-rounded-status rounded-pill">Dikerjakan</div>
                         </td>
                         <td>
-                            <a href="/teknisi/daftar-pengaduan/detail" class="btn btn-dark">Detail</a>
+                            <a href="/pelapor/daftar-pengaduan/detail" class="btn btn-dark">Detail</a>
                         </td>
                     </tr>
                     <tr>
@@ -56,7 +57,7 @@
                             <div class="bg-rounded-status rounded-pill">Selesai</div>
                         </td>
                         <td>
-                            <a href="/teknisi/daftar-pengaduan/detail" class="btn btn-dark">Detail</a>
+                            <a href="/pelapor/daftar-pengaduan/detail" class="btn btn-dark">Detail</a>
                         </td>
                     </tr>
                     <tr>
@@ -71,7 +72,7 @@
                             <div class="bg-rounded-status rounded-pill">Selesai</div>
                         </td>
                         <td>
-                            <a href="/teknisi/daftar-pengaduan/detail" class="btn btn-dark">Detail</a>
+                            <a href="/pelapor/daftar-pengaduan/detail" class="btn btn-dark">Detail</a>
                         </td>
                     </tr>
                 </tbody>
