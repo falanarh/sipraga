@@ -8,7 +8,7 @@
 
 {{-- Menambahkan header untuk koordinator --}}
 @section('header')
-    @include('partials.header-koordinator')
+    @include('partials.header')
 @endsection
 
 {{-- Menambahkan konten yang sesuai --}}

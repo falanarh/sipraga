@@ -47,7 +47,7 @@
 
 {{-- Menambahkan header untuk admin --}}
 @section('header')
-    @include('partials.header-admin')
+    @include('partials.header')
 @endsection
 
 {{-- Menambahkan konten yang sesuai --}}

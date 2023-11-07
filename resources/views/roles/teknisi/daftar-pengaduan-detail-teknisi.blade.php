@@ -8,7 +8,7 @@
 
 {{-- Menambahkan header untuk teknisi --}}
 @section('header')
-    @include('partials.header-teknisi')
+    @include('partials.header')
 @endsection
 
 {{-- Menambahkan konten yang sesuai --}}

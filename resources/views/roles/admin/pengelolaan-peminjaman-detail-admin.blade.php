@@ -22,7 +22,7 @@
                 <img class="mx-2" src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
                 <a href="/admin/pengelolaan-peminjaman/detail" class="table-title d-flex text-dark">
                     1
-                </a>            
+                </a>
             </div>
             {{-- <a href="/admin/pengelolaan-peminjaman" class="table-title text-dark d-block mb-4">DAFTAR PENGELOLAAN PEMINJAMAN
                 RUANGAN</a> --}}
@@ -56,7 +56,7 @@
                     <td>-</td>
                 </tr>
             </table>
-            <a href="#" id="terima" class="btn btn-primary">Terima</a>
+            <a href="#" id="terima-peminjaman" class="btn btn-primary">Terima</a>
 
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#modal-tolak">
@@ -70,8 +70,9 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5 fw-bolder text-uppercase" id="modal-tolakLabel">Tolak Pengajuan Peminjaman Ruangan</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <h1 class="modal-title fs-5 fw-bolder text-uppercase" id="modal-tolakLabel">Tolak Pengaduan Peminjaman Ruangan</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="mb-3">

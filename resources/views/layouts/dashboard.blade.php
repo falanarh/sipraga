@@ -67,7 +67,7 @@
 
        
         $(function() {
-            $(document).on('click', '#terima', function(e) {
+            $(document).on('click', '#terima-peminjaman', function(e) {
                 e.preventDefault();
                 var link = $(this).attr("href");
 
@@ -84,6 +84,31 @@
                         Swal.fire(
                             'Diterima!',
                             'Pengajuan peminjaman telah diterima.',
+                            'success'
+                        )
+                    }
+                })
+            })
+        })
+
+        $(function() {
+            $(document).on('click', '#terima-pengaduan', function(e) {
+                e.preventDefault();
+                var link = $(this).attr("href");
+
+                Swal.fire({
+                    title: 'Anda yakin untuk terima pengaduan?',
+                    text: "Anda tidak dapat mengembalikan ini!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, terima!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                            'Diterima!',
+                            'Pengaduan sarpras telah diterima.',
                             'success'
                         )
                     }

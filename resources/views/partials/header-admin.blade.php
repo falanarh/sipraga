@@ -2,7 +2,7 @@
 
 @section('time', 'Malam')
 
-@section('first-name', "Falana")
+@section('first-name', {{ $userName }})
 
 @section('role', 'Admin')
 

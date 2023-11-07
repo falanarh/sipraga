@@ -15,10 +15,10 @@
       </ul>
       <div class="navbar-collapse justify-content-end mx-2 px-0 d-flex align-items-center justify-content-between" id="navbarNav">
         <ul class="navbar-nav d-flex align-items-center justify-content-end">
-          <p class="fluid-text m-0 text-dark">Selamat @yield('time'), @yield('first-name')!</p>
+          <p class="fluid-text m-0 text-dark">Selamat {{ $userInfo['timeOfDay'] }}, {{ $userInfo['name'] }}!</p>
         </ul>
         <ul class="navbar-nav flex-row align-items-center justify-content-end">
-          <p class="fluid-text-display m-0 text-dark">@yield('role')</p>
+          <p class="fluid-text-display m-0 text-dark">{{ $userInfo['role']  }}</p>
           <a href="#" class="ms-3">
             <img src="{{ asset('../images/profile/user-1.jpg') }}" alt="" width="35" height="35" class="rounded-circle">
           </a>

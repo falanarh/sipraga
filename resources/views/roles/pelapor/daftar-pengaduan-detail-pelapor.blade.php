@@ -8,7 +8,7 @@
 
 {{-- Menambahkan header untuk pelapor --}}
 @section('header')
-    @include('partials.header-pelapor')
+    @include('partials.header')
 @endsection
 
 {{-- Menambahkan konten yang sesuai --}}

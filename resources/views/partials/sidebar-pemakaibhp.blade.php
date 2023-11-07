@@ -37,7 +37,7 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="#5" aria-expanded="false">
+            <a class="sidebar-link" href="/logout" aria-expanded="false">
               <span>
                 <img src="{{ asset('images/icons/logout.svg') }}" width="25px" height="25px">
               </span>

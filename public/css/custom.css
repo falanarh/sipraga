@@ -24,6 +24,13 @@
     filter: invert(100%);
 }
 
+.line {
+    border-top: 1px solid #DEE4ED; /* Warna dan ketebalan garis sesuaikan dengan kebutuhan Anda */
+    margin-top: 20px; /* Atur jarak di atas garis jika diperlukan */
+    margin-bottom: 20px; /* Atur jarak di bawah garis jika diperlukan */
+  }
+  
+
 /* CSS untuk layar berukuran <= 525px */
 @media (max-width: 525px) {
     .fluid-text, .fluid-text-display, .table-title {

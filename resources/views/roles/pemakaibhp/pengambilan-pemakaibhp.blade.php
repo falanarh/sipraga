@@ -8,7 +8,7 @@
 
 {{-- Menambahkan header untuk pemakaibhp --}}
 @section('header')
-    @include('partials.header-pemakaibhp')
+    @include('partials.header')
 @endsection
 
 {{-- Menambahkan konten yang sesuai --}}

@@ -1,6 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PelaporController;
+use App\Http\Controllers\TeknisiController;
+use App\Http\Controllers\PemakaiBHPController;
+use App\Http\Controllers\KoordinatorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,144 +18,140 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-//Falana
-Route::get('/teknisi/daftar-pengaduan', function () {
-    return view('roles.teknisi.daftar-pengaduan-teknisi');
+//Login
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', [LoginController::class, 'index'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
 });
 
-Route::get('/teknisi/daftar-pengaduan/detail', function () {
-    return view('roles.teknisi.daftar-pengaduan-detail-teknisi');
+Route::middleware(['auth'])->group(function () {
+    //Logout
+    Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+    // Route untuk Teknisi
+    Route::middleware(['userAkses:Teknisi'])->group(function () {
+        Route::get('/teknisi/daftar-pengaduan', [TeknisiController::class, 'daftarPengaduan']);
+        Route::get('/teknisi/daftar-pengaduan/detail', [TeknisiController::class, 'daftarPengaduanDetail']);
+        Route::get('/teknisi/jadwal-pemeliharaan', [TeknisiController::class, 'jadwalPemeliharaan']);
+        Route::get('/teknisi/jadwal-pemeliharaan/pemeliharaan', [TeknisiController::class, 'pemeliharaan']);
+        Route::get('/teknisi/daftar-pemeliharaan', [TeknisiController::class, 'daftarPemeliharaan']);
+        Route::get('/teknisi/daftar-pemeliharaan/detail', [TeknisiController::class, 'daftarPemeliharaanDetail']);
+        Route::get('/teknisi/daftar-pengaduan/detail/catat', [TeknisiController::class, 'perbaikan']);
+        Route::get('/teknisi/daftar-perbaikan', [TeknisiController::class, 'daftarPerbaikan']);
+        Route::get('/teknisi/daftar-perbaikan/detail', [TeknisiController::class, 'daftarPerbaikanDetail']);
+    });
+
+    // Route untuk Admin
+    Route::middleware(['userAkses:Admin'])->group(function () {
+        Route::get('/admin/data-ruangan', [AdminController::class, 'dataRuangan']);
+        Route::get('/admin/ketersediaan-ruangan', [AdminController::class, 'ketersediaanRuangan']);
+        Route::get('/admin/ketersediaan-ruangan/detail', [AdminController::class, 'ketersediaanRuanganDetail']);
+        Route::get('/admin/data-ruangan/edit-ruang', [AdminController::class, 'editRuangan']);
+        Route::get('/admin/data-ruangan/tambah-ruang', [AdminController::class, 'tambahRuangan']);
+        Route::get('/admin/pengelolaan-peminjaman', [AdminController::class, 'pengelolaanPeminjaman']);
+        Route::get('/admin/pengelolaan-peminjaman/detail', [AdminController::class, 'pengelolaanPeminjamanDetail']);
+        Route::get('/admin/data-master', [AdminController::class, 'dataMaster']);
+        Route::get('/admin/data-master/detail', [AdminController::class, 'dataMasterDetail']);
+        Route::get('/admin/data-master/tambah-sarpras', [AdminController::class, 'tambahSarpras']);
+        Route::get('/admin/data-master/edit-sarpras', [AdminController::class, 'editSarpras']);
+        Route::get('/admin/jadwal-pengecekan-kelas', [AdminController::class, 'jadwalPengecekanKelas']);
+        Route::get('/admin/barang-habis-pakai', [AdminController::class, 'barangHabisPakai']);
+        Route::get('/admin/barang-habis-pakai/tambah-bhp', [AdminController::class, 'tambahBHP']);
+    });
+
+    // Route untuk Koordinator
+    Route::middleware(['userAkses:Koordinator'])->group(function () {
+        Route::get('/koordinator/jadwal-pengecekan-kelas', [KoordinatorController::class, 'jadwalPengecekanKelas']);
+        Route::get('/koordinator/jadwal-pengecekan-kelas/penugasan', [KoordinatorController::class, 'penugasan']);
+        Route::get('/koordinator/daftar-pengaduan', [KoordinatorController::class, 'daftarPengaduan']);
+        Route::get('/koordinator/daftar-pengaduan/detail', [KoordinatorController::class, 'daftarPengaduanDetail']);
+        Route::get('/koordinator/daftar-perbaikan', [KoordinatorController::class, 'daftarPerbaikan']);
+        Route::get('/koordinator/daftar-perbaikan/detail', [KoordinatorController::class, 'daftarPerbaikanDetail']);
+    });
+
+    // Route untuk Pelapor
+    Route::middleware(['userAkses:Pelapor'])->group(function () {
+        Route::get('/pelapor/buat-pengaduan', [PelaporController::class, 'buatPengaduan']);
+        Route::get('/pelapor/daftar-pengaduan', [PelaporController::class, 'daftarPengaduan']);
+        Route::get('/pelapor/daftar-pengaduan/detail', [PelaporController::class, 'daftarPengaduanDetail']);
+    });
+
+    // Route untuk Pemakai BHP
+    Route::middleware(['userAkses:PemakaiBHP'])->group(function () {
+        Route::get('/pemakaibhp/pengambilan', [PemakaiBHPController::class, 'pengambilan']);
+    });
+
+    Route::get('/home', [LoginController::class, 'authenticated']);
 });
 
-Route::get('/teknisi/daftar-pengaduan/pencatatan-perbaikan', function () {
-    return view('roles.teknisi.pencatatan-perbaikan-teknisi');
-});
+// //Falana
+// Route::get('/teknisi/daftar-pengaduan', [TeknisiController::class, 'daftarPengaduan'])->middleware('userAkses:Teknisi');
 
-Route::get('/admin/data-ruangan', function () {
-    return view('roles.admin.data-ruangan-admin');
-});
+// Route::get('/teknisi/daftar-pengaduan/detail', [TeknisiController::class, 'daftarPengaduanDetail']);
 
-Route::get('/admin/ketersediaan-ruangan', function () {
-    return view('roles.admin.ketersediaan-ruangan-admin');
-});
+// Route::get('/admin/data-ruangan', [AdminController::class, 'dataRuangan']);
 
-Route::get('/admin/ketersediaan-ruangan/detail', function () {
-    return view('roles.admin.ketersediaan-ruangan-detail-admin');
-});
+// Route::get('/admin/ketersediaan-ruangan', [AdminController::class, 'ketersediaanRuangan']);
 
-Route::get('/admin/pengelolaan-peminjaman', function () {
-    return view('roles.admin.pengelolaan-peminjaman-admin');
-});
+// Route::get('/admin/ketersediaan-ruangan/detail', [AdminController::class, 'ketersediaanRuanganDetail']);
 
-Route::get('/admin/data-ruangan/edit-ruang', function () {
-    return view('roles.admin.edit-ruangan-admin');
-});
+// Route::get('/admin/data-ruangan/edit-ruang', [AdminController::class, 'editRuangan']);
 
-Route::get('/admin/pengelolaan-peminjaman/detail', function () {
-    return view('roles.admin.pengelolaan-peminjaman-detail-admin');
-});
+// Route::get('/admin/data-ruangan/tambah-ruang', [AdminController::class, 'tambahRuangan']);
 
-Route::get('/admin/data-ruangan/tambah-ruang', function () {
-    return view('roles.admin.tambah-ruangan-admin');
-});
+// Route::get('/admin/pengelolaan-peminjaman', [AdminController::class, 'pengelolaanPeminjaman']);
 
-//Anggy
-Route::get('/admin/data-master', function () {
-    return view('roles.admin.data-master-admin');
-});
+// Route::get('/admin/pengelolaan-peminjaman/detail', [AdminController::class, 'pengelolaanPeminjamanDetail']);
 
-Route::get('/admin/data-master/tambah-sarpras', function () {
-    return view('roles.admin.tambah-sarpras-admin');
-});
+// //Anggy
+// Route::get('/admin/data-master', [AdminController::class, 'dataMaster']);
 
-Route::get('/admin/data-master/edit-sarpras', function () {
-    return view('roles.admin.edit-sarpras-admin');
-});
+// Route::get('/admin/data-master/detail', [AdminController::class, 'dataMasterDetail']);
 
-Route::get('/admin/data-master/detail', function () {
-    return view('roles.admin.data-master-detail-admin');
-});
+// Route::get('/admin/data-master/tambah-sarpras', [AdminController::class, 'tambahSarpras']);
 
-//Gita
-Route::get('/admin/jadwal-pengecekan-kelas', function () {
-    return view('roles.admin.jadwal-pengecekan-kelas-admin');
-});
+// Route::get('/admin/data-master/edit-sarpras', [AdminController::class, 'editSarpras']);
 
-Route::get('/admin/barang-habis-pakai', function () {
-    return view('roles.admin.barang-habis-pakai-admin');
-});
+// //Gita
+// Route::get('/admin/jadwal-pengecekan-kelas', [AdminController::class, 'jadwalPengecekanKelas']);
 
-Route::get('/admin/barang-habis-pakai/tambah-bhp', function () {
-    return view('roles.admin.tambah-bhp-admin');
-});
+// Route::get('/admin/barang-habis-pakai', [AdminController::class, 'barangHabisPakai']);
 
-Route::get('/koordinator/jadwal-pengecekan-kelas', function () {
-    return view('roles.koordinator.jadwal-pengecekan-kelas-koordinator');
-});
+// Route::get('/admin/barang-habis-pakai/tambah-bhp', [AdminController::class, 'tambahBHP ']);
 
-Route::get('/koordinator/jadwal-pengecekan-kelas/penugasan', function () {
-    return view('roles.koordinator.penugasan-admin');
-});
+// Route::get('/koordinator/jadwal-pengecekan-kelas', [KoordinatorController::class, 'jadwalPengecekanKelas']);
 
-Route::get('/pemakaibhp/pengambilan', function () {
-    return view('roles.pemakaibhp.pengambilan-pemakaibhp');
-});
+// Route::get('/koordinator/jadwal-pengecekan-kelas/penugasan', [KoordinatorController::class, 'penugasan']);
 
-//Sari
-Route::get('/teknisi/jadwal-pemeliharaan', function () {
-    return view('roles.teknisi.jadwal-pemeliharaan-teknisi');
-});
+// Route::get('/pemakaibhp/pengambilan', [PemakaiBHPController::class, 'pengambilan']);
 
-Route::get('/teknisi/jadwal-pemeliharaan/pemeliharaan', function () {
-    return view('roles.teknisi.pemeliharaan-teknisi');
-});
+// //Sari
+// Route::get('/teknisi/jadwal-pemeliharaan', [TeknisiController::class, 'jadwalPemeliharaan']);
 
-//Haykal
-Route::get('/teknisi/daftar-pemeliharaan', function () {
-    return view('roles.teknisi.daftar-pemeliharaan-teknisi');
-});
+// Route::get('/teknisi/jadwal-pemeliharaan/pemeliharaan', [TeknisiController::class, 'pemeliharaan']);
 
-Route::get('/teknisi/daftar-pemeliharaan/detail', function () {
-    return view('roles.teknisi.daftar-pemeliharaan-detail-teknisi');
-});
+// //Haykal
+// Route::get('/teknisi/daftar-pemeliharaan', [TeknisiController::class, 'daftarPemeliharaan']);
 
-//Sindu
-Route::get('/teknisi/daftar-pengaduan/detail/catat', function () {
-    return view('roles.teknisi.perbaikan-teknisi');
-});
+// Route::get('/teknisi/daftar-pemeliharaan/detail', [TeknisiController::class, 'daftarPemeliharaanDetail']);
 
-Route::get('/teknisi/daftar-perbaikan', function () {
-    return view('roles.teknisi.daftar-perbaikan-teknisi');
-});
+// //Sindu
+// Route::get('/teknisi/daftar-pengaduan/detail/catat', [TeknisiController::class, 'perbaikan']);
 
-Route::get('/teknisi/daftar-perbaikan/detail', function () {
-    return view('roles.teknisi.daftar-perbaikan-detail-teknisi');
-});
+// Route::get('/teknisi/daftar-perbaikan', [TeknisiController::class, 'daftarPerbaikan']);
 
-Route::get('/koordinator/daftar-pengaduan', function () {
-    return view('roles.koordinator.daftar-pengaduan-koordinator');
-}); 
+// Route::get('/teknisi/daftar-perbaikan/detail', [TeknisiController::class, 'daftarPerbaikanDetail']);
 
-Route::get('/koordinator/daftar-pengaduan/detail', function () {
-    return view('roles.koordinator.daftar-pengaduan-detail-koordinator');
-}); 
+// Route::get('/koordinator/daftar-pengaduan', [KoordinatorController::class, 'daftarPengaduan']);
 
-Route::get('/koordinator/daftar-perbaikan', function () {
-    return view('roles.koordinator.daftar-perbaikan-koordinator');
-}); 
+// Route::get('/koordinator/daftar-pengaduan/detail', [KoordinatorController::class, 'daftarPengaduanDetail']);
 
-Route::get('/koordinator/daftar-perbaikan/detail', function () {
-    return view('roles.koordinator.daftar-perbaikan-detail-koordinator');
-}); 
+// Route::get('/koordinator/daftar-perbaikan', [KoordinatorController::class, 'daftarPerbaikan']);
 
-Route::get('/pelapor/buat-pengaduan', function () {
-    return view('roles.pelapor.form-pengaduan-pelapor');
-});
+// Route::get('/koordinator/daftar-perbaikan/detail', [KoordinatorController::class, 'daftarPerbaikanDetail']);
 
-Route::get('/pelapor/daftar-pengaduan', function () {
-    return view('roles.pelapor.daftar-pengaduan-pelapor');
-});
+// Route::get('/pelapor/buat-pengaduan', [PelaporController::class, 'buatPengaduan']);
 
-Route::get('/pelapor/daftar-pengaduan/detail', function () {
-    return view('roles.pelapor.daftar-pengaduan-detail-pelapor');
-});
+// Route::get('/pelapor/daftar-pengaduan', [PelaporController::class, 'daftarPengaduan']);
+
+// Route::get('/pelapor/daftar-pengaduan/detail', [PelaporController::class, 'daftarPengaduanDetail']);
