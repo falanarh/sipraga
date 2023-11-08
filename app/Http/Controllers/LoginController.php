@@ -27,7 +27,7 @@ class LoginController extends Controller
             'password' => $request->password
         ];
 
-        if(Auth::attempt($info_login)){
+        if(Auth::attempt($info_login, $request->has('remember'))){
             if(Auth::user()->role == 'Admin'){
                 return redirect('/admin/data-master');
             } elseif(Auth::user()->role == 'Koordinator'){

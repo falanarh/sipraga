@@ -54,7 +54,7 @@
                         @enderror
                     </div>
                     <div class="checkbox">
-                        <label class="d-flex align-items-center"><input class="me-2" type="checkbox">Ingat saya di
+                        <label for="remember" class="d-flex align-items-center"><input id="remember" name="remember" class="me-2" type="checkbox">Ingat saya di
                             perangkat ini</label>
                     </div>
                     <button type="submit" class="btn btn-primary mt-2 w-100">Masuk</a>
