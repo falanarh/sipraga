@@ -5,6 +5,13 @@
     display: inline-block;
 }
 
+.rounded-background {
+    padding: 2px 10px; /* Untuk memberikan ruang di dalam elemen */
+    color: #fff; /* Untuk mengubah warna teks agar lebih terlihat di latar belakang */
+    text-align: center;
+    display: inline-block;
+}
+
 #example td {
     vertical-align: middle;
 }

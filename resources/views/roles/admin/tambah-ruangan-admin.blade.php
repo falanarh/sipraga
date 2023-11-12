@@ -24,35 +24,52 @@
                     FORM TAMBAH RUANG
                 </a>            
             </div>
-            <form class="row">
+            <form class="row" method="POST" action="{{ route('admin.data-ruangan.store') }}">
+                @csrf
                 <div class="mb-3 col-6">
-                    <label for="kode" class="form-label">Kode</label>
-                    <input type="text" class="form-control" id="kode">
+                    <label for="kode_ruang" class="form-label">Kode Ruang</label>
+                    <input type="text" name="kode_ruang" class="form-control" id="kode_ruang" value="{{ old('kode_ruang') }}" required>
+                    @error('kode_ruang')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="mb-3 col-6">
                     <label for="nama" class="form-label">Nama</label>
-                    <input type="text" class="form-control" id="nama">
+                    <input type="text" name="nama" class="form-control" id="nama" value="{{ old('nama') }}" required>
+                    @error('nama')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="mb-3 col-6">
-                    <label for="kapasitas" class="form-label">Kapasitas</label>
-                    <input type="number" class="form-control" id="kapasitas">
+                    <label for="kapasitas" class="form-label">Kapasitas (Orang)</label>
+                    <input type="number" name="kapasitas" class="form-control" id="kapasitas" value="{{ old('kapasitas') }}" required>
+                    @error('kapasitas')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="mb-3 col-6">
                     <label for="gedung" class="form-label">Gedung</label>
-                    <input type="number" class="form-control" id="gedung">
+                    <input type="number" name="gedung" class="form-control" id="gedung" value="{{ old('gedung') }}" required>
+                    @error('gedung')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="mb-3">
                     <label for="lantai" class="form-label">Lantai</label>
-                    <input type="number" class="form-control" id="lantai">
+                    <input type="number" name="lantai" class="form-control" id="lantai" value="{{ old('lantai') }}" required>
+                    @error('lantai')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
                 </div>
                 {{-- <div class="mb-3">
                     <label for="keterangan" class="form-label">Keterangan</label>
                     <textarea class="form-control" id="keterangan" rows="10"></textarea>
                 </div> --}}
                 <div>
-                    <a href="" type="submit" class="btn btn-primary mt-3">Submit</a>
+                    <button type="submit" class="btn btn-primary mt-3">Submit</button>
                 </div>
             </form>
         </div>
     </div>
 @endsection
+

@@ -21,36 +21,39 @@
                 </a>
                 <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
                 <a href="/admin/data-ruangan/edit-ruang" class="table-title d-flex text-dark">
-                    FORM EDIT RUANG
+                    EDIT
                 </a>            
             </div>
-            <form class="row">
+            <form class="row" method="POST" action="{{ route('admin.data-ruangan.edit', $ruang->kode) }}"> 
+                @csrf
+                @method('PUT')
+
                 <div class="mb-3 col-6">
                     <label for="kode" class="form-label">Kode</label>
-                    <input type="text" class="form-control" id="kode" value="33001" disabled readonly>
+                    <input type="text" name="kode" class="form-control" id="kode" value="{{ $ruang->kode }}" disabled readonly>
                 </div>
                 <div class="mb-3 col-6">
                     <label for="nama" class="form-label">Nama</label>
-                    <input type="text" class="form-control" id="nama" value="331">
+                    <input type="text" name="nama" class="form-control" id="nama" value="{{ $ruang->nama }}">
                 </div>
                 <div class="mb-3 col-6">
                     <label for="kapasitas" class="form-label">Kapasitas</label>
-                    <input type="number" class="form-control" id="kapasitas" value="40">
+                    <input type="number" name="kapasitas" class="form-control" id="kapasitas" value="{{ $ruang->kapasitas }}">
                 </div>
                 <div class="mb-3 col-6">
                     <label for="gedung" class="form-label">Gedung</label>
-                    <input type="number" class="form-control" id="gedung" value="3">
+                    <input type="number" name="gedung" class="form-control" id="gedung" value="{{ $ruang->gedung }}">
                 </div>
                 <div class="mb-3">
                     <label for="lantai" class="form-label">Lantai</label>
-                    <input type="number" class="form-control" id="lantai" value="3">
+                    <input type="number" name="lantai" class="form-control" id="lantai" value="{{ $ruang->lantai }}">
                 </div>
                 {{-- <div class="mb-3">
                     <label for="keterangan" class="form-label">Keterangan</label>
                     <textarea class="form-control" id="keterangan" rows="10"></textarea>
                 </div> --}}
                 <div>
-                    <a href="" type="submit" class="btn btn-dark mt-3">Edit</a>
+                    <button type="submit" class="btn btn-dark mt-3">Edit</button>
                 </div>
             </form>
         </div>

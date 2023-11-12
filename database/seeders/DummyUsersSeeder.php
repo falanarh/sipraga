@@ -21,31 +21,37 @@ class DummyUsersSeeder extends Seeder
                     'role' => 'Teknisi',
                     'password' => bcrypt('123456')
                 ]
-                // ,
-                // [
-                //     'name' => 'Mas Koordinator',
-                //     'email' => 'koordinator@gmail.com',
-                //     'role' => 'Koordinator',
-                //     'password' => bcrypt('123456')
-                // ],
-                // [
-                //     'name' => 'Mas Pelapor',
-                //     'email' => 'pelapor@gmail.com',
-                //     'role' => 'Pelapor',
-                //     'password' => bcrypt('123456')
-                // ],
-                // [
-                //     'name' => 'Mas PemakaiBHP',
-                //     'email' => 'pemakaibhp@gmail.com',
-                //     'role' => 'PemakaiBHP',
-                //     'password' => bcrypt('123456')
-                // ],
-                // [
-                //     'name' => 'Mas Teknisi',
-                //     'email' => 'teknisi@gmail.com',
-                //     'role' => 'Teknisi',
-                //     'password' => bcrypt('123456')
-                // ]
+                ,
+                [
+                    'name' => 'Sindu Dinar',
+                    'email' => 'koordinator@gmail.com',
+                    'role' => 'Koordinator',
+                    'password' => bcrypt('123456')
+                ],
+                [
+                    'name' => 'Falana Rofako',
+                    'email' => 'pelapor@gmail.com',
+                    'role' => 'Pelapor',
+                    'password' => bcrypt('123456')
+                ],
+                [
+                    'name' => 'Anggy Distria',
+                    'email' => 'pemakaibhp@gmail.com',
+                    'role' => 'PemakaiBHP',
+                    'password' => bcrypt('123456')
+                ],
+                [
+                    'name' => 'Gita Kirana',
+                    'email' => 'admin@gmail.com',
+                    'role' => 'Admin',
+                    'password' => bcrypt('123456')
+                ],
+                [
+                    'name' => 'Sariyyanti Hikmah',
+                    'email' => 'teknisi@gmail.com',
+                    'role' => 'Teknisi',
+                    'password' => bcrypt('123456')
+                ]
             ];
 
             foreach($userData as $key => $val){

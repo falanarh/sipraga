@@ -61,11 +61,14 @@
     <script
         src="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-1.13.6/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/r-2.5.0/sp-2.2.0/datatables.min.js">
     </script>
+    <!-- Pustaka Bootstrap Colorpicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/js/bootstrap-colorpicker.min.js">
+    </script>
     <script>
         new DataTable('#example');
         new DataTable('#example2');
 
-       
+
         $(function() {
             $(document).on('click', '#terima-peminjaman', function(e) {
                 e.preventDefault();
@@ -116,6 +119,12 @@
             })
         })
     </script>
+    <script>
+        $(document).ready(function(){
+            $('.colorpicker').colorpicker();
+        });
+    </script>    
+    @yield('additional-js')
 </body>
 
 </html>

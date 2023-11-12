@@ -31,7 +31,7 @@
                     </a>
                 </div>
             </div>
-            <table id="example" class="table table-striped responsive" style="width: 100%;">
+            <table id="tabelruang" class="table table-striped responsive" style="width: 100%;">
                 <thead class="text-dark" style="border: 1px solid #000;">
                     <tr>
                         <th>No</th>
@@ -43,56 +43,6 @@
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>33001</td>
-                        <td>Ruang Kelas 331</td>
-                        <td>3</td>
-                        <td>3</td>
-                        <td>40</td>
-                        <td>
-                            <a href="/admin/data-ruangan/edit-ruang" class="btn-act text-dark me-1">
-                                <img src="{{ asset('images/icons/edit.svg') }}" alt="">
-                            </a>
-                            <a href="" class="btn-act text-dark me-1">
-                                <img src="{{ asset('images/icons/trash.svg') }}" alt="">
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>33002</td>
-                        <td>Ruang Kelas 332</td>
-                        <td>3</td>
-                        <td>3</td>
-                        <td>40</td>
-                        <td>
-                            <a href="" class="btn-act text-dark me-1">
-                                <img src="{{ asset('images/icons/edit.svg') }}" alt="">
-                            </a>
-                            <a href="" class="btn-act text-dark me-1">
-                                <img src="{{ asset('images/icons/trash.svg') }}" alt="">
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>33003</td>
-                        <td>Ruang Kelas 333</td>
-                        <td>3</td>
-                        <td>3</td>
-                        <td>40</td>
-                        <td>
-                            <a href="" class="btn-act text-dark me-1">
-                                <img src="{{ asset('images/icons/edit.svg') }}" alt="">
-                            </a>
-                            <a href="" class="btn-act text-dark me-1">
-                                <img src="{{ asset('images/icons/trash.svg') }}" alt="">
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
                 <tfoot>
                     <tr>
                         <th>No</th>
@@ -107,4 +57,92 @@
             </table>
         </div>
     </div>
+@endsection
+
+@section('additional-js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Menangkap pesan "Ruang berhasil ditambahkan"
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: '{{ session('success') }}',
+                });
+            @endif
+        });
+
+        $(document).ready(function() {
+            $('#tabelruang').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('admin.data-ruangan.view') }}", // Sesuaikan dengan route yang benar
+                columns: [{
+                        data: 'nomor',
+                        name: 'nomor'
+                    },
+                    {
+                        data: 'kode_ruang',
+                        name: 'kode_ruang'
+                    },
+                    {
+                        data: 'nama',
+                        name: 'nama'
+                    },
+                    {
+                        data: 'gedung',
+                        name: 'gedung'
+                    },
+                    {
+                        data: 'lantai',
+                        name: 'lantai'
+                    },
+                    {
+                        data: 'kapasitas',
+                        name: 'kapasitas'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ]
+            });
+        });
+
+        $(function() {
+            $(document).on('click', '#hapus-ruang', function(e) {
+                e.preventDefault();
+                var link = $(this).attr("href");
+
+                Swal.fire({
+                    title: 'Anda yakin untuk menghapus data ruang?',
+                    text: "Anda tidak dapat mengembalikan ini!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Jika dikonfirmasi, redirect ke link hapus
+                        window.location.href = link;
+                    }
+                })
+            })
+        })
+
+        // Optional: Tambahkan SweetAlert2 ketika form berhasil disubmit
+        // var submitBtn = document.getElementById('btn-ruang');
+        // if (submitBtn) {
+        //     submitBtn.addEventListener('click', function() {
+        //         Swal.fire({
+        //             icon: 'success',
+        //             title: 'Success!',
+        //             text: 'Barang berhasil ditambahkan',
+        //         });
+        //     });
+        // }
+    </script>
 @endsection

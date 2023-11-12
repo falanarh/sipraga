@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use App\Models\Aset;
+use App\Models\Ruang;
+use App\Models\Barang;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -47,9 +50,10 @@ class AdminController extends Controller
         return view('roles.admin.data-ruangan-admin', compact('userInfo'));
     }
 
-    public function editRuangan(){
+    public function editRuangan($kode){
         $userInfo = $this->getUserInfo();
-        return view('roles.admin.edit-ruangan-admin', compact('userInfo'));
+        $ruang = Ruang::find($kode);
+        return view('roles.admin.edit-ruangan-admin', compact('userInfo', 'ruang'));
     }
 
     public function tambahRuangan(){
@@ -72,19 +76,43 @@ class AdminController extends Controller
         return view('roles.admin.data-master-admin', compact('userInfo'));
     }
 
-    public function dataMasterDetail(){
+    public function dataMasterDetail($kode_barang, $nup){
         $userInfo = $this->getUserInfo();
-        return view('roles.admin.data-master-detail-admin', compact('userInfo'));
+        $aset = Aset::where('kode_barang', $kode_barang)
+            ->where('nup', $nup)
+            ->firstOrFail();
+        return view('roles.admin.data-master-detail-admin', compact('userInfo', 'aset'));
     }
+
+    public function tambahJenis() {
+        $userInfo = $this->getUserInfo();
+        return view('roles.admin.tambah-jenis-barang-admin', compact('userInfo'));
+    }
+
+    public function editJenis($kode_barang) {
+        $userInfo = $this->getUserInfo();
+        $barang = Barang::find($kode_barang);
+    
+        return view('roles.admin.edit-jenis-barang-admin', compact('userInfo', 'barang'));
+    }   
 
     public function tambahSarpras(){
         $userInfo = $this->getUserInfo();
-        return view('roles.admin.tambah-sarpras-admin', compact('userInfo'));
+        $jenisBarangOptions = Barang::all();
+        $ruangOptions = Ruang::all();
+
+        return view('roles.admin.tambah-sarpras-admin', compact('userInfo', 'jenisBarangOptions', 'ruangOptions'));
     }
 
-    public function editSarpras(){
+    public function editSarpras($kode_barang, $nup){
         $userInfo = $this->getUserInfo();
-        return view('roles.admin.edit-sarpras-admin', compact('userInfo'));
+        $jenisBarangOptions = Barang::all();
+        $ruangOptions = Ruang::all();
+        $aset = Aset::where('kode_barang', $kode_barang)
+            ->where('nup', $nup)
+            ->firstOrFail();
+
+        return view('roles.admin.edit-sarpras-admin', compact('userInfo', 'jenisBarangOptions', 'ruangOptions', 'aset'));
     }
 
     public function jadwalPengecekanKelas(){

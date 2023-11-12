@@ -16,46 +16,52 @@
     <div class="card">
         <div class="card-body">
             <div class="title d-flex mb-4">
-                <a href="/admin/data-master" class="table-title d-flex text-dark">
+                <a href="{{ route('admin.data-master') }}" class="table-title d-flex text-dark">
                     DATA MASTER
                 </a>
                 <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
-                <a href="/admin/data-master/detail" class="table-title d-flex text-dark">
-                    11002
+                <a href="{{ route('admin.data-master.sarpras.detail', ['kode_barang' => $aset->kode_barang, 'nup' => $aset->nup]) }}" class="table-title d-flex text-dark">
+                    {{ $aset->kode_barang }}/{{ $aset->nup }}
                 </a>            
             </div>
             <table class="table table-striped responsive" style="width: 100%;">
                 <tr>
                     <th class="col-3">Kode Barang</th>
-                    <td class="col-9">11002</td>
+                    <td class="col-9">{{ $aset->kode_barang }}</td>
                 </tr>
                 <tr>
                     <th class="col-3">NUP</th>
-                    <td class="col-9">1</td>
+                    <td class="col-9">{{ $aset->nup }}</td>
                 </tr>
                 <tr>
                     <th class="col-3">Jenis Barang</th>
-                    <td class="col-9">Kursi</td>
+                    <td class="col-9">{{ $aset->barang->nama }}</td>
                 </tr>
                 <tr>
                     <th class="col-3">Tanggal Masuk</th>
-                    <td class="col-9">23/09/2023</td>
+                    <td class="col-9">{{ $aset->tanggal_masuk->format('d-m-Y') }}</td>
                 </tr>
                 <tr>
-                    <th class="col-3">Lokasi Barang</th>
-                    <td class="col-9">341</td>
+                    <th class="col-3">Ruang</th>
+                    <td class="col-9">{{ $aset->ruang->nama }}</td>
                 </tr>
                 <tr>
-                    <th class="col-3">Kondisi Barang</th>
-                    <td class="col-9">Baik</td>
+                    <th class="col-3">Kondisi</th>
+                    <td class="col-9">{{ $aset->kondisi }}</td>
                 </tr>
                 <tr>
-                    <th class="col-3">Tanggal Terakhir Pemeliharaan</th>
-                    <td class="col-9">-</td>
+                    <th class="col-3">Tanggal Pemeliharaan Terakhir</th>
+                    <td class="col-9">
+                        @if ($aset->tanggal_pemeliharaan_terakhir)
+                            {{ $aset->tanggal_pemeliharaan_terakhir->format('d-m-Y') }}
+                        @else
+                            -
+                        @endif
+                    </td>
                 </tr>
                 <tr>
                     <th class="col-3">Deskripsi Barang</th>
-                    <td class="col-9">Kursi berbahan kayu dan metal</td>
+                    <td class="col-9">{{ $aset->deskripsi }}</td>
                 </tr>
             </table>
         </div>

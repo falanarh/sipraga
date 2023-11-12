@@ -94,3 +94,10 @@ document.querySelectorAll(".ubahButton").forEach(function (button) {
         showConfirmUbahDialog(); // Menampilkan konfirmasi saat tombol "Ubah" diklik
     });
 });
+
+// $(document).ready(function () {
+//     $('.rounded-background').each(function () {
+//         var warna = $(this).data('warna'); // Gantilah 'warna' dengan nama atribut yang sesuai di tabel database
+//         $(this).css('background-color', warna);
+//     });
+// });
