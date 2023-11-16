@@ -19,16 +19,4 @@ class Barang extends Model
     {
         return $this->hasMany(Aset::class);
     }
-
-    // Event model untuk menangani penghapusan
-    // protected static function boot()
-    // {
-    //     parent::boot();
-
-    //     // Menangani event deleting (sebelum dihapus)
-    //     static::deleting(function ($barang) {
-    //         // Hapus semua aset yang berkaitan dengan barang
-    //         $barang->asets()->delete();
-    //     });
-    // }
 }

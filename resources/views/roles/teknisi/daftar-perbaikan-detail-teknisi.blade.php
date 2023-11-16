@@ -17,7 +17,7 @@
         <div class="card-body">
             <div class="title d-flex mb-4">
                 <a href="/teknisi/daftar-perbaikan" class="table-title d-flex text-dark">
-                    LAPORAN PEMELIHARAAN DAN PERBAIKAN AC 
+                    CATATAN PERBAIKAN SARANA DAN PRASARANA KELAS 
                 </a>
                 <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
                 <a href="/teknisi/daftar-perbaikan/detail" class="table-title d-flex text-dark">

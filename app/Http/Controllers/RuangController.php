@@ -89,7 +89,12 @@ class RuangController extends Controller
         $ruang = Ruang::where('kode_ruang', $kode_ruang)->first();
 
         if($ruang){
+            $nomorSebelum = $ruang->nomor;
+
             $ruang->delete();
+
+            // Update nomor untuk baris data yang memiliki nomor lebih besar dari nomor sebelumnya
+            Ruang::where('nomor', '>', $nomorSebelum)->decrement('nomor');
 
             return redirect()->route('admin.data-ruangan')->with('success', 'Ruang berhasil dihapus!');
         } else {

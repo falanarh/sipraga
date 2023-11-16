@@ -18,8 +18,14 @@
             {{-- impor data --}}
             <div class="mb-4">
                 <p class="table-title text-dark mb-4">IMPOR DATA RUANGAN</p>
-                <input type="file" class="col-6 form-control mb-4" id="lampiran">
-                <button type="submit" class="btn btn-dark">Impor</button>
+                <form action="{{ route('admin.data-ruangan.impor') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="file" name="file" accept=".xlsx, .xls" class="col-6 form-control" id="file">
+                    @error('file')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                    <button type="submit" class="btn btn-dark mt-4">Impor</button>
+                </form>
             </div>
             <hr class="my-4">
             <div class="row-card d-flex justify-content-between">
@@ -77,7 +83,8 @@
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('admin.data-ruangan.view') }}", // Sesuaikan dengan route yang benar
-                columns: [{
+                columns: [
+                    {
                         data: 'nomor',
                         name: 'nomor'
                     },
@@ -107,7 +114,7 @@
                         orderable: false,
                         searchable: false
                     }
-                ]
+                ],
             });
         });
 

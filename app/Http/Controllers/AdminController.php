@@ -73,7 +73,10 @@ class AdminController extends Controller
 
     public function dataMaster(){
         $userInfo = $this->getUserInfo();
-        return view('roles.admin.data-master-admin', compact('userInfo'));
+        $jenisBarangOptions = Barang::all();
+        $ruangOptions = Ruang::all();
+
+        return view('roles.admin.data-master-admin', compact('userInfo', 'jenisBarangOptions', 'ruangOptions'));
     }
 
     public function dataMasterDetail($kode_barang, $nup){

@@ -49,7 +49,7 @@
                     <th class="fw-bolder">Teknisi</th>
                     <td>
                         <select id="prioritas" class="form-select border-0 px-0">
-                            <option value="">Pilih Nama Admin</option>
+                            <option value="">Pilih Nama Teknisi</option>
                             <option value="Falana">Falana</option>
                             <option value="Sindu">Sindu</option>
                             <option value="Sari">Sari</option>

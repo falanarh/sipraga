@@ -24,13 +24,13 @@
                     EDIT
                 </a>            
             </div>
-            <form class="row" method="POST" action="{{ route('admin.data-ruangan.edit', $ruang->kode) }}"> 
+            <form class="row" method="POST" action="{{ route('admin.data-ruangan.edit', $ruang->kode_ruang) }}"> 
                 @csrf
                 @method('PUT')
 
                 <div class="mb-3 col-6">
                     <label for="kode" class="form-label">Kode</label>
-                    <input type="text" name="kode" class="form-control" id="kode" value="{{ $ruang->kode }}" disabled readonly>
+                    <input type="text" name="kode" class="form-control" id="kode" value="{{ $ruang->kode_ruang }}" disabled readonly>
                 </div>
                 <div class="mb-3 col-6">
                     <label for="nama" class="form-label">Nama</label>
