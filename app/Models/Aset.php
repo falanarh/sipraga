@@ -39,4 +39,9 @@ class Aset extends Model
         return $this->belongsTo(Ruang::class, 'kode_ruang', 'kode_ruang');
     }
 
+    public function jadwalPemeliharaanAcs()
+    {
+        return $this->hasMany(JadwalPemeliharaanAc::class, ['kode_barang', 'nup'], ['kode_barang', 'nup']);
+    }
+
 }

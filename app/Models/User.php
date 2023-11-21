@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(PengecekanKelas::class);
     }
+
+    public function jadwalPemeliharaanAcs()
+    {
+        return $this->hasMany(JadwalPemeliharaanAc::class, 'teknisi_id', 'user_id');
+    }
 }
