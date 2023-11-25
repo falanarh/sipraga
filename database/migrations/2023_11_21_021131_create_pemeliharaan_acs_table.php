@@ -22,7 +22,7 @@ class CreatePemeliharaanAcsTable extends Migration
             $table->string('judul_pemeliharaan');
             $table->string('judul_perbaikan');
             $table->text('keterangan');
-            $table->binary('lampiran')->nullable();
+            $table->string('file_path')->nullable();
             $table->timestamps();
             //Definisi foreign key dengna cascade delete
             $table->foreign('jadwal_pemeliharaan_ac_id')

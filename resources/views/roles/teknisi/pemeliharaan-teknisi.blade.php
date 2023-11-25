@@ -35,8 +35,9 @@
                 <div class="mb-3">
                     <label for="nup" class="form-label">NUP</label>
                     <input type="text" id="nup" name="nup" class="form-control" placeholder="15"
-                        value="{{ $jadwalPemeliharaanAc->nup }}" disabled>
-                </div>
+                        value="{{ $jadwalPemeliharaanAc->nup }}" disabled readonly>
+                    <input type="hidden" name="nup" value="{{ $jadwalPemeliharaanAc->nup }}">
+                </div>                
                 <div class="mb-3">
                     <label for="ruang" class="form-label">Ruang</label>
                     <input type="text" id="ruang" name="ruang" class="form-control" placeholder="332"

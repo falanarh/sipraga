@@ -36,6 +36,12 @@
     margin-top: 20px; /* Atur jarak di atas garis jika diperlukan */
     margin-bottom: 20px; /* Atur jarak di bawah garis jika diperlukan */
   }
+
+.readonly-style {
+    background-color: #e0e0e0; /* Warna latar belakang yang mirip dengan disabled */
+    color: #555; /* Warna teks yang sesuai */
+    cursor: not-allowed; /* Kursor tidak dapat diklik */
+}
   
 
 /* CSS untuk layar berukuran <= 525px */
