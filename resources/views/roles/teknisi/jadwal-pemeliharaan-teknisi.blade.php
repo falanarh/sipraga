@@ -26,6 +26,37 @@
                     </a>
                 </div>
             </div>
+            {{-- filter --}}
+            <div class="list-filter d-flex gap-2">
+                <div class="mb-4">
+                    <label class="mb-1 fw-bold" for="filterRuang">Ruang:</label>
+                    <select id="filterRuang" name="filter_ruang" class="form-select filter-dropdown">
+                        <option value="">Pilih Ruang</option>
+                        @foreach ($ruangOptions as $option)
+                            <option value="{{ $option->kode_ruang }}">{{ $option->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="mb-1 fw-bold" for="filterStatus">Status:</label>
+                    <select id="filterStatus" name="filter_status" class="form-select filter-dropdown">
+                        <option value="">Pilih Status</option>
+                        <option value="Belum Dikerjakan">Belum Dikerjakan</option>
+                        <option value="Sedang Dikerjakan">Sedang Dikerjakan</option>
+                        <option value="Selesai Dikerjakan">Selesai Dikerjakan</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="mb-1 fw-bold" for="filterTeknisi">Teknisi:</label>
+                    <select id="filterTeknisi" name="filter_teknisi" class="form-select filter-dropdown">
+                        <option value="">Pilih Teknisi</option>
+                        @foreach ($teknisiOptions as $option)
+                            <option value="{{ $option->name }}">{{ $option->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            
             <table id="tabeljadwal" class="table table-striped responsive" style="width: 100%">
                 <thead class="text-dark" style="border: 1px solid #000;">
                     <tr>
@@ -119,40 +150,49 @@
             })
         })
 
+        var dataTabelJadwal;
+
         $(document).ready(function() {
-            $('#tabeljadwal').DataTable({
+            dataTabelJadwal = $('#tabeljadwal').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
                     url: "{{ route('teknisi.jadwal.ac') }}",
+                    data: function(d) {
+                        d.filter_ruang = $('#filterRuang').val(); // Ambil nilai dropdown filter
+                        d.filter_status = $('#filterStatus').val(); // Ambil nilai dropdown filter
+                        d.filter_teknisi = $('#filterTeknisi').val(); // Ambil nilai dropdown filter
+                    }
                 },
                 columns: [{
                         data: 'nomor',
-                        name: 'nomor'
+                        name: 'nomor',
+                        orderable: true,
                     },
                     {
                         data: 'tanggal',
-                        name: 'tanggal'
+                        name: 'tanggal',
                     },
                     {
                         data: 'kode_barang',
-                        name: 'kode_barang'
+                        name: 'kode_barang',
                     },
                     {
                         data: 'nup',
-                        name: 'nup'
+                        name: 'nup',
+                        orderable: true,
                     },
                     {
                         data: 'ruang',
-                        name: 'ruang'
+                        name: 'ruang',
                     },
                     {
                         data: 'status',
-                        name: 'status'
+                        name: 'status',
                     },
                     {
                         data: 'teknisi',
-                        name: 'teknisi'
+                        name: 'teknisi',
                     },
                     {
                         data: 'action',
@@ -161,6 +201,11 @@
                         searchable: false,
                     }
                 ]
+            });
+
+            // Event listener untuk dropdown filter
+            $('.filter-dropdown').change(function() {
+                dataTabelJadwal.ajax.reload(); // Menggambar ulang tabel untuk menerapkan filter
             });
         });
     </script>

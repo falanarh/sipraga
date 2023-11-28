@@ -48,13 +48,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/teknisi/jadwal-pemeliharaan/set/{jadwal_pemeliharaan_ac_id}/{teknisi_id}', [JadwalPemeliharaanAcController::class, 'setTeknisiId'])->name('teknisi.jadwal.set');
         Route::get('/teknisi/jadwal-pemeliharaan/generate', [JadwalPemeliharaanAcController::class, 'generateJadwal'])->name('teknisi.jadwal.generate');
         Route::get('/teknisi/jadwal-pemeliharaan/ac', [JadwalPemeliharaanAcController::class, 'data'])->name('teknisi.jadwal.ac');
-        //Route::get('/teknisi/jadwal-pemeliharaan/pemeliharaan', [TeknisiController::class, 'pemeliharaan']);
         Route::get('/teknisi/jadwal-pemeliharaan/pemeliharaan/{jadwal_pemeliharaan_ac_id}/edit', [TeknisiController::class, 'pemeliharaan'])->name('teknisi.jadwal.pemeliharaan-form');
         Route::post('/teknisi/jadwal-pemeliharaan/pemeliharaan/{jadwal_pemeliharaan_ac_id}/edit', [PemeliharaanAcController::class, 'store'])->name('teknisi.jadwal.pemeliharaan.store');
-        //Route::post('/teknisi/jadwal-pemeliharan')
-        //Route::post('/admin/data-ruangan/tambah-ruang', [RuangController::class, 'store'])->name('admin.data-ruangan.store');
-        //Route::get('/admin/data-master/{kode_barang}/{nup}/edit', [AdminController::class, 'editSarpras'])->name('admin.data-master.sarpras.edit-form');
-        //Route::patch('/admin/data-master/{kode_barang}/{nup}/edit', [AsetController::class, 'update'])->name('admin.data-master.sarpras.edit');
         Route::get('/teknisi/daftar-pemeliharaan', [TeknisiController::class, 'daftarPemeliharaan'])->name('teknisi.daftar-pemeliharaan');
         Route::get('/teknisi/daftar-pemeliharaan/detail', [TeknisiController::class, 'daftarPemeliharaanDetail']);
         Route::get('/teknisi/daftar-pengaduan/detail/catat', [TeknisiController::class, 'perbaikan']);

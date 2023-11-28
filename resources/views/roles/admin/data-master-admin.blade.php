@@ -220,7 +220,7 @@
         //                 data: 'kode_barang',
         //                 name: 'kode_barang'
         //       
-              },
+        //             },
         //             {
         //                 data: 'nup',
         //                 name: 'nup'

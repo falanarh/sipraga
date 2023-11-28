@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\JadwalPemeliharaanAc;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Ruang;
+use App\Models\User;
 
 class TeknisiController extends Controller
 {
@@ -50,8 +52,10 @@ class TeknisiController extends Controller
     public function jadwalPemeliharaan()
     {
         $userInfo = $this->getUserInfo();
+        $ruangOptions = Ruang::all();
+        $teknisiOptions = User::where('role', 'Teknisi')->get(); // Sesuaikan dengan kolom yang sesuai
         
-        return view('roles.teknisi.jadwal-pemeliharaan-teknisi', compact('userInfo'));
+        return view('roles.teknisi.jadwal-pemeliharaan-teknisi', compact('userInfo', 'ruangOptions', 'teknisiOptions'));
     }
 
     public function pemeliharaan($jadwal_pemeliharaan_ac_id)

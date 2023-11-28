@@ -67,10 +67,25 @@ class JadwalPemeliharaanAcController extends Controller
         return redirect()->route('teknisi.jadwal')->with('success', 'Teknisi berhasil ditambahkan!');
     }
 
-    public function data()
+    public function data(Request $request)
     {
         $jadwalPemeliharaanAc = JadwalPemeliharaanAc::with(['ruang', 'user']);
-        
+
+        // Filter data berdasarkan inputan user
+        if ($request->filter_ruang != null) {
+            $jadwalPemeliharaanAc->where('kode_ruang', $request->filter_ruang);
+        }
+        if($request->filter_status != null){
+            $jadwalPemeliharaanAc->where('status', $request->filter_status);
+        }
+        if ($request->filter_teknisi != null) {
+            $jadwalPemeliharaanAc->whereHas('user', function($query) use ($request) {
+                $query->where('name', $request->filter_teknisi);
+            });
+        }
+
+        // Urutkan data berdasarkan inputan user
+      
         return DataTables::of($jadwalPemeliharaanAc)
             -> addColumn('tanggal', function($row){
                 return $row->tanggal_pelaksanaan->format('d/m/Y');
@@ -108,7 +123,6 @@ class JadwalPemeliharaanAcController extends Controller
                     default:
                         // Handle other cases or leave as is
                 }
-            
                 return '<div class="' . $statusClass . '">' . $statusText . '</div>';
             })
                
@@ -131,6 +145,25 @@ class JadwalPemeliharaanAcController extends Controller
                             '<a class="btn btn-outline-success disabled">Catat</a>';
 
                 }
+            })
+            ->filterColumn('tanggal', function($query, $keyword) {
+                $query->whereDate('tanggal_pelaksanaan', 'like', '%' . $keyword . '%');
+            })
+            ->filterColumn('kode_barang', function($query, $keyword) {
+                $query->where('kode_barang', 'like', '%' . $keyword . '%');
+            })
+            ->filterColumn('nup', function($query, $keyword) {
+                $query->where('nup', 'like', '%' . $keyword . '%');
+            })
+            ->filterColumn('ruang', function($query, $keyword) {
+                $query->whereHas('ruang', function($query) use ($keyword) {
+                    $query->where('nama', 'like', '%' . $keyword . '%');
+                });
+            })
+            ->filterColumn('teknisi', function($query, $keyword) {
+                $query->whereHas('user', function($query) use ($keyword) {
+                    $query->where('name', 'like', '%' . $keyword . '%');
+                });
             })
             ->rawColumns(['status', 'action'])
             ->make(true);
