@@ -154,6 +154,9 @@
 
         $(document).ready(function() {
             dataTabelJadwal = $('#tabeljadwal').DataTable({
+                responsive: {
+            
+                },
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -172,10 +175,12 @@
                     {
                         data: 'tanggal',
                         name: 'tanggal',
+                        orderable: true,
                     },
                     {
                         data: 'kode_barang',
                         name: 'kode_barang',
+                        orderable: true,
                     },
                     {
                         data: 'nup',
@@ -185,14 +190,17 @@
                     {
                         data: 'ruang',
                         name: 'ruang',
+                        orderable: true,
                     },
                     {
                         data: 'status',
                         name: 'status',
+                        orderable: true,
                     },
                     {
                         data: 'teknisi',
                         name: 'teknisi',
+                        orderable: true,
                     },
                     {
                         data: 'action',

@@ -75,40 +75,70 @@ class JadwalPemeliharaanAcController extends Controller
         if ($request->filter_ruang != null) {
             $jadwalPemeliharaanAc->where('kode_ruang', $request->filter_ruang);
         }
-        if($request->filter_status != null){
+        if ($request->filter_status != null) {
             $jadwalPemeliharaanAc->where('status', $request->filter_status);
         }
         if ($request->filter_teknisi != null) {
-            $jadwalPemeliharaanAc->whereHas('user', function($query) use ($request) {
+            $jadwalPemeliharaanAc->whereHas('user', function ($query) use ($request) {
                 $query->where('name', $request->filter_teknisi);
             });
         }
 
-        // Urutkan data berdasarkan inputan user
-      
+        // Handle sorting based on the request
+        if ($request->has('order')) {
+            $order = $request->order[0];
+            $columnIndex = $order['column'];
+            $columnName = $request->columns[$columnIndex]['name'];
+            $sortDirection = $order['dir'];
+            //$jadwalPemeliharaanAc->orderBy($columnName, $sortDirection);
+
+            // Sorting untuk teknisi dan ruang
+            if ($columnName == 'teknisi') {
+                $columnName = $columnName . "_id";
+
+                // Use leftJoin with select to avoid duplicate column names
+                $jadwalPemeliharaanAc->leftJoin('users', $columnName, '=', 'users.user_id')
+                    ->select('jadwal_pemeliharaan_acs.*', 'users.name as teknisi_name');
+
+                // Use orderBy with the aliased column name
+                $jadwalPemeliharaanAc->orderBy('teknisi_name', $sortDirection);
+            } else if ($columnName == 'ruang') {
+                $columnName = "kode_" . $columnName;
+
+                // Use leftJoin with select to avoid duplicate column names
+                $jadwalPemeliharaanAc->leftJoin('ruangs', 'jadwal_pemeliharaan_acs.' . $columnName, '=', 'ruangs.kode_ruang')
+                    ->select('jadwal_pemeliharaan_acs.*', 'ruangs.nama as nama_ruang');
+
+                // Use orderBy with the aliased column name
+                $jadwalPemeliharaanAc->orderBy('nama_ruang', $sortDirection);
+            } else {
+                $jadwalPemeliharaanAc->orderBy($columnName, $sortDirection);
+            }
+        }
+
         return DataTables::of($jadwalPemeliharaanAc)
-            -> addColumn('tanggal', function($row){
+            ->addColumn('tanggal', function ($row) {
                 return $row->tanggal_pelaksanaan->format('d/m/Y');
             })
-            -> addColumn('kode_barang', function($row){
+            ->addColumn('kode_barang', function ($row) {
                 return $row->kode_barang;
             })
-            -> addColumn('nup', function($row){
+            ->addColumn('nup', function ($row) {
                 return $row->nup;
             })
-            -> addColumn('ruang', function($row){
+            ->addColumn('ruang', function ($row) {
                 return $row->ruang->nama;
             })
-            -> addColumn('teknisi', function($row){
-                if($row->user == null)
+            ->addColumn('teknisi', function ($row) {
+                if ($row->user == null)
                     return "-";
                 else
                     return $row->user->name;
-            }) 
+            })
             ->addColumn('status', function ($row) {
                 $statusClass = ''; // Default class
                 $statusText = $row->status; // Default status text
-            
+
                 switch ($row->status) {
                     case 'Belum Dikerjakan':
                         $statusClass = 'bg-rounded-status-monitoring rounded-pill bg-warning';
@@ -119,49 +149,48 @@ class JadwalPemeliharaanAcController extends Controller
                     case 'Selesai Dikerjakan':
                         $statusClass = 'bg-rounded-status-monitoring rounded-pill bg-success';
                         break;
-            
+
                     default:
                         // Handle other cases or leave as is
                 }
                 return '<div class="' . $statusClass . '">' . $statusText . '</div>';
             })
-               
+
             ->addColumn('action', function ($row) {
-                if ( $row->status == "Selesai Dikerjakan") {
+                if ($row->status == "Selesai Dikerjakan") {
                     return '
                                 <a class="btn btn-outline-secondary disabled">Ubah</a>
                                 <a class="btn btn-outline-success disabled">Catat</a>
                             ';
-                } if($row->status == "Sedang Dikerjakan"){
+                }
+                if ($row->status == "Sedang Dikerjakan") {
                     return '
                                 <a class="btn btn-outline-secondary disabled">Ubah</a>
-                                <a href="/teknisi/jadwal-pemeliharaan/pemeliharaan/'. $row->jadwal_pemeliharaan_ac_id.'/edit" class="btn btn-success">Catat</a>
+                                <a href="/teknisi/jadwal-pemeliharaan/pemeliharaan/' . $row->jadwal_pemeliharaan_ac_id . '/edit" class="btn btn-success">Catat</a>
                             ';
-                }
-                else {
+                } else {
                     // Ambil ID teknisi yang sedang login dan tampilkan namanya di kolom "Teknisi"
-                    $idTeknisiLogin = auth()->user()->user_id; 
+                    $idTeknisiLogin = auth()->user()->user_id;
                     return '<a href="' . route('teknisi.jadwal.set', ['jadwal_pemeliharaan_ac_id' => $row->jadwal_pemeliharaan_ac_id, 'teknisi_id' => $idTeknisiLogin]) . '" class="btn btn-secondary" id="ubah">Ubah</a>' .
-                            '<a class="btn btn-outline-success disabled">Catat</a>';
-
+                        '<a class="btn btn-outline-success disabled">Catat</a>';
                 }
             })
-            ->filterColumn('tanggal', function($query, $keyword) {
+            ->filterColumn('tanggal', function ($query, $keyword) {
                 $query->whereDate('tanggal_pelaksanaan', 'like', '%' . $keyword . '%');
             })
-            ->filterColumn('kode_barang', function($query, $keyword) {
+            ->filterColumn('kode_barang', function ($query, $keyword) {
                 $query->where('kode_barang', 'like', '%' . $keyword . '%');
             })
-            ->filterColumn('nup', function($query, $keyword) {
+            ->filterColumn('nup', function ($query, $keyword) {
                 $query->where('nup', 'like', '%' . $keyword . '%');
             })
-            ->filterColumn('ruang', function($query, $keyword) {
-                $query->whereHas('ruang', function($query) use ($keyword) {
+            ->filterColumn('ruang', function ($query, $keyword) {
+                $query->whereHas('ruang', function ($query) use ($keyword) {
                     $query->where('nama', 'like', '%' . $keyword . '%');
                 });
             })
-            ->filterColumn('teknisi', function($query, $keyword) {
-                $query->whereHas('user', function($query) use ($keyword) {
+            ->filterColumn('teknisi', function ($query, $keyword) {
+                $query->whereHas('user', function ($query) use ($keyword) {
                     $query->where('name', 'like', '%' . $keyword . '%');
                 });
             })
