@@ -21,46 +21,74 @@
                 </a>
                 <img class="mx-2" src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
                 <a href="/teknisi/daftar-pengaduan/detail" class="table-title d-flex text-dark">
-                    101
+                    {{ $pengaduans->tiket }}
                 </a>            
             </div>
             <table class="table table-striped mt-5" style="width: 100%;">
                 <tr>
-                    <th class="fw-bolder">Nomor</th>
-                    <td>101</td>
+                    <th class="fw-bolder">Tiket</th>
+                    <td>{{ $pengaduans->tiket }}</td>
                 </tr>
                 <tr>
-                    <th class="fw-bolder">Tanggal</th>
-                    <td>23/09/2023</td>
+                    <th class="fw-bolder">Tanggal Pengaduan</th>
+                    <td>{{ $pengaduans->tanggal->format('Y-m-d') }}</td>
+                </tr>
+                {{-- <tr>
+                    <th class="fw-bolder">Tanggal Selesai</th>
+                    <td>
+                        @if ($pengaduans->tanggal_selesai)
+                            {{ $pengaduans->tanggal_selesai->format('Y-m-d') }}
+                        @else
+                            {{ $pengaduans->tanggal_selesai }}
+                    </td>
+                </tr>                 --}}
+                {{-- <tr>
+                    <th class="fw-bolder">Kode Barang</th>
+                    <td>{{ $pengaduans->kode_barang }}</td>
                 </tr>
                 <tr>
-                    <th class="fw-bolder">Kode</th>
-                    <td>11001</td>
+                    <th class="fw-bolder">NUP</th>
+                    <td>{{ $pengaduans->nup }}</td>
+                </tr> --}}
+                <tr>
+                    <th class="fw-bolder">Jenis Barang</th>
+                    <td>{{ $pengaduans->jenis_barang }}</td>
                 </tr>
                 <tr>
                     <th class="fw-bolder">Ruang</th>
-                    <td>332</td>
+                    <td>{{ $pengaduans->kode_ruang }}</td>
                 </tr>
                 <tr>
                     <th class="fw-bolder">Prioritas</th>
-                    <td>Sedang</td>
+                    <td>{{ $pengaduans->prioritas }}</td>
                 </tr>
                 <tr>
                     <th class="fw-bolder">Status</th>
-                    <td>Dikerjakan</td>
+                    <td>{{ $pengaduans->status }}</td>
+                </tr>
+                <tr>
+                    <th class="fw-bolder">Deskripsi</th>
+                    <td>{{ $pengaduans->deskripsi }}</td>
                 </tr>
                 <tr>
                     <th class="fw-bolder">Teknisi</th>
-                    <td>Falana Rofako</td>
+                    <td>
+                        {{-- Display the teknisi name --}}
+                        @if($pengaduans->teknisi_id)
+                            {{ \App\Models\User::find($pengaduans->teknisi_id)->name }}
+                        @else
+                            N/A
+                        @endif
+                    </td>
                 </tr>
                 <tr>
-                    <th class="fw-bolder">Bukti</th>
+                    <th class="fw-bolder">Lampiran</th>
                     <td>
-                        <img class="img-fluid" src="{{ asset('images/proyektor-mati.png') }}" alt="proyektor-mati" width="300px" height="300px">
+                        <img class="img-fluid" src="{{ asset('storage/' . $pengaduans->lampiran) }}" alt="lampiran" width="300px" height="300px">
                     </td>
                 </tr>
             </table>
-            <a href="/teknisi/daftar-pengaduan/detail/catat" class="btn btn-success">Catat Perbaikan</a>
+            <a href="/teknisi/daftar-pengaduan/detail/catat/{{$pengaduans->tiket}}" class="btn btn-success">Catat Perbaikan</a>
         </div>
     </div>
 @endsection

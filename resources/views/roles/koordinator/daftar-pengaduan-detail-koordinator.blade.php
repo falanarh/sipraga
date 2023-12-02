@@ -18,66 +18,74 @@
             <p class="table-title text-dark" style="font-size:18px; font-weight: 600;">
                 DAFTAR PENGADUAN SARANA DAN PRASARANA KELAS
                 <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="arrow-right" width="33px" height="25px">
-                101
+                {{ $pengaduans->tiket }}
             </p>
-            <table class="table table-striped mt-5" style="width: 100%;">
-                <tr>
-                    <th class="fw-bolder">Nomor</th>
-                    <td>101</td>
-                </tr>
-                <tr>
-                    <th class="fw-bolder">Tanggal</th>
-                    <td>23/09/2023</td>
-                </tr>
-                <tr>
-                    <th class="fw-bolder">Kode</th>
-                    <td>11001</td>
-                </tr>
-                <tr>
-                    <th class="fw-bolder">Ruang</th>
-                    <td>332</td>
-                </tr>
-                <tr>
-                    <th class="fw-bolder">Prioritas</th>
-                    <td>Sedang</td>
-                </tr>
-                <tr>
-                    <th class="fw-bolder">Status</th>
-                    <td>Dikerjakan</td>
-                </tr>
-                <tr>
-                    <th class="fw-bolder">Teknisi</th>
-                    <td>
-                        <select id="prioritas" class="form-select border-0 px-0">
-                            <option value="">Pilih Nama Teknisi</option>
-                            <option value="Falana">Falana</option>
-                            <option value="Sindu">Sindu</option>
-                            <option value="Sari">Sari</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="fw-bolder">Deskripsi</th>
-                    <td>Proyektor tidak menyala</td>
-                </tr>
-                <tr>
-                    <th class="fw-bolder">Bukti</th>
-                    <td>
-                        <img class="img-fluid" src="{{ asset('images/proyektor-mati.png') }}" alt="proyektor-mati"
-                            width="300px" height="300px">
-                    </td>
-                </tr>
-            </table>
-            {{-- <a href="" class="btn btn-primary mt-4">Terima</a>
-            <a href="" class="btn btn-danger mt-4 mx-2">Tolak</a> --}}
-            <a href="#" id="terima-pengaduan" class="btn btn-primary">Terima</a>
+            <form action="{{ route('koordinator.update-pengaduan', ['tiket' => $pengaduans->tiket]) }}" method="POST">
+                @method('PUT')
+                @csrf            
+                <table class="table table-striped mt-5" style="width: 100%;">
+                    <tr>
+                        <th class="fw-bolder">Tiket</th>
+                        <td>{{ $pengaduans->tiket }}</td>
+                    </tr>
+                    <tr>
+                        <th class="fw-bolder">Tanggal</th>
+                        <td>{{ $pengaduans->tanggal->format('Y-m-d') }}</td>
+                    </tr>
+                    <tr>
+                        <th class="fw-bolder">Jenis Barang</th>
+                        <td>{{ $pengaduans->jenis_barang }}</td>
+                    </tr>
+                    <tr>
+                        <th class="fw-bolder">Ruang</th>
+                        <td>{{ $pengaduans->kode_ruang }}</td>
+                    </tr>
+                    <tr>
+                        <th class="fw-bolder">Prioritas</th>
+                        <td>{{ $pengaduans->prioritas }}</td>
+                    </tr>
+                    <tr>
+                        <th class="fw-bolder">Deskripsi</th>
+                        <td>{{ $pengaduans->deskripsi }}</td>
+                    </tr>
+                    <tr>
+                        <th class="fw-bolder">Teknisi</th>
+                        <td>
+                            <select name="teknisi_id" class="form-select border-0 px-0">
+                                <option value="">Pilih Nama Teknisi</option>
+                                @foreach ($teknisis as $teknisi)
+                                    <option value="{{ $teknisi->user_id }}" @if ($pengaduans->teknisi_id == $teknisi->user_id) selected @endif>{{ $teknisi->name }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="fw-bolder">Lampiran</th>
+                        <td>
+                            <img class="img-fluid" src="{{ asset('storage/' . $pengaduans->lampiran) }}" alt="lampiran" width="300px" height="300px">
+                        </td>
+                    </tr>
+                </table>
+
+                {{-- Flex container for buttons --}}
+                <div class="d-flex mt-4">
+                    <button type="submit" class="btn btn-primary">Terima</button>
+
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#modal-tolak">
+                        Tolak
+                    </button>
+                </div>
+            </form>
 
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#modal-tolak">
+            {{-- <button type="button" class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#modal-tolak">
                 Tolak
-            </button>
+            </button> --}}
 
-            <form action="">
+            <form action="{{ route('koordinator.tolak-pengaduan', ['tiket' => $pengaduans->tiket]) }}" method="post">
+                @csrf
+                @method('POST')
                 <!-- Modal -->
                 <div class="modal fade" id="modal-tolak" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                     aria-labelledby="modal-tolakLabel" aria-hidden="true">
@@ -91,7 +99,7 @@
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label for="tanggapan" class="form-label">Alasan</label>
-                                    <textarea class="form-control" id="tanggapan" rows="5"></textarea>
+                                    <textarea class="form-control" name="alasan_ditolak" id="tanggapan" rows="5"></textarea>
                                 </div>
                             </div>
                             <div class="modal-footer">

@@ -15,59 +15,89 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            {{-- <p class="table-title text-dark" style="font-size:18px; font-weight: 600;">DAFTAR PENGADUAN SARANA DAN PRASARANA KELAS</p> --}}
             <div class="title d-flex mb-4">
                 <a href="/pelapor/daftar-pengaduan" class="table-title d-flex text-dark">
                     DAFTAR PENGADUAN SARANA DAN PRASARANA KELAS
                 </a>
                 <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
-                <a href="/pelapor/daftar-pengaduan/detail" class="table-title d-flex text-dark">
-                    101
-                </a>            
+                <span class="table-title d-flex text-dark">
+                    DETAIL PENGADUAN
+                </span>
             </div>
             <table class="table table-striped mt-5" style="width: 100%;">
                 <tr>
-                    <th class="fw-bolder col-3">Nomor</th>
-                    <td class="col-9">101</td>
+                    <th class="fw-bolder col-3">Tiket</th>
+                    <td class="col-9">{{ $pengaduan->tiket }}</td>
                 </tr>
                 <tr>
                     <th class="fw-bolder col-3">Tanggal</th>
-                    <td class="col-9">23/09/2023</td>
+                    <td class="col-9">{{ $pengaduan->tanggal->format('Y-m-d') }}</td>
                 </tr>
                 <tr>
-                    <th class="fw-bolder col-3">Kode</th>
-                    <td class="col-9">11001</td>
+                    <th class="fw-bolder col-3">Jenis Barang</th>
+                    <td class="col-9">{{ $pengaduan->jenis_barang }}</td>
+                </tr>
+                <tr>
+                    <th class="fw-bolder col-3">Kode Barang</th>
+                    <td class="col-9" placeholder="-"> 
+                    @if($pengaduan->kode_barang)
+                        {{ $pengaduan->kode_barang }}
+                    @else
+                        N/A
+                    @endif</td>
+                </tr>
+                <tr>
+                    <th class="fw-bolder col-3">NUP</th>
+                    <td class="col-9" placeholder="-">
+                    @if($pengaduan->nup)
+                        {{ $pengaduan->nup }}
+                    @else
+                        N/A
+                    @endif</td>
                 </tr>
                 <tr>
                     <th class="fw-bolder col-3">Ruang</th>
-                    <td class="col-9">332</td>
+                    <td class="col-9">{{ $pengaduan->kode_ruang }}</td>
                 </tr>
                 <tr>
                     <th class="fw-bolder col-3">Prioritas</th>
-                    <td class="col-9">Sedang</td>
+                    <td class="col-9">{{ $pengaduan->prioritas }}</td>
                 </tr>
                 <tr>
                     <th class="fw-bolder col-3">Deskripsi</th>
-                    <td class="col-9">AC tiba-tiba mati atau menyala</td>
+                    <td class="col-9">{{ $pengaduan->deskripsi }}</td>
                 </tr>
                 <tr>
                     <th class="fw-bolder col-3">Status</th>
-                    <td class="col-9">Dikerjakan</td>
+                    <td class="col-9">{{ $pengaduan->status }}</td>
                 </tr>
                 <tr>
                     <th class="fw-bolder col-3">Teknisi</th>
-                    <td class="col-9">Falana Rofako</td>
+                    <td class="col-9" placeholder="-">@if($pengaduan->teknisi_id)
+                        {{ \App\Models\User::find($pengaduan->teknisi_id)->name }}
+                    @else
+                        N/A
+                    @endif</td>
                 </tr>
                 <tr>
-                    <th class="fw-bolder col-3">Bukti</th>
+                    <th class="fw-bolder col-3">Lampiran</th>
                     <td>
-                        <img class="img-fluid" src="{{ asset('images/proyektor-mati.png') }}" alt="proyektor-mati" width="300px" height="300px">
+                        <img class="img-fluid" src="{{ asset('storage/' . $pengaduan->lampiran) }}" alt="lampiran" width="300px" height="300px">
+
                     </td class="col-9">
                 </tr>
                 <tr>
-                    <th class="fw-bolder col-3">Tanggapan</th>
-                    <td class="col-9">-</td>
-                </tr>
+                    <th class="fw-bolder col-3">Keterangan</th>
+                    <td class="col-9" placeholder="-">
+                        @if($pengaduan->status === 'Ditolak')
+                            {{ $pengaduan->alasan_ditolak }}
+                        @elseif($pengaduan->status === 'Selesai')
+                            {{ $pengaduan->keterangan }}
+                        @else
+                            N/A
+                        @endif
+                    </td>
+                </tr>                
             </table>
         </div>
     </div>
