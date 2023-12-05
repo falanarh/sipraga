@@ -62,15 +62,18 @@ class KoordinatorController extends Controller
         //$pengaduans = Pengaduan::all(); // Adjust the logic based on your implementation
     
         $userInfo = $this->getUserInfo();
-    
+        $ruangOption = Ruang::all();
         // Pass the userInfo and pengaduans variables to the view
-        return view('roles.koordinator.daftar-pengaduan-koordinator', compact('userInfo'));
+        return view('roles.koordinator.daftar-pengaduan-koordinator', compact('userInfo', "ruangOption"));
     }
 
     public function daftarPengaduanDetail($tiket)
     {
         $userInfo = $this->getUserInfo();
-        $pengaduans = DB::table('pengaduans')->where('tiket', $tiket)->first();
+        $pengaduans = DB::table('pengaduans')->where('tiket', $tiket)
+        ->leftJoin('ruangs', 'pengaduans.kode_ruang', '=', 'ruangs.kode_ruang')
+        ->select('pengaduans.*', 'ruangs.nama as nama_ruang')
+        ->first();
         // Convert the date string to a Carbon instance
         $pengaduans->tanggal = Carbon::parse($pengaduans->tanggal);
         $teknisis = User::where('role', 'teknisi')->get();
@@ -119,10 +122,11 @@ class KoordinatorController extends Controller
     public function daftarPerbaikan()
     {
         $userInfo = $this->getUserInfo();
-        $perbaikans = Perbaikan::join('pengaduans', 'perbaikans.pengaduan_id', '=', 'pengaduans.pengaduan_id')
-            ->select('perbaikans.*', 'pengaduans.tiket', 'pengaduans.tanggal', 'pengaduans.jenis_barang', 'pengaduans.teknisi_id', 'pengaduans.kode_ruang')
-            ->get();
-        return view('roles.koordinator.daftar-perbaikan-koordinator', compact('userInfo', 'perbaikans'));
+        // $perbaikans = Perbaikan::join('pengaduans', 'perbaikans.pengaduan_id', '=', 'pengaduans.pengaduan_id')
+        //     ->select('perbaikans.*', 'pengaduans.tiket', 'pengaduans.tanggal', 'pengaduans.jenis_barang', 'pengaduans.teknisi_id', 'pengaduans.kode_ruang')
+        //     ->get();
+        $ruangOption = Ruang::all();
+        return view('roles.koordinator.daftar-perbaikan-koordinator', compact('userInfo', 'ruangOption'));
     }
 
     public function daftarPerbaikanDetail($tiket)

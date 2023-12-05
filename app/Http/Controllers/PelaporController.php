@@ -48,22 +48,24 @@ class PelaporController extends Controller
         //$pengaduans = Pengaduan::all(); // Adjust the logic based on your implementation
     
         $userInfo = $this->getUserInfo();
+        $ruangOption = Ruang::all();
     
         // Pass the userInfo and pengaduans variables to the view
-        return view('roles.pelapor.daftar-pengaduan-pelapor', compact('userInfo'));
+        return view('roles.pelapor.daftar-pengaduan-pelapor', compact('userInfo', 'ruangOption'));
     }
     
     public function daftarPengaduanDetail($tiket) {
         $userInfo = $this->getUserInfo();
     
-        //Menggunakan metode firstOrFail untuk mendapatkan satu baris data atau menampilkan 404 jika tidak ditemukan
         $pengaduan = Pengaduan::where('tiket', $tiket)
             ->leftJoin('perbaikans', 'pengaduans.pengaduan_id', '=', 'perbaikans.pengaduan_id')
-            ->select('pengaduans.*', 'perbaikans.kode_barang', 'perbaikans.nup', 'perbaikans.keterangan')
+            ->leftJoin('ruangs', 'pengaduans.kode_ruang', '=', 'ruangs.kode_ruang') // Add a left join with the 'ruangs' table
+            ->select('pengaduans.*', 'perbaikans.kode_barang', 'perbaikans.nup', 'perbaikans.keterangan', 'ruangs.nama as nama_ruang') // Select the 'nama' column from 'ruangs'
             ->firstOrFail();
     
         return view('roles.pelapor.daftar-pengaduan-detail-pelapor', compact('userInfo', 'pengaduan'));
     }
+    
     
     
     

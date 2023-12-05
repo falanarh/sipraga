@@ -57,7 +57,7 @@
                 </tr>
                 <tr>
                     <th class="fw-bolder col-3">Ruang</th>
-                    <td class="col-9">{{ $pengaduan->kode_ruang }}</td>
+                    <td class="col-9">{{ $pengaduan->nama_ruang }}</td>
                 </tr>
                 <tr>
                     <th class="fw-bolder col-3">Prioritas</th>

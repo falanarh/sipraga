@@ -37,7 +37,9 @@
                         <label for="nup" class="form-label">NUP</label>
                         <select id="nup" name="nup" class="form-control">
                             @foreach($nupOptions as $nup)
-                                <option value="{{ $perbaikan->nup }}">{{ $nup }}</option>
+                                <option value="{{ $nup }}" {{ $nup == $perbaikan->nup ? 'selected' : '' }}>
+                                    {{ $nup }}
+                                </option>
                             @endforeach
                         </select>
                     </div>

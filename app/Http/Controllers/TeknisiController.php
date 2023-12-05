@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Pengaduan;
 use App\Models\Perbaikan;
+use App\Models\Ruang;
 use App\Models\Aset;
 use App\Models\Barang;
 use Illuminate\Support\Facades\DB;
@@ -42,11 +43,12 @@ class TeknisiController extends Controller
     public function daftarPengaduan()
     {
         $userInfo = $this->getUserInfo();
+        $ruangOption = Ruang::all();
         
         // Get pengaduans for the logged-in teknisi
         // $pengaduans = Pengaduan::where('teknisi_id', Auth::id())->get();
 
-        return view('roles.teknisi.daftar-pengaduan-teknisi', compact('userInfo'));
+        return view('roles.teknisi.daftar-pengaduan-teknisi', compact('userInfo', 'ruangOption'));
     }
 
     public function daftarPengaduanDetail($tiket)
@@ -102,10 +104,11 @@ class TeknisiController extends Controller
     public function daftarPerbaikan()
     {
         $userInfo = $this->getUserInfo();
+        $ruangOption = Ruang::all();
         // $perbaikans = Perbaikan::join('pengaduans', 'perbaikans.pengaduan_id', '=', 'pengaduans.pengaduan_id')
         //     ->select('perbaikans.*', 'pengaduans.tiket', 'pengaduans.tanggal', 'pengaduans.jenis_barang', 'pengaduans.teknisi_id', 'pengaduans.kode_ruang')
         //     ->get();
-        return view('roles.teknisi.daftar-perbaikan-teknisi', compact('userInfo'));
+        return view('roles.teknisi.daftar-perbaikan-teknisi', compact('userInfo','ruangOption'));
     }
 
     public function daftarPerbaikanDetail($tiket)

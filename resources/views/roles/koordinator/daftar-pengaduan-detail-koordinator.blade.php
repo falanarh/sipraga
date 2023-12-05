@@ -38,7 +38,7 @@
                     </tr>
                     <tr>
                         <th class="fw-bolder">Ruang</th>
-                        <td>{{ $pengaduans->kode_ruang }}</td>
+                        <td>{{ $pengaduans->nama_ruang }}</td>
                     </tr>
                     <tr>
                         <th class="fw-bolder">Prioritas</th>
@@ -69,7 +69,9 @@
 
                 {{-- Flex container for buttons --}}
                 <div class="d-flex mt-4">
-                    <button type="submit" class="btn btn-primary">Terima</button>
+                    <button type="submit" class="btn btn-primary">
+                        Terima
+                    </button>
 
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#modal-tolak">
@@ -82,6 +84,27 @@
             {{-- <button type="button" class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#modal-tolak">
                 Tolak
             </button> --}}
+
+            {{-- Modal for Terima --}}
+            {{-- <div class="modal fade" id="modal-terima" tabindex="-1" aria-labelledby="modal-terimaLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modal-terimaLabel">Konfirmasi Terima Pengaduan</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Apakah Anda ingin menyetujui pengaduan ini?</p> --}}
+                            {{-- Hidden field to capture the selected technician's ID --}}
+                            {{-- <input type="hidden" id="selectedTechnicianId" name="teknisi_id" value="">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" onclick="submitUpdateForm()">Yes</button>
+                        </div>
+                    </div>
+                </div>
+            </div> --}}
 
             <form action="{{ route('koordinator.tolak-pengaduan', ['tiket' => $pengaduans->tiket]) }}" method="post">
                 @csrf
@@ -112,3 +135,23 @@
         </div>
     </div>
 @endsection
+
+{{-- @section('additional.js')
+    <script>
+        // JavaScript to update the hidden field value when the dropdown changes
+        document.addEventListener('DOMContentLoaded', function () {
+            var selectTechnician = document.querySelector('select[name="teknisi_id"]');
+            var hiddenTechnicianId = document.getElementById('selectedTechnicianId');
+
+            // Event listener for dropdown change
+            selectTechnician.addEventListener('change', function () {
+                hiddenTechnicianId.value = this.value; // Update the hidden field value
+            });
+        });
+
+        // JavaScript function to submit the form when "Yes" is clicked
+        function submitUpdateForm() {
+            document.querySelector('form#updateForm').submit();
+        }
+    </script>
+@endsection --}}

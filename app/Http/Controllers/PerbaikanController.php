@@ -117,13 +117,54 @@ class PerbaikanController extends Controller
         return redirect()->route('teknisi.daftar-perbaikan')->with('success', 'Perbaikan updated successfully');
     }
 
-    public function dataTeknisi()
+    // public function dataTeknisi()
+    // {
+    //     $perbaikans = Perbaikan::join('pengaduans', 'perbaikans.pengaduan_id', '=', 'pengaduans.pengaduan_id')
+    //         ->leftJoin('users', 'pengaduans.teknisi_id', '=', 'users.user_id')
+    //         ->select('perbaikans.*', 'pengaduans.tiket', 'pengaduans.tanggal', 'pengaduans.jenis_barang', 'pengaduans.kode_ruang', 'users.name as teknisi_name')
+    //         ->get();
+        
+    //     return Datatables::of($perbaikans)
+    //         ->addColumn('action', function($perbaikans) {
+    //             return '<a href="/teknisi/daftar-perbaikan/detail/'.$perbaikans->tiket.'" class="btn btn-dark">Detail</a>';
+    //         })
+    //         ->make(true);
+    // }
+
+    public function dataTeknisi(Request $request)
     {
         $perbaikans = Perbaikan::join('pengaduans', 'perbaikans.pengaduan_id', '=', 'pengaduans.pengaduan_id')
             ->leftJoin('users', 'pengaduans.teknisi_id', '=', 'users.user_id')
-            ->select('perbaikans.*', 'pengaduans.tiket', 'pengaduans.tanggal', 'pengaduans.jenis_barang', 'pengaduans.kode_ruang', 'users.name as teknisi_name')
-            ->get();
-        
+            ->leftJoin('ruangs', 'pengaduans.kode_ruang', '=', 'ruangs.kode_ruang')
+            ->select('perbaikans.*', 
+            'pengaduans.tiket', 
+            'pengaduans.tanggal', 
+            'pengaduans.jenis_barang', 
+            'ruangs.nama as nama_ruang',
+            'pengaduans.kode_ruang', 
+            'users.name as teknisi_name')
+            ->where('pengaduans.teknisi_id', Auth::id());
+
+        // Filter data berdasarkan inputan user
+        if ($request->filter_ruang != null) {
+            $perbaikans->where('ruangs.kode_ruang', $request->filter_ruang);}
+
+        // Handle sorting based on the request
+        if ($request->has('order')) {
+            $order = $request->order[0];
+            $columnIndex = $order['column'];
+            $columnName = $request->columns[$columnIndex]['name'];
+            $sortDirection = $order['dir'];
+
+            // Sorting untuk ruang
+            if ($columnName == 'nama_ruang') {
+                $perbaikans->orderBy('ruangs.nama', $sortDirection);
+            } else {
+                $perbaikans->orderBy($columnName, $sortDirection);
+            }
+            
+        }
+
         return Datatables::of($perbaikans)
             ->addColumn('action', function($perbaikans) {
                 return '<a href="/teknisi/daftar-perbaikan/detail/'.$perbaikans->tiket.'" class="btn btn-dark">Detail</a>';
@@ -131,13 +172,33 @@ class PerbaikanController extends Controller
             ->make(true);
     }
 
-    public function dataKoordinator()
+    public function dataKoordinator(Request $request)
     {
         $perbaikans = Perbaikan::join('pengaduans', 'perbaikans.pengaduan_id', '=', 'pengaduans.pengaduan_id')
             ->leftJoin('users', 'pengaduans.teknisi_id', '=', 'users.user_id')
-            ->select('perbaikans.*', 'pengaduans.tiket', 'pengaduans.tanggal', 'pengaduans.jenis_barang', 'pengaduans.kode_ruang', 'users.name as teknisi_name')
-            ->get();
+            ->leftJoin('ruangs', 'pengaduans.kode_ruang', '=', 'ruangs.kode_ruang')
+            ->select('perbaikans.*', 'pengaduans.tiket', 'pengaduans.tanggal','ruangs.nama as nama_ruang', 'pengaduans.jenis_barang', 'pengaduans.kode_ruang', 'users.name as teknisi_name');
         
+        // Filter data berdasarkan inputan user
+        if ($request->filter_ruang != null) {
+            $perbaikans->where('ruangs.kode_ruang', $request->filter_ruang);}
+
+        // Handle sorting based on the request
+        if ($request->has('order')) {
+            $order = $request->order[0];
+            $columnIndex = $order['column'];
+            $columnName = $request->columns[$columnIndex]['name'];
+            $sortDirection = $order['dir'];
+
+            // Sorting untuk ruang
+            if ($columnName == 'nama_ruang') {
+                $perbaikans->orderBy('ruangs.nama', $sortDirection);
+            } else {
+                $perbaikans->orderBy($columnName, $sortDirection);
+            }
+            
+        }
+
         return Datatables::of($perbaikans)
             ->addColumn('action', function($perbaikans) {
                 return '<a href="/koordinator/daftar-perbaikan/detail/'.$perbaikans->tiket.'" class="btn btn-dark">Detail</a>';

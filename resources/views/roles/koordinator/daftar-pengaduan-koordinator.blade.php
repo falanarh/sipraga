@@ -22,27 +22,28 @@
                     <label class="mb-1 fw-bold" for="filterRuang">Ruang:</label>
                     <select id="filterRuang" name="filter_ruang" class="form-select filter-dropdown">
                         <option value="">Pilih Ruang</option>
-                        @foreach ($ruangOptions as $option)
-                            <option value="{{ $option->kode_ruang }}">{{ $option->nama }}</option>
-                        @endforeach
+                            @foreach ($ruangOption as $option)
+                                <option value="{{ $option->nama }}">{{ $option->nama }}</option>
+                            @endforeach
                     </select>
                 </div>
                 <div class="mb-4">
                     <label class="mb-1 fw-bold" for="filterStatus">Status:</label>
                     <select id="filterStatus" name="filter_status" class="form-select filter-dropdown">
                         <option value="">Pilih Status</option>
-                        @foreach ($statusOptions as $option)
-                            <option value="{{ $option->status }}">{{ $option->status }}</option>
-                        @endforeach
+                        <option value="Menunggu">Menunggu</option>
+                        <option value="Ditolak">Ditolak</option>
+                        <option value="Dikerjakan">Dikerjakan</option>
+                        <option value="Selesai">Selesai</option>
                     </select>
                 </div>
                 <div class="mb-4">
-                    <label class="mb-1 fw-bold" for="filterTeknisi">Teknisi:</label>
-                    <select id="filterTeknisi" name="filter_teknisi" class="form-select filter-dropdown">
+                    <label class="mb-1 fw-bold" for="filterPrioritas">Prioritas:</label>
+                    <select id="filterPrioritas" name="filter_prioritas" class="form-select filter-dropdown">
                         <option value="">Pilih Prioritas</option>
-                        @foreach ($prioritasOptions as $option)
-                            <option value="{{ $option->prioritas }}">{{ $option->prioritas }}</option>
-                        @endforeach
+                        <option value="Rendah">Rendah</option>
+                        <option value="Sedang">Sedang</option>
+                        <option value="Tinggi">Tinggi</option>
                     </select>
                 </div>
             </div>
@@ -68,6 +69,9 @@
 
 @section('additional-js')
     <script>
+
+        var tabelPengaduan
+
         $(document).ready(function() {
             // Check if DataTable is already initialized
             if ($.fn.DataTable.isDataTable('#example')) {
@@ -76,10 +80,18 @@
             }
 
             // Initialize the DataTable
-            $('#example').DataTable({
+            tabelPengaduan = $('#example').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('koordinator.daftar-pengaduan.view') }}",
+                ajax: {
+                    url: "{{ route('koordinator.daftar-pengaduan.view') }}",
+                    data: function(d) {
+                        d.filter_ruang = $('#filterRuang').val(); // Ambil nilai dropdown filter
+                        d.filter_status = $('#filterStatus').val(); // Ambil nilai dropdown filter
+                        d.filter_prioritas = $('#filterPrioritas').val(); // Ambil nilai dropdown filter
+                    }
+                },
+                // ajax: "{{ route('koordinator.daftar-pengaduan.view') }}",
                 columns: [
                     { data: 'tiket', name: 'tiket' },
                     {   data: 'tanggal',
@@ -89,15 +101,17 @@
                         }
                     },
                     { data: 'jenis_barang', name: 'jenis_barang' },
-                    { data: 'kode_ruang', name: 'kode_ruang' },
+                    { data: 'nama_ruang', name: 'nama_ruang' },
                     { data: 'prioritas', name: 'prioritas' },
                     { data: 'status', name: 'status' },
                     { data: 'teknisi_name', name: 'teknisi_name' },
                     { data: 'action', name: 'action', orderable: false, searchable: false},
                 ],
             });
-
-            
+            // Event listener untuk dropdown filter
+            $('.filter-dropdown').change(function() {
+                tabelPengaduan.ajax.reload(); // Menggambar ulang tabel untuk menerapkan filter
+            });
         });
     </script>
 @endsection
