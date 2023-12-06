@@ -15,7 +15,7 @@
       </ul>
       <div class="navbar-collapse justify-content-end mx-2 px-0 d-flex align-items-center justify-content-between" id="navbarNav">
         <ul class="navbar-nav d-flex align-items-center justify-content-end">
-          <p class="fluid-text m-0 text-dark">Selamat {{ $userInfo['timeOfDay'] }}, {{ $userInfo['name'] }}!</p>
+          <p class="fluid-text m-0 text-dark text-sm">Selamat {{ $userInfo['timeOfDay'] }}, {{ $userInfo['name'] }}!</p>
         </ul>
         <ul class="navbar-nav flex-row align-items-center justify-content-end">
           <p class="fluid-text-display m-0 text-dark">{{ $userInfo['role']  }}</p>

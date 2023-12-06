@@ -1,7 +1,11 @@
 <?php
 
+use App\Http\Controllers\GoogleSheetController;
 use Illuminate\Http\Request;
+use App\Models\PeminjamanRuangan;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RuangController;
+use App\Http\Controllers\PeminjamanRuanganController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +21,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('peminjaman-ruangan/store', [PeminjamanRuanganController::class, 'store']);
+
+Route::get('ruangs', [RuangController::class, 'getRuangs']);
+
+Route::get('ketersediaan-ruangs', [GoogleSheetController::class,'readSheet']);

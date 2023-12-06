@@ -15,7 +15,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <p class="table-title text-dark" style="font-size:18px; font-weight: 600;"> FORM PENGAMBILAN BARANG BHP </p>
+            <p class="table-title text-dark text-center" style=""> FORM PENGAMBILAN BARANG BHP </p>
             <form class="mt-4">
                 <div class="mb-3">
                     <label for="jenis" class="form-label">Barang yang diambil</label>

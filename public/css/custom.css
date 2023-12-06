@@ -36,25 +36,53 @@
     margin-top: 20px; /* Atur jarak di atas garis jika diperlukan */
     margin-bottom: 20px; /* Atur jarak di bawah garis jika diperlukan */
   }
-  
 
-/* CSS untuk layar berukuran <= 525px */
+  
+  /* CSS untuk layar berukuran <= 525px */
 @media (max-width: 525px) {
     .fluid-text, .fluid-text-display, .table-title {
         font-size: 16px; /* Ubah ukuran font sesuai kebutuhan Anda */
     }
 }
 
-/* CSS untuk layar berukuran <= 525px */
+/* CSS untuk layar berukuran <= 445px */
 @media (max-width: 445px) {
+    .card{
+        padding-top: 0px;
+    }
+    .card-body{
+        padding-top: 10px;
+    }
+
     .fluid-text, .fluid-text-display, .table-title {
         font-size: 12px; /* Ubah ukuran font sesuai kebutuhan Anda */
     }
-}
 
-/* CSS untuk layar berukuran <= 410px */
-@media (max-width: 410px) {
+    /* .table-title a:hover{
+        color:black;
+    } */
+
+    .mb-3 label{
+        font-size: 12px;
+    }
+    
     .fluid-text {
         display: none;
     }
+
+    .mb-3 .form-select, .mb-3 .form-control{
+        font-size: 11px;
+    }
+
+    .btn-primary .mt-4 {
+        font-size: 11px;
+    }
+
+    table {
+        font-size: 11px;
+    }
 }
+
+
+
+

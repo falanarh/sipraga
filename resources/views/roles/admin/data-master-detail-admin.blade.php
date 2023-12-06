@@ -16,12 +16,12 @@
     <div class="card">
         <div class="card-body">
             <div class="title d-flex mb-4">
-                <a href="{{ route('admin.data-master') }}" class="table-title d-flex text-dark">
+                <a href="{{ route('admin.data-master') }}" class="table-title d-flex" style="font-weight: 700; color: #818181;">
                     DATA MASTER
                 </a>
-                <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
+                <img src="{{ asset('images/icons/chevron-right.svg') }}" alt="">
                 <a href="{{ route('admin.data-master.sarpras.detail', ['kode_barang' => $aset->kode_barang, 'nup' => $aset->nup]) }}"
-                    class="table-title d-flex text-dark">
+                    class="table-title d-flex text-dark" style="font-weight: 700">
                     {{ $aset->kode_barang }}/{{ $aset->nup }}
                 </a>
             </div>

@@ -29,7 +29,7 @@
             </div>
             <hr class="my-4">
             <div class="row-card d-flex justify-content-between">
-                <p class="table-title text-dark mb-4">DATA RUANGAN</p>
+                <p class="table-title mb-4">DATA RUANGAN</p>
                 <div>
                     <a href="/admin/data-ruangan/tambah-ruang" class="btn btn-dark text-white d-flex align-items-center">
                         <img src="{{ asset('images/icons/plus.svg') }}" alt="" class="mr-2 add-icon img-fluid">

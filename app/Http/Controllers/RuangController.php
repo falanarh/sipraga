@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Ruang;
 use Illuminate\Http\Request;
-use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
+use Yajra\DataTables\Facades\DataTables;
 
 class RuangController extends Controller
 {
@@ -116,5 +117,31 @@ class RuangController extends Controller
                          </a>';
             })
             ->make(true);
+    }
+
+    public function getRuangs(Request $request)
+    {
+        try {
+            $ruangs = Ruang::all();
+
+            $response = [
+                'success' => 'Daftar ruangan berhasil diambil!',
+                'data' => $ruangs,
+            ];
+
+            return response()->json($response, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            $response = [
+                'error' => 'Terjadi kesalahan saat mengambil daftar ruangan.',
+                'details' => $th->getMessage(),
+            ];
+
+            return response()->json($response, Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getStatusRuang(Request $request)
+    {
+
     }
 }

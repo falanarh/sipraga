@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\PengecekanKelas;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AsetController;
 use App\Http\Controllers\AdminController;
@@ -13,7 +14,7 @@ use App\Http\Controllers\PemakaiBHPController;
 use App\Http\Controllers\ImportRuangController;
 use App\Http\Controllers\KoordinatorController;
 use App\Http\Controllers\PengecekanKelasController;
-use App\Models\PengecekanKelas;
+use App\Http\Controllers\PeminjamanRuanganController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +29,7 @@ use App\Models\PengecekanKelas;
 //Login
 Route::middleware(['guest'])->group(function () {
     Route::get('/', function () {
-       return redirect('/home');
+        return redirect('/home');
     });
     Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
@@ -61,6 +62,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/ketersediaan-ruangan', [AdminController::class, 'ketersediaanRuangan']);
         Route::get('/admin/ketersediaan-ruangan/detail', [AdminController::class, 'ketersediaanRuanganDetail']);
         // Route::get('/admin/data-ruangan/edit-ruang', [AdminController::class, 'editRuangan']);
+
+        //Route::post('api/peminjaman-ruangan/store', [PeminjamanRuanganController::class, 'store']);
         Route::get('/admin/data-ruangan/tambah-ruang', [AdminController::class, 'tambahRuangan']);
         Route::post('/admin/data-ruangan/tambah-ruang/impor', [ImportRuangController::class, 'import'])->name('admin.data-ruangan.impor');
         Route::post('/admin/data-ruangan/tambah-ruang', [RuangController::class, 'store'])->name('admin.data-ruangan.store');
