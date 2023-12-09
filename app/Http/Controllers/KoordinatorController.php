@@ -53,6 +53,7 @@ class KoordinatorController extends Controller
         return view('roles.koordinator.penugasan-admin', compact('userInfo', 'adminUsers', 'pengecekanKelas'));
     }
 
+    
     public function daftarPengaduan()
     {
         $userInfo = $this->getUserInfo();

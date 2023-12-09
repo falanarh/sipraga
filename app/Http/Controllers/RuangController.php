@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Ruang;
 use Illuminate\Http\Request;
-use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Validation\Rule;
+use Yajra\DataTables\Facades\DataTables;
 
 class RuangController extends Controller
 {
@@ -117,4 +118,39 @@ class RuangController extends Controller
             })
             ->make(true);
     }
+
+    public function getRuangs(){
+        try {
+            $ruangs = Ruang::select('kode_ruang', 'nama', 'gedung', 'lantai', 'kapasitas')->get();
+        
+            $response = [
+                'status_code' => 200,
+                'message' => 'Berhasil mendapatkan data ruangan!',
+                'data' => $ruangs,
+            ];
+        
+            return response()->json($response, 200);
+        } catch (Exception $e) {
+            $response = [
+                'status_code' => 500,
+                'error' => $e->getMessage(),
+            ];
+        
+            return response()->json($response, 500);
+        }        
+    }
+
+    public function getRuangsForCalendar() {
+        $ruangs = Ruang::select('kode_ruang', 'nama', 'gedung', 'lantai', 'kapasitas')->get();
+    
+        $ruangsForCalendar = $ruangs->map(function ($ruang) {
+            return [
+                'id' => $ruang->kode_ruang,
+                'title' => $ruang->nama,
+                // Jika Anda ingin menyertakan informasi lain, tambahkan di sini
+            ];
+        });
+    
+        return $ruangsForCalendar;
+    }    
 }

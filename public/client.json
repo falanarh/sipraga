@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "sipraga",
+  "private_key_id": "5dd858d2193832953712ee5724a14039463e7f22",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDadr3PAMmExbDK\np4xMYEBym1RuNn82HxJVqVHbgl+Qkph0P3I4lRLd48zvyPqwW4erbF08+yQpKKhr\n+wpaz9b2kYoEmpM8eEe7Rnf/UaH/X6E/odScFhVYBNlitBNphUOm7xtdyjBbSUYE\nytbyM3TTau3XRMQdl2XuGDdeQRrF8HH+2JlHjQ0nw0aNnGlRyHd0wvKuYSH0iOTA\nsqMfP674Pfe5JFCN1UAPR7olktm+RAX2wZYNSxU6dBvTDnGzhKxBICUaKV3tMBoT\n0kGvZkxWBYrDFe1uK85yX0l8pKyx6upqgYR/RwY7UkdyILz6xy2tZzaNsP8DaGpX\nMa8/7q1DAgMBAAECggEAZg9dI0zx2DZnHnXh5Hh/A0uvyQFqssUXUq+Uj2E79hWW\nZZCScv6p3sGip08UVrmcCyjH8ko9nYDiFfgk4UIB4hUiDn6MVI64rDQCsWPYs65g\nbZLT+cuTUxiI2kTYYM6iSWWhOlLP/oWf0XNVsbb6WB63WH9Gw7BMLUxg6Yau1FNf\n/G6IK1+E2Il823NnZ+u+hampswvmavjdgtOikIzWqyO9XZ2oKXa03lEuqbusTakE\n2AwrD6qvl5KCL+VVbwq+wjWQ3KWqZtv25yMvTidD4/4ujvsNAkbRyeKg/hapypdT\n6AX5WjDdjo2ztP/30IVXeeAcmBwk6GdVWR0BKl5t8QKBgQD7es6zqxQdINp3aXGy\nsvyVFsweVUhgd+Omy41tjUUaGLZNsVaV8pMmc84eOxROoLTiK8i/gNJiA4V948MT\nl+gHnbsrzFSCYyEs3QHWuRKL3GJF6da/x8rpro1RQY3IBBkeEQpgXOzFIacixw7O\nx6AjK1WYricacQ0f56fzn6ilGQKBgQDeZAKiXI1nhvYCKbEIFReAMVzzw52Sf0B5\noqAzox/npHyl5aFqYM4TLV9DNgDFe79MDWLiaBF1yA0Ym/59jUQ3B4tPZBF8Rho3\naXu4yXjViyvDfzTcSF+BTPFxX2fdovcpOYA6EI7IUz4ka34vyESQp/MCmcpRKiFQ\nq2cH6X00uwKBgG7/ysK1DYC54pP4f83vgNtRn7D31aV25Y3WpMspIsodBEKQtvYi\nht7fGKhxTUpTVuPJjacxdir7AO4LHSzFzQ2nilkPrHGMzbTerBQZxlzjXqEbUMV/\nq0mv2QJ3m9wgKvIBdYIJIhz0+K+6CwgsRrufQf3NSMc8BR4DAzfeTfLpAoGAD20c\niaql3GKOOgQuVYMxCCFkczxEd97/1/Ah8LMGCYltZAyTr89bPBVPoFfkoc49rMbY\n7x+M5oCj9+sKMidUbgTF8xHb7KToOKPGg0DmctmehYcTYZxbk5qEvPqDN+qP/noQ\nnPZ9EQRFMT2LmUDpEKe1wZ5tXEfx26ioEvJtTvUCgYAsy/oGhvGe32fYnZD69Bf9\nT6rpl5Titxeb6AndOBINOwKlN5Bx+j7MPDGvF6L+8aGR0qXBd2NoXiVuqvReiSVY\nEQ3fcHtee1FPmmRDGx0FNP2/k23EEv5GIs4gle//SRCleJL7HpwNq8J0n8t+56eb\nPc6tMwbY8UOwxZPcqv60FA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "sipraga@sipraga.iam.gserviceaccount.com",
+  "client_id": "111649951258444294961",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sipraga%40sipraga.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

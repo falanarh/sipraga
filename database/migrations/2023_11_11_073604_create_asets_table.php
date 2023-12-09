@@ -22,14 +22,14 @@ class CreateAsetsTable extends Migration
             $table->string('kode_ruang')->nullable();
             $table->enum('kondisi', ['Baik', 'Rusak Ringan', 'Rusak Berat'])->default('Baik');
             $table->date('tanggal_pemeliharaan_terakhir')->nullable();
-        $table->string('deskripsi')->nullable();
+            $table->string('deskripsi')->nullable();
             $table->primary(['kode_barang', 'nup']);
             //Definisi foreign key dengan cascade delete
             $table->foreign('kode_barang')
                 ->references('kode_barang')
                 ->on('barangs')
                 ->onDelete('cascade')
-                ->onUpdate('cascade');
+                ->onUpdate('cascade'); 
             //Definisi foreign key dengan cascade delete
             $table->foreign('kode_ruang')
                 ->references('kode_ruang')
