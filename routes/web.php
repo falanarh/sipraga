@@ -21,6 +21,9 @@ use App\Http\Controllers\PemakaiBHPController;
 use App\Http\Controllers\ImportRuangController;
 use App\Http\Controllers\KoordinatorController;
 use App\Http\Controllers\PengecekanKelasController;
+use App\Http\Controllers\JadwalPemeliharaanAcController;    
+use App\Http\Controllers\PemeliharaanAcController;
+use App\Models\PengecekanKelas;
 use App\Http\Controllers\StaffController;
 use App\Models\Dosen;
 use App\Models\Staff;
@@ -120,9 +123,13 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['userAkses:Teknisi'])->group(function () {
         Route::get('/teknisi/daftar-pengaduan', [TeknisiController::class, 'daftarPengaduan']);
         Route::get('/teknisi/daftar-pengaduan/detail', [TeknisiController::class, 'daftarPengaduanDetail']);
-        Route::get('/teknisi/jadwal-pemeliharaan', [TeknisiController::class, 'jadwalPemeliharaan']);
-        Route::get('/teknisi/jadwal-pemeliharaan/pemeliharaan', [TeknisiController::class, 'pemeliharaan']);
-        Route::get('/teknisi/daftar-pemeliharaan', [TeknisiController::class, 'daftarPemeliharaan']);
+        Route::get('/teknisi/jadwal-pemeliharaan', [TeknisiController::class, 'jadwalPemeliharaan'])->name('teknisi.jadwal');
+        Route::get('/teknisi/jadwal-pemeliharaan/set/{jadwal_pemeliharaan_ac_id}/{teknisi_id}', [JadwalPemeliharaanAcController::class, 'setTeknisiId'])->name('teknisi.jadwal.set');
+        Route::get('/teknisi/jadwal-pemeliharaan/generate', [JadwalPemeliharaanAcController::class, 'generateJadwal'])->name('teknisi.jadwal.generate');
+        Route::get('/teknisi/jadwal-pemeliharaan/ac', [JadwalPemeliharaanAcController::class, 'data'])->name('teknisi.jadwal.ac');
+        Route::get('/teknisi/jadwal-pemeliharaan/pemeliharaan/{jadwal_pemeliharaan_ac_id}/edit', [TeknisiController::class, 'pemeliharaan'])->name('teknisi.jadwal.pemeliharaan-form');
+        Route::post('/teknisi/jadwal-pemeliharaan/pemeliharaan/{jadwal_pemeliharaan_ac_id}/edit', [PemeliharaanAcController::class, 'store'])->name('teknisi.jadwal.pemeliharaan.store');
+        Route::get('/teknisi/daftar-pemeliharaan', [TeknisiController::class, 'daftarPemeliharaan'])->name('teknisi.daftar-pemeliharaan');
         Route::get('/teknisi/daftar-pemeliharaan/detail', [TeknisiController::class, 'daftarPemeliharaanDetail']);
         Route::get('/teknisi/daftar-pengaduan/detail/catat', [TeknisiController::class, 'perbaikan']);
         Route::get('/teknisi/daftar-perbaikan', [TeknisiController::class, 'daftarPerbaikan']);

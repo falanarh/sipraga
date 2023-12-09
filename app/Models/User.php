@@ -55,6 +55,11 @@ class User extends Authenticatable
         return $this->hasMany(PengecekanKelas::class);
     }
 
+    public function jadwalPemeliharaanAcs()
+    {
+        return $this->hasMany(JadwalPemeliharaanAc::class, 'teknisi_id', 'user_id');
+    }
+  
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
