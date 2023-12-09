@@ -16,7 +16,12 @@ class UserAkses
      */
     public function handle(Request $request, Closure $next, $role)
     {
-        if(auth()->user()->role == $role){
+        // Jika $role adalah array, gunakan contains untuk memeriksa apakah user memiliki setidaknya satu dari role tersebut
+        if (is_array($role) && auth()->user()->roles->pluck('name')->contains($role)) {
+            return $next($request);
+        }
+        // Jika $role adalah string, langsung cek apakah user memiliki role tersebut
+        elseif (is_string($role) && auth()->user()->roles->pluck('name')->contains($role)) {
             return $next($request);
         }
 
