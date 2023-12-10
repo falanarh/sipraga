@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Ruang;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -118,30 +119,39 @@ class RuangController extends Controller
             })
             ->make(true);
     }
-
-    public function getRuangs(Request $request)
-    {
+  
+    public function getRuangs(){
         try {
-            $ruangs = Ruang::all();
-
+            $ruangs = Ruang::select('kode_ruang', 'nama', 'gedung', 'lantai', 'kapasitas')->get();
+        
             $response = [
-                'success' => 'Daftar ruangan berhasil diambil!',
+                'status_code' => 200,
+                'message' => 'Berhasil mendapatkan data ruangan!',
                 'data' => $ruangs,
             ];
-
-            return response()->json($response, Response::HTTP_OK);
-        } catch (\Throwable $th) {
+        
+            return response()->json($response, 200);
+        } catch (Exception $e) {
             $response = [
-                'error' => 'Terjadi kesalahan saat mengambil daftar ruangan.',
-                'details' => $th->getMessage(),
+                'status_code' => 500,
+                'error' => $e->getMessage(),
             ];
-
-            return response()->json($response, Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        
+            return response()->json($response, 500);
+        }        
     }
 
-    public function getStatusRuang(Request $request)
-    {
-
-    }
+    public function getRuangsForCalendar() {
+        $ruangs = Ruang::select('kode_ruang', 'nama', 'gedung', 'lantai', 'kapasitas')->get();
+    
+        $ruangsForCalendar = $ruangs->map(function ($ruang) {
+            return [
+                'id' => $ruang->kode_ruang,
+                'title' => $ruang->nama,
+                // Jika Anda ingin menyertakan informasi lain, tambahkan di sini
+            ];
+        });
+    
+        return $ruangsForCalendar;
+    }    
 }

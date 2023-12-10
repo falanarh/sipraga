@@ -24,7 +24,12 @@ class Ruang extends Model
 
     public function pengecekanKelass()
     {
-    return $this->hasMany(PengecekanKelas::class, 'kode_ruang', 'kode_ruang');
+     return $this->hasMany(PengecekanKelas::class, 'kode_ruang', 'kode_ruang');
+    }
+
+    public function jadwalPemeliharaanAcs()
+    {
+        return $this->hasMany(JadwalPemeliharaanAc::class, 'kode_ruang', 'kode_ruang');
     }
 
     public function peminjamanRuangs()

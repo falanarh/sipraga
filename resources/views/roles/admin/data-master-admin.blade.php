@@ -13,12 +13,12 @@
     </style>
 @endsection
 
-{{-- Menambahkan sidebar untuk teknisi --}}
+{{-- Menambahkan sidebar untuk admin --}}
 @section('sidebar')
     @include('partials.sidebar-admin')
 @endsection
 
-{{-- Menambahkan header untuk teknisi --}}
+{{-- Menambahkan header untuk admin --}}
 @section('header')
     @include('partials.header')
 @endsection
@@ -82,6 +82,7 @@
                         <!-- JavaScript will populate options here -->
                     </select>
                 </div>
+                
                 <!-- Button trigger modal -->
                 <div class="ms-auto my-auto">
                     <button type="button" class="btn btn-dark d-flex align-items-center" data-bs-toggle="modal"
@@ -219,6 +220,7 @@
         //             {
         //                 data: 'kode_barang',
         //                 name: 'kode_barang'
+        //       
         //             },
         //             {
         //                 data: 'nup',

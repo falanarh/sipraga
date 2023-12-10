@@ -19,9 +19,12 @@ class CreatePeminjamanRuangansTable extends Migration
         $table->string('kode_ruang');
         $table->string('peminjam');
         $table->text('keterangan');
-        $table->enum('status', ['Menunggu', 'Disetujui', 'Ditolak'])->default('Menunggu');
+        $table->enum('status', ['Menunggu', 'Disetujui', 'Dialihkan', 'Ditolak'])->default('Menunggu');
         $table->text('tanggapan')->nullable();
-        $table->dateTime('waktu');
+        $table->date('tgl_mulai');
+        $table->date('tgl_selesai');
+        $table->time('waktu_mulai');
+        $table->time('waktu_selesai');
         $table->timestamps();
         
         //Definisi foreign key dengan cascade delete

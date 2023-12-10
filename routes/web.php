@@ -1,20 +1,34 @@
 <?php
 
+use App\Models\Mahasiswa;
+use App\Rules\EmailChecker;
 use App\Models\PengecekanKelas;
+use App\Helpers\UserInformation;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AsetController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RuangController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\DosenController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\PelaporController;
 use App\Http\Controllers\TeknisiController;
+use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\ImportAsetController;
 use App\Http\Controllers\PemakaiBHPController;
 use App\Http\Controllers\ImportRuangController;
 use App\Http\Controllers\KoordinatorController;
 use App\Http\Controllers\PengecekanKelasController;
 use App\Http\Controllers\PeminjamanRuanganController;
+use App\Http\Controllers\JadwalPemeliharaanAcController;    
+use App\Http\Controllers\PemeliharaanAcController;
+use App\Models\PengecekanKelas;
+use App\Http\Controllers\StaffController;
+use App\Models\Dosen;
+use App\Models\Staff;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,19 +47,90 @@ Route::middleware(['guest'])->group(function () {
     });
     Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
+    Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
 });
 
 Route::middleware(['auth'])->group(function () {
     //Logout
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('authenticated', [LoginController::class, 'authenticated'])->name('authenticated');
+    Route::get('profiling', function () {
+        $user = Auth::user();
+        $emailChecker = new EmailChecker();
+        $user_email = $user->email;
+
+        $roles = $user->roles->pluck('name')->toArray();
+
+        if (in_array('Admin', $roles) || in_array('Teknisi', $roles) || in_array('Koordinator', $roles)) {
+            return redirect('staff');
+        } else {
+            if ($emailChecker->isNumericEmailCharacters($user_email)) {
+                return redirect('mahasiswa');
+            } else {
+                return redirect('dosen');
+            }
+        }
+    });
+    Route::get('mahasiswa', [MahasiswaController::class, 'store'])->name('mahasiswa');
+    Route::get('dosen', [DosenController::class, 'store'])->name('dosen');
+    Route::get('staff', [StaffController::class, 'store'])->name('staff');
+    Route::get('/home', [LoginController::class, 'authenticated'])->name('home');
+    Route::get('pilih-peran', function () {
+        return view('roles.pilih-peran');
+    });
+    Route::get('/{role}/profil', function ($role) {
+        $userInfoManager = new UserInformation();
+        $userInfo = $userInfoManager->getUserInfo();
+        $loggedInUser = Auth::user();
+        $user = User::where('user_id', $loggedInUser->user_id)->first();
+        $userRoles = $user->roles()->pluck('name')->toArray(); // Ambil nama-nama role
+
+        $mahasiswa = Mahasiswa::where('user_id', $user->user_id)->first();
+        $dosen = Dosen::where('user_id', $user->user_id)->first();
+        $staff = Staff::where('user_id', $user->user_id)->first();
+
+        if ($mahasiswa) {
+            $posisi = "Mahasiswa";
+        } elseif ($dosen) {
+            $posisi = "Dosen";
+        } else {
+            $posisi = "Staff";
+        }
+
+        // Memeriksa apakah role user termasuk dalam daftar yang diizinkan
+        $allowedRoles = ['Admin', 'Teknisi', 'Koordinator', 'Pelapor', 'Pemakai BHP'];
+        if (!empty(array_intersect($userRoles, $allowedRoles))) {
+            // Jika termasuk, kembalikan view yang sesuai
+            if ($posisi == 'Mahasiswa') {
+                return view('roles.profile', compact('userInfo', 'user', 'mahasiswa', 'role', 'posisi'));
+            } elseif ($posisi == 'Dosen') {
+                return view('roles.profile', compact('userInfo', 'user', 'dosen', 'role', 'posisi'));
+            } else {
+                return view('roles.profile', compact('userInfo', 'user', 'staff', 'role', 'posisi'));
+            }
+        } else {
+            // Jika tidak termasuk, Anda dapat mengarahkan ke halaman lain atau memberikan respons sesuai kebutuhan
+            abort(403, 'Unauthorized');
+        }
+    })->name('profil');
+    Route::patch('edit/mahasiswa/{user_id}', [MahasiswaController::class, 'edit'])->name('edit-profil-mahasiswa');
+    Route::patch('edit/dosen/{user_id}', [DosenController::class, 'edit'])->name('edit-profil-dosen');
+    Route::patch('edit/staff/{user_id}', [StaffController::class, 'edit'])->name('edit-profil-staff');
+
+    Route::get('ruangsForCalendar', [RuangController::class, 'getRuangsForCalendar'])->name('getRuangsForCalendar');
 
     // Route untuk Teknisi
     Route::middleware(['userAkses:Teknisi'])->group(function () {
         Route::get('/teknisi/daftar-pengaduan', [TeknisiController::class, 'daftarPengaduan']);
         Route::get('/teknisi/daftar-pengaduan/detail', [TeknisiController::class, 'daftarPengaduanDetail']);
-        Route::get('/teknisi/jadwal-pemeliharaan', [TeknisiController::class, 'jadwalPemeliharaan']);
-        Route::get('/teknisi/jadwal-pemeliharaan/pemeliharaan', [TeknisiController::class, 'pemeliharaan']);
-        Route::get('/teknisi/daftar-pemeliharaan', [TeknisiController::class, 'daftarPemeliharaan']);
+        Route::get('/teknisi/jadwal-pemeliharaan', [TeknisiController::class, 'jadwalPemeliharaan'])->name('teknisi.jadwal');
+        Route::get('/teknisi/jadwal-pemeliharaan/set/{jadwal_pemeliharaan_ac_id}/{teknisi_id}', [JadwalPemeliharaanAcController::class, 'setTeknisiId'])->name('teknisi.jadwal.set');
+        Route::get('/teknisi/jadwal-pemeliharaan/generate', [JadwalPemeliharaanAcController::class, 'generateJadwal'])->name('teknisi.jadwal.generate');
+        Route::get('/teknisi/jadwal-pemeliharaan/ac', [JadwalPemeliharaanAcController::class, 'data'])->name('teknisi.jadwal.ac');
+        Route::get('/teknisi/jadwal-pemeliharaan/pemeliharaan/{jadwal_pemeliharaan_ac_id}/edit', [TeknisiController::class, 'pemeliharaan'])->name('teknisi.jadwal.pemeliharaan-form');
+        Route::post('/teknisi/jadwal-pemeliharaan/pemeliharaan/{jadwal_pemeliharaan_ac_id}/edit', [PemeliharaanAcController::class, 'store'])->name('teknisi.jadwal.pemeliharaan.store');
+        Route::get('/teknisi/daftar-pemeliharaan', [TeknisiController::class, 'daftarPemeliharaan'])->name('teknisi.daftar-pemeliharaan');
         Route::get('/teknisi/daftar-pemeliharaan/detail', [TeknisiController::class, 'daftarPemeliharaanDetail']);
         Route::get('/teknisi/daftar-pengaduan/detail/catat', [TeknisiController::class, 'perbaikan']);
         Route::get('/teknisi/daftar-perbaikan', [TeknisiController::class, 'daftarPerbaikan']);
@@ -118,8 +203,6 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['userAkses:PemakaiBHP'])->group(function () {
         Route::get('/pemakaibhp/pengambilan', [PemakaiBHPController::class, 'pengambilan']);
     });
-
-    Route::get('/home', [LoginController::class, 'authenticated']);
 });
 
 // //Falana

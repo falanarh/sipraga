@@ -8,6 +8,7 @@
     <link rel="shortcut icon" type="image/jpg" href="{{ asset('images/logos/sipraga.png') }}" />
     <link rel="stylesheet" href="{{ asset('css/styles.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -18,13 +19,13 @@
             <div class="card-body d-flex flex-column align-items-center gap-3">
                 <img class="img-fluid" src="{{ asset('images/logos/sipraga-logo.jpg') }}"
                     style="width: 166px; height: 45px;" alt="">
-                <p class="text-center fs-2 m-0">Gunakan akun SIPADU Anda untuk masuk</p>
+                <p class="text-center fs-2 m-0">Gunakan akun Google STIS untuk masuk</p>
                 <div
                     class="login-sipadu w-100 d-flex align-items-center justify-content-center border border-2 rounded-1 p-1 shadow-sm">
-                    <a href="" class="d-flex align-items-center">
+                    <a href="{{ route('auth.google') }}" class="d-flex align-items-center">
                         <img class="me-1" style="width: 25px; height: 25px;"
-                            src="{{ asset('images/logos/sipadu-ng.png') }}" alt="">
-                        <p class="text-dark m-0">Masuk dengan SIPADU</p>
+                            src="{{ asset('images/logos/google.png') }}" alt="">
+                        <p class="text-dark m-0">STIS Email</p>
                     </a>
                 </div>
                 <div class="or d-flex w-100 justify-content-center align-items-center p-1">
@@ -54,7 +55,8 @@
                         @enderror
                     </div>
                     <div class="checkbox">
-                        <label for="remember" class="d-flex align-items-center"><input id="remember" name="remember" class="me-2" type="checkbox">Ingat saya di
+                        <label for="remember" class="d-flex align-items-center"><input id="remember" name="remember"
+                                class="me-2" type="checkbox">Ingat saya di
                             perangkat ini</label>
                     </div>
                     <button type="submit" class="btn btn-primary mt-2 w-100">Masuk</a>
@@ -76,6 +78,18 @@
     </script>
     <script src="{{ asset('libs/simplebar/dist/simplebar.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            @if (session('error'))
+                Swal.fire({
+                    icon: "error",
+                    title: "Terjadi kesalahan",
+                    text: '{{ session('error') }}',
+                });
+            @endif
+        });
+    </script>
 </body>
 
 </html>

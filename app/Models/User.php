@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Role;
 use App\Models\PengecekanKelas;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
@@ -19,13 +20,15 @@ class User extends Authenticatable
      * @var array<int, string>
      */
 
+    protected $table = 'users';
     protected $primaryKey = 'user_id';
 
     protected $fillable = [
+        'google_id',
         'name',
         'email',
         'password',
-        'role'
+        'picture_link'
     ];
 
     /**
@@ -50,5 +53,20 @@ class User extends Authenticatable
     public function pengecekan_kelass()
     {
         return $this->hasMany(PengecekanKelas::class);
+    }
+
+    public function jadwalPemeliharaanAcs()
+    {
+        return $this->hasMany(JadwalPemeliharaanAc::class, 'teknisi_id', 'user_id');
+    }
+  
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
+    }
+
+    public function mahasiswa()
+    {
+        return $this->hasOne(Mahasiswa::class, 'user_id', 'user_id');
     }
 }
