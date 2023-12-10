@@ -20,11 +20,11 @@
                 FORM PEMELIHARAAN AC
             </p> --}}
             <div class="title d-flex mb-4">
-                <a href="/teknisi/jadwal-pemeliharaan" class="table-title d-flex text-dark">
+                <a href="/teknisi/jadwal-pemeliharaan" class="table-title d-flex" style="font-weight: 700; color: #818181">
                     JADWAL PEMELIHARAAN AC 
                 </a>
-                <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
-                <a href="/teknisi/jadwal-pemeliharaan/pemeliharaan" class="table-title d-flex text-dark">
+                <img src="{{ asset('images/icons/chevron-right.svg') }}" alt="">
+                <a href="/teknisi/jadwal-pemeliharaan/pemeliharaan" class="table-title d-flex text-dark" style="font-weight: 700">
                     FORM PEMELIHARAAN AC
                 </a>            
             </div>

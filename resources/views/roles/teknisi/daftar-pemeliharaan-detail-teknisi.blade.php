@@ -20,11 +20,11 @@
                 23/09/2023-11003
             </p> --}}
             <div class="title d-flex mb-4">
-                <a href="/teknisi/daftar-pemeliharaan" class="table-title d-flex text-dark">
+                <a href="/teknisi/daftar-pemeliharaan" class="table-title d-flex" style="color: #818181; font-weight:700">
                     LAPORAN PEMELIHARAAN DAN PERBAIKAN AC 
                 </a>
-                <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
-                <a href="/teknisi/daftar-pemeliharaan/detail" class="table-title d-flex text-dark">
+                <img src="{{ asset('images/icons/chevron-right.svg') }}" alt="">
+                <a href="/teknisi/daftar-pemeliharaan/detail" class="table-title d-flex text-dark" style="font-weight:700">
                     23/09/2023-11003
                 </a>            
             </div>

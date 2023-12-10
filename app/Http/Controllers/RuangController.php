@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\Ruang;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -118,7 +119,7 @@ class RuangController extends Controller
             })
             ->make(true);
     }
-
+  
     public function getRuangs(){
         try {
             $ruangs = Ruang::select('kode_ruang', 'nama', 'gedung', 'lantai', 'kapasitas')->get();

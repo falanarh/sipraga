@@ -55,11 +55,11 @@
     <div class="card">
         <div class="card-body">
             <div class="title d-flex mb-4">
-                <a href="/admin/ketersediaan-ruangan" class="table-title d-flex text-dark">
+                <a href="/admin/ketersediaan-ruangan" class="table-title d-flex" style="font-weight: 700; color: #818181;">
                     KETERSEDIAAN RUANGAN
                 </a>
-                <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
-                <a href="/admin/ketersediaan-ruangan/detail" class="table-title d-flex text-dark">
+                <img src="{{ asset('images/icons/chevron-right.svg') }}" alt="">
+                <a href="/admin/ketersediaan-ruangan/detail" class="table-title d-flex text-dark" style="font-weight: 700">
                     RUANG 331
                 </a>            
             </div>
