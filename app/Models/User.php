@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\AmbilBarangHabisPakai;
 use App\Models\Role;
 use App\Models\PengecekanKelas;
 use Laravel\Sanctum\HasApiTokens;
@@ -19,10 +20,8 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-
     protected $table = 'users';
     protected $primaryKey = 'user_id';
-
     protected $fillable = [
         'google_id',
         'name',
@@ -50,6 +49,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function ambil_barang_habis_pakais()
+    {
+        return $this->hasMany(AmbilBarangHabisPakai::class, 'pemakai_bhp_id', 'user_id');
+    }
     public function pengecekan_kelass()
     {
         return $this->hasMany(PengecekanKelas::class);
@@ -70,3 +73,4 @@ class User extends Authenticatable
         return $this->hasOne(Mahasiswa::class, 'user_id', 'user_id');
     }
 }
+

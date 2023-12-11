@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Ruang;
 use Illuminate\Http\Request;
+use App\Models\BarangHabisPakai;
+use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
 
 class PemakaiBHPController extends Controller
@@ -32,8 +36,23 @@ class PemakaiBHPController extends Controller
         }
     }
 
-    public function pengambilan(){
+    // public function pengambilan(){
+    //     $userInfo = $this->getUserInfo();
+    //     return view('roles.pemakaibhp.pengambilan-pemakaibhp', compact('userInfo'));
+    // }
+
+    public function pengambilan()
+    {
         $userInfo = $this->getUserInfo();
-        return view('roles.pemakaibhp.pengambilan-pemakaibhp', compact('userInfo'));
+        $users = User::where('role', 'PemakaiBHP')
+            ->get();
+        $ruangOptions = Ruang::all();
+        $bhps = BarangHabisPakai::select([
+            'jenis_barang'])
+            ->groupBy('jenis_barang')
+            ->get();
+
+
+        return view('roles.pemakaibhp.pengambilan-pemakaibhp', compact('userInfo', 'users', 'bhps', 'ruangOptions'));
     }
 }
