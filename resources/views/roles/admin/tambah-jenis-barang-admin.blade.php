@@ -16,11 +16,11 @@
     <div class="card">
         <div class="card-body">
             <div class="title d-flex mb-4">
-                <a href="{{ route('admin.data-master') }}" class="table-title d-flex text-dark">
+                <a href="{{ route('admin.data-master') }}" class="table-title d-flex" style="font-weight: 700; color:#818181">
                     DAFTAR JENIS BARANG
                 </a>
-                <img class="mx-2" src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
-                <a href="{{ route('admin.tambah-jenis') }}" class="table-title d-flex text-dark">
+                <img class="mx-2" src="{{ asset('images/icons/chevron-right.svg') }}" alt="">
+                <a href="{{ route('admin.tambah-jenis') }}" class="table-title d-flex text-dark" style="font-weight: 700">
                     TAMBAH
                 </a>
             </div>
