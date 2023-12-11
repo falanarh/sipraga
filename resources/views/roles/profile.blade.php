@@ -107,13 +107,13 @@
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div id="profil" class="container tab-pane active">
-                        <div class="row justify-content-center">
-                            <div class="foto-profil card mt-5 col-md-4 col-lg-3">
-                                <div class="card-body" style="height: 250px; width: 250px; overflow: hidden;">
-                                    <img src="{{ asset($profile) }}" style="width: 100%; height: 100%; border-radius: 50%; border: 5px solid #e5e5e8;" alt="Profile Image">
+                        <div class="row justify-content-center mt-n4">
+                            <div class="foto-profil card mt-5 col-md-4 col-lg-3 text-center">
+                                <div class="card-body ms-n4" style="height: 250px; width: 250px; overflow: hidden; margin: 0 auto;">
+                                    <img src="{{ asset($profile) }}" class="position-absolute top-50 start-50 translate-middle" style="width: 180px; height: 200px; object-fit: cover; border-radius: 50%; border: 5px solid #e5e5e8;" alt="Profile Image">
                                 </div>
-                            </div>
-                            <div class="deskripsi-profil col-md-8 col-lg-9">
+                            </div>                            
+                            <div class="deskripsi-profil col-md-8 col-lg-9 mt-4">
                                 <table class="table table-striped profile-table mt-5">
                                     <tr>
                                         <th>Nama Lengkap</th>
