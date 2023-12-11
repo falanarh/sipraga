@@ -21,6 +21,7 @@ use App\Http\Controllers\PemakaiBHPController;
 use App\Http\Controllers\ImportRuangController;
 use App\Http\Controllers\KoordinatorController;
 use App\Http\Controllers\PengecekanKelasController;
+use App\Http\Controllers\PeminjamanRuanganController;
 use App\Http\Controllers\JadwalPemeliharaanAcController;    
 use App\Http\Controllers\PemeliharaanAcController;
 use App\Http\Controllers\StaffController;
@@ -145,6 +146,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/ketersediaan-ruangan', [AdminController::class, 'ketersediaanRuangan']);
         Route::get('/admin/ketersediaan-ruangan/detail', [AdminController::class, 'ketersediaanRuanganDetail']);
         // Route::get('/admin/data-ruangan/edit-ruang', [AdminController::class, 'editRuangan']);
+
+        //Route::post('api/peminjaman-ruangan/store', [PeminjamanRuanganController::class, 'store']);
         Route::get('/admin/data-ruangan/tambah-ruang', [AdminController::class, 'tambahRuangan']);
         Route::post('/admin/data-ruangan/tambah-ruang/impor', [ImportRuangController::class, 'import'])->name('admin.data-ruangan.impor');
         Route::post('/admin/data-ruangan/tambah-ruang', [RuangController::class, 'store'])->name('admin.data-ruangan.store');

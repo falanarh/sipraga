@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\GoogleSheetController;
-use App\Http\Controllers\RuangController;
 use Illuminate\Http\Request;
+use App\Models\PeminjamanRuangan;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RuangController;
+use App\Http\Controllers\PeminjamanRuanganController;
 
 /*
 |--------------------------------------------------------------------------

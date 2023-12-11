@@ -16,11 +16,11 @@
     <div class="card">
         <div class="card-body">
             <div class="title d-flex mb-4">
-                <a href="/teknisi/daftar-perbaikan" class="table-title d-flex text-dark">
+                <a href="/teknisi/daftar-perbaikan" class="table-title d-flex" style="font-weight: 700; color: #818181">
                     CATATAN PERBAIKAN SARANA DAN PRASARANA KELAS 
                 </a>
-                <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
-                <a href="/teknisi/daftar-perbaikan/detail" class="table-title d-flex text-dark">
+                <img src="{{ asset('images/icons/chevron-right.svg') }}" alt="">
+                <a href="/teknisi/daftar-perbaikan/detail" class="table-title d-flex text-dark" style="font-weight: 700">
                     23/09/2023-11003
                 </a>            
             </div>
