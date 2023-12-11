@@ -22,19 +22,36 @@
                 <img class="mx-2" src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
                 <a href="/admin/barang-habis-pakai/tambah-bhp" class="table-title d-flex text-dark">
                     FORM PENAMBAHAN STOK
-                </a>            
+                </a>
             </div>
-            <form class="mt-4">
+            <form class="mt-4" action ="{{ route('admin.bhp.tambah') }}" method="POST">
+                @csrf
                 <div class="mb-3">
-                    <label for="jenis" class="form-label">Jenis Barang</label>
-                    <input type="text" class="form-control" id="jenis" placeholder="Spidol">
+                    <label for="jenis_barang" class="form-label">Jenis Barang</label>
+
+                    <select type="text" name="jenis_barang" class="form-select" id="jenis_barang">\
+
+                        <option value="" selected disabled>Pilih Jenis Barang</option>
+                        @foreach ($bhps as $jenis_barangs)
+                                <option value="{{ $jenis_barangs->jenis_barang }}">{{ $jenis_barangs->jenis_barang }}</option>
+                        @endforeach
+                    </select>
+                    @error('jenis_barang')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
                 </div>
                 <div class="mb-3">
                     <label for="jumlah" class="form-label">Jumlah Barang</label>
-                    <input type="text" class="form-control" id="jumlah" placeholder="50">
+                    <input type="number" name="jumlah" class="form-control" id="jumlah"
+                        placeholder="Isi jumlah barang yang ingin ditambah">
+                    @error('jumlah')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
                 </div>
+
                 <button type="submit" class="btn btn-primary">Submit</button>
-              </form> 
+            </form>
         </div>
     </div>
 @endsection

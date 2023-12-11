@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SIPRAGA | DASHBOARD</title>
+    {{-- @notifyCss --}}
     <link rel="shortcut icon" type="image/jpg" href="{{ asset('images/logos/sipraga.png') }}" />
     <link rel="stylesheet" href="{{ asset('css/styles.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}" />
@@ -12,10 +13,14 @@
         href="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-1.13.6/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/r-2.5.0/sp-2.2.0/datatables.min.css"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     @yield('js')
+    @yield('additional-css')
 </head>
 
 <body>
+    {{-- <x-notify::notify />
+        @notifyJs --}}
     <!--  Body Wrapper -->
     <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
         data-sidebar-position="fixed" data-header-position="fixed">
@@ -37,6 +42,7 @@
         </div>
         <!--  Main-wrapper End-->
     </div>
+
     <script src="{{ asset('libs/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/sidebarmenu.js') }}"></script>

@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Aset;
+use App\Models\User;
 use App\Models\Ruang;
 use App\Models\Barang;
+use App\Models\BarangHabisPakai;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\AmbilBarangHabisPakai;
 
 class AdminController extends Controller
 {
-    private function getUserInfo() {
+    private function getUserInfo()
+    {
         $userInfo = [
             'name' => Auth::user()->name,
             'role' => Auth::user()->role,
@@ -20,7 +24,8 @@ class AdminController extends Controller
         return $userInfo;
     }
 
-    private function getTimeOfDay() {
+    private function getTimeOfDay()
+    {
         $now = Carbon::now('Asia/Jakarta'); // Set zona waktu ke WIB
         $hour = $now->hour;
 
@@ -35,48 +40,57 @@ class AdminController extends Controller
         }
     }
 
-    public function ketersediaanRuangan(){
+    public function ketersediaanRuangan()
+    {
         $userInfo = $this->getUserInfo();
         return view('roles.admin.ketersediaan-ruangan-admin', compact('userInfo'));
     }
 
-    public function ketersediaanRuanganDetail(){
+    public function ketersediaanRuanganDetail()
+    {
         $userInfo = $this->getUserInfo();
         return view('roles.admin.ketersediaan-ruangan-detail-admin', compact('userInfo'));
     }
-        
-    public function dataRuangan(){
+
+    public function dataRuangan()
+    {
         $userInfo = $this->getUserInfo();
         return view('roles.admin.data-ruangan-admin', compact('userInfo'));
     }
 
-    public function editRuangan($kode){
+    public function editRuangan($kode)
+    {
         $userInfo = $this->getUserInfo();
         $ruang = Ruang::find($kode);
         return view('roles.admin.edit-ruangan-admin', compact('userInfo', 'ruang'));
     }
 
-    public function tambahRuangan(){
+    public function tambahRuangan()
+    {
         $userInfo = $this->getUserInfo();
         return view('roles.admin.tambah-ruangan-admin', compact('userInfo'));
     }
 
-    public function pengelolaanPeminjaman(){
+    public function pengelolaanPeminjaman()
+    {
         $userInfo = $this->getUserInfo();
         return view('roles.admin.pengelolaan-peminjaman-admin', compact('userInfo'));
     }
 
-    public function pengelolaanPeminjamanDetail(){
+    public function pengelolaanPeminjamanDetail()
+    {
         $userInfo = $this->getUserInfo();
         return view('roles.admin.pengelolaan-peminjaman-detail-admin', compact('userInfo'));
     }
 
-    public function dataMaster(){
+    public function dataMaster()
+    {
         $userInfo = $this->getUserInfo();
         return view('roles.admin.data-master-admin', compact('userInfo'));
     }
 
-    public function dataMasterDetail($kode_barang, $nup){
+    public function dataMasterDetail($kode_barang, $nup)
+    {
         $userInfo = $this->getUserInfo();
         $aset = Aset::where('kode_barang', $kode_barang)
             ->where('nup', $nup)
@@ -84,19 +98,22 @@ class AdminController extends Controller
         return view('roles.admin.data-master-detail-admin', compact('userInfo', 'aset'));
     }
 
-    public function tambahJenis() {
+    public function tambahJenis()
+    {
         $userInfo = $this->getUserInfo();
         return view('roles.admin.tambah-jenis-barang-admin', compact('userInfo'));
     }
 
-    public function editJenis($kode_barang) {
+    public function editJenis($kode_barang)
+    {
         $userInfo = $this->getUserInfo();
         $barang = Barang::find($kode_barang);
-    
-        return view('roles.admin.edit-jenis-barang-admin', compact('userInfo', 'barang'));
-    }   
 
-    public function tambahSarpras(){
+        return view('roles.admin.edit-jenis-barang-admin', compact('userInfo', 'barang'));
+    }
+
+    public function tambahSarpras()
+    {
         $userInfo = $this->getUserInfo();
         $jenisBarangOptions = Barang::all();
         $ruangOptions = Ruang::all();
@@ -104,7 +121,8 @@ class AdminController extends Controller
         return view('roles.admin.tambah-sarpras-admin', compact('userInfo', 'jenisBarangOptions', 'ruangOptions'));
     }
 
-    public function editSarpras($kode_barang, $nup){
+    public function editSarpras($kode_barang, $nup)
+    {
         $userInfo = $this->getUserInfo();
         $jenisBarangOptions = Barang::all();
         $ruangOptions = Ruang::all();
@@ -115,19 +133,66 @@ class AdminController extends Controller
         return view('roles.admin.edit-sarpras-admin', compact('userInfo', 'jenisBarangOptions', 'ruangOptions', 'aset'));
     }
 
-    public function jadwalPengecekanKelas(){
+    public function jadwalPengecekanKelas()
+    {
         $userInfo = $this->getUserInfo();
         return view('roles.admin.jadwal-pengecekan-kelas-admin', compact('userInfo'));
     }
 
-    public function barangHabisPakai(){
+    public function barangHabisPakai()
+    {
+       
         $userInfo = $this->getUserInfo();
-        return view('roles.admin.barang-habis-pakai-admin', compact('userInfo'));
+        $users = User::where('role', 'PemakaiBHP')
+            ->get();
+        $ruangOptions = Ruang::all();
+        $bhps = BarangHabisPakai::select([
+            'jenis_barang'])
+            ->groupBy('jenis_barang')
+            ->get();
+        $ambil_bhps = AmbilBarangHabisPakai::select([
+            'jenis_barang'])
+            ->groupBy('jenis_barang')
+            ->get();
+        
+        
+        return view('roles.admin.barang-habis-pakai-admin', compact('userInfo', 'users', 'bhps','ambil_bhps', 'ruangOptions'));
     }
 
-    public function tambahBHP(){
+    
+
+    public function tambahBHP()
+    {
         $userInfo = $this->getUserInfo();
-        return view('roles.admin.tambah-bhp-admin', compact('userInfo'));
+        $bhps = BarangHabisPakai::select([
+            'jenis_barang'])
+            ->groupBy('jenis_barang')
+            ->get();
+
+        return view('roles.admin.tambah-bhp-admin', compact('userInfo', 'bhps'));
+    }
+
+    public function tambahJenisBHP()
+    {
+        $userInfo = $this->getUserInfo();
+        $bhps = BarangHabisPakai::select([
+            'jenis_barang'])
+            ->groupBy('jenis_barang')
+            ->get();
+        return view('roles.admin.tambah-jenis-bhp-admin', compact('userInfo', 'bhps'));
+    }
+
+    public function showBhpEditForm($id)
+    {
+        $userInfo = $this->getUserInfo();
+        $bhp = BarangHabisPakai::find($id);
+        return view('roles.admin.edit-bhp-admin', compact('userInfo', 'bhp'));
+    }
+
+    public function eksporBHP()
+    {
+        $userInfo = $this->getUserInfo();
+        return view('roles.admin.barang-habis-pakai-admin', compact('userInfo'));
     }
 }
 
