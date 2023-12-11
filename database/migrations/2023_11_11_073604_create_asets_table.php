@@ -14,25 +14,28 @@ class CreateAsetsTable extends Migration
     public function up()
     {
         Schema::create('asets', function (Blueprint $table) {
-            $table->id('no_aset');
-            $table->bigInteger('nomor');
             $table->string('kode_barang');
             $table->string('nup');
+            $table->bigInteger('nomor');
+            $table->string('merek');
             $table->date('tanggal_masuk');
-            $table->string('kode_ruang');
-            $table->enum('kondisi', ['Baik', 'Rusak'])->default('Baik');
+            $table->string('kode_ruang')->nullable();
+            $table->enum('kondisi', ['Baik', 'Rusak Ringan', 'Rusak Berat'])->default('Baik');
             $table->date('tanggal_pemeliharaan_terakhir')->nullable();
-            $table->string('deskripsi');
+            $table->string('deskripsi')->nullable();
+            $table->primary(['kode_barang', 'nup']);
             //Definisi foreign key dengan cascade delete
             $table->foreign('kode_barang')
                 ->references('kode_barang')
                 ->on('barangs')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+                ->onUpdate('cascade'); 
             //Definisi foreign key dengan cascade delete
             $table->foreign('kode_ruang')
                 ->references('kode_ruang')
                 ->on('ruangs')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 

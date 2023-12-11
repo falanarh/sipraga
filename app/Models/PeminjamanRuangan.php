@@ -2,15 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Ruang;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PeminjamanRuangan extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'ruang_id';
-    protected $fillable = [
-        'peminjam', 'tgl_peminjaman', 'jam', 'keterangan', 'status', 'keterangan_status'
-    ];
+    protected $primaryKey = 'peminjaman_ruangan_id';
+
+    protected $guarded = [];
+    protected $dates = ['tgl_peminjaman'];
+    public $timestamps = true;
+
+    public function ruang(){
+        return $this->belongsTo(Ruang::class, 'kode_ruang', 'kode_ruang');
+    }
 }

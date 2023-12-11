@@ -73,7 +73,7 @@
                     <span class="hide-menu">EKSTRA</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="#7" aria-expanded="false">
+                    <a class="sidebar-link" href="/admin/profil" aria-expanded="false">
                         <span>
                             <img src="{{ asset('images/icons/user-circle.svg') }}" width="25px" height="25px">
                         </span>

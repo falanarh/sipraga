@@ -82,9 +82,15 @@ class BarangController extends Controller
 
         // Periksa apakah barang ditemukan
         if ($barang) {
+
+            $nomorSebelum = $barang->nomor;
+    
             // Hapus barang
             $barang->delete();
 
+            // Update nomor untuk baris data yang memiliki nomor lebih besar dari nomor sebelumnya
+            Barang::where('nomor', '>', $nomorSebelum)->decrement('nomor');
+            
             // Redirect dengan pesan sukses
             return redirect()->route('admin.data-master')->with('success', 'Barang berhasil dihapus!');
         } else {

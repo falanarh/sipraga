@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ruang;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\PeminjamanRuangan;
+use Illuminate\Routing\Controller;
 use App\Http\Requests\StorePeminjamanRuanganRequest;
 use App\Http\Requests\UpdatePeminjamanRuanganRequest;
+
 
 class PeminjamanRuanganController extends Controller
 {
@@ -34,53 +39,52 @@ class PeminjamanRuanganController extends Controller
      * @param  \App\Http\Requests\StorePeminjamanRuanganRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePeminjamanRuanganRequest $request)
+    public function store(Request $request)
     {
-        //
-    }
+        try {
+            $request->validate([
+                'kode_ruang' => ['required', 'string'],
+                'peminjam' => ['required', 'string'],
+                'keterangan' => ['required', 'string'],
+                'status' => ['required', 'string'],
+                'tanggapan' => ['nullable', 'string'],
+                // 'waktu' => ['required', 'date_format:d/m/Y H:i'],
+            ], [
+                'kode_ruang.required' => 'Ruang wajib diisi!',
+                'kode_ruang.string' => 'Ruang harus berupa string!',
+                'peminjam.required' => 'Peminjam wajib diisi!',
+                'peminjam.string' => 'Peminjam harus berupa string!',
+                'keterangan.required' => 'Keterangan wajib diisi!',
+                'keterangan.string' => 'Keterangan harus berupa string!',
+                'status.required' => 'Status wajib diisi!',
+                'status.string' => 'Status harus berupa string!',
+                'tanggapan.string' => 'Tanggapan harus berupa string!',
+                'waktu.required' => 'Waktu wajib diisi!',
+                'waktu.date_format' => 'Format waktu tidak valid. Gunakan format dd/mm/yyyy H:i.',
+            ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\PeminjamanRuangan  $peminjamanRuangan
-     * @return \Illuminate\Http\Response
-     */
-    public function show(PeminjamanRuangan $peminjamanRuangan)
-    {
-        //
-    }
+            // Menghitung jumlah baris data yang sudah ada
+            $jumlahBarisData = PeminjamanRuangan::count();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\PeminjamanRuangan  $peminjamanRuangan
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(PeminjamanRuangan $peminjamanRuangan)
-    {
-        //
-    }
+            // Menambahkan kolom nomor
+            $request->merge(['nomor' => $jumlahBarisData + 1]);
+            $request->merge(['nomor' => $jumlahBarisData + 1]);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdatePeminjamanRuanganRequest  $request
-     * @param  \App\Models\PeminjamanRuangan  $peminjamanRuangan
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdatePeminjamanRuanganRequest $request, PeminjamanRuangan $peminjamanRuangan)
-    {
-        //
-    }
+            // Menyimpan data baru ke dalam tabel
+            PeminjamanRuangan::create($request->all());
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\PeminjamanRuangan  $peminjamanRuangan
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(PeminjamanRuangan $peminjamanRuangan)
-    {
-        //
+            $response = [
+                'success' => 'Peminjaman ruangan berhasil dibuat!'
+            ];
+
+            return response()->json($response, Response::HTTP_CREATED);
+        } catch (\Exception $e) {
+            $response = [
+                'error' => 'Terjadi kesalahan saat menyimpan data peminjaman ruangan.',
+                'details' => $e->getMessage(),
+            ];
+
+            return response()->json($response, Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

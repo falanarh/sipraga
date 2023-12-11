@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\JadwalPemeliharaanAc;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Ruang;
+use App\Models\User;
 
 class TeknisiController extends Controller
 {
@@ -49,13 +52,20 @@ class TeknisiController extends Controller
     public function jadwalPemeliharaan()
     {
         $userInfo = $this->getUserInfo();
-        return view('roles.teknisi.jadwal-pemeliharaan-teknisi', compact('userInfo'));
+        $ruangOptions = Ruang::all();
+        $teknisiOptions = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Teknisi');
+        })->get(); 
+        
+        return view('roles.teknisi.jadwal-pemeliharaan-teknisi', compact('userInfo', 'ruangOptions', 'teknisiOptions'));
     }
 
-    public function pemeliharaan()
+    public function pemeliharaan($jadwal_pemeliharaan_ac_id)
     {
         $userInfo = $this->getUserInfo();
-        return view('roles.teknisi.pemeliharaan-teknisi', compact('userInfo'));
+        $jadwalPemeliharaanAc = JadwalPemeliharaanAc::where('jadwal_pemeliharaan_ac_id', $jadwal_pemeliharaan_ac_id)->firstOrFail();
+
+        return view('roles.teknisi.pemeliharaan-teknisi', compact('userInfo','jadwalPemeliharaanAc'));
     }
 
     public function daftarPemeliharaan()

@@ -16,21 +16,21 @@
     <div class="card">
         <div class="card-body">
             <div class="title d-flex mb-4">
-                <a href="/admin/data-ruangan" class="table-title d-flex text-dark">
+                <a href="/admin/data-ruangan" class="table-title d-flex" style="font-weight: 700; color: #818181">
                     DATA RUANGAN
                 </a>
-                <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
-                <a href="/admin/data-ruangan/edit-ruang" class="table-title d-flex text-dark">
+                <img src="{{ asset('images/icons/chevron-right.svg') }}" alt="">
+                <a href="/admin/data-ruangan/edit-ruang" class="table-title d-flex text-dark" style="font-weight: 700">
                     EDIT
                 </a>            
             </div>
-            <form class="row" method="POST" action="{{ route('admin.data-ruangan.edit', $ruang->kode) }}"> 
+            <form class="row" method="POST" action="{{ route('admin.data-ruangan.edit', $ruang->kode_ruang) }}"> 
                 @csrf
                 @method('PUT')
 
                 <div class="mb-3 col-6">
                     <label for="kode" class="form-label">Kode</label>
-                    <input type="text" name="kode" class="form-control" id="kode" value="{{ $ruang->kode }}" disabled readonly>
+                    <input type="text" name="kode" class="form-control" id="kode" value="{{ $ruang->kode_ruang }}" disabled readonly>
                 </div>
                 <div class="mb-3 col-6">
                     <label for="nama" class="form-label">Nama</label>

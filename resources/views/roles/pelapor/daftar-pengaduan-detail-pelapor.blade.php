@@ -16,16 +16,16 @@
     <div class="card">
         <div class="card-body">
             {{-- <p class="table-title text-dark" style="font-size:18px; font-weight: 600;">DAFTAR PENGADUAN SARANA DAN PRASARANA KELAS</p> --}}
-            <div class="title d-flex mb-4">
-                <a href="/pelapor/daftar-pengaduan" class="table-title d-flex text-dark">
-                    DAFTAR PENGADUAN SARANA DAN PRASARANA KELAS
+            <div class="title d-flex mb-4 mt-n3">
+                <a href="/pelapor/daftar-pengaduan" class="table-title d-flex align-items-center p-0 m-0" style="font-weight: 700; color: #818181;">
+                    DAFTAR PENGADUAN SARPRAS KELAS
                 </a>
-                <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
-                <a href="/pelapor/daftar-pengaduan/detail" class="table-title d-flex text-dark">
+                <img src="{{ asset('images/icons/chevron-right.svg') }}" alt="">
+                <a href="/pelapor/daftar-pengaduan/detail" class="table-title d-flex text-dark d-flex align-items-center" style="font-weight: 700">
                     101
                 </a>            
             </div>
-            <table class="table table-striped mt-5" style="width: 100%;">
+            <table class="table table-striped mt-3" style="width: 100%;">
                 <tr>
                     <th class="fw-bolder col-3">Nomor</th>
                     <td class="col-9">101</td>

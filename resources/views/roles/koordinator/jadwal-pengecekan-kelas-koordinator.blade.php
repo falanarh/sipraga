@@ -14,58 +14,33 @@
 {{-- Menambahkan konten yang sesuai --}}
 @section('content')
     <div class="card">
-        <div class="card-body">
-            <p class="table-title text-dark" style="font-size:18px; font-weight: 600;">JADWAL PENGECEKAN KELAS</p>
-            <table id="example" class="table table-striped responsive" style="width: 100%;">
+        <div class="card-body"> 
+            <div class="row-card d-flex justify-content-between">
+                <p class="table-title text-dark" style="font-size:18px; font-weight: 600;">JADWAL PENGECEKAN KELAS</p>
+                <div>
+                    <a href="{{ route('koordinator.jadwal-pengecekan-kelas.tambah-form') }}" class="btn btn-dark text-white d-flex align-items-center">
+                        <img src="{{ asset('images/icons/plus.svg') }}" alt="" class="mr-2 add-icon img-fluid">
+                        Tambah
+                    </a>
+                </div>
+            </div>
+            <table id="tabelPengecekan" class="table table-striped responsive" style="width: 100%;">
                 <thead class="text-dark" style="border: 1px solid #000;">
                     <tr>
                         <th>Nomor</th>
                         <th>Tanggal</th>
                         <th>Ruang</th>
+                        <th>Admin</th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>101</td>
-                        <td>23/09/2023</td>
-                        <td>331</td>
-                        <td>
-                            <div class="bg-rounded-status-pengecekan rounded-pill">Belum dikerjakan</div>
-                        </td>
-                        <td>
-                            <a href="/koordinator/jadwal-pengecekan-kelas/penugasan" class="btn btn-dark tugaskanButton">Tugaskan</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>102</td>
-                        <td>27/09/2023</td>
-                        <td>333</td>
-                        <td>
-                            <div class="bg-rounded-status-pengecekan rounded-pill">Belum dikerjakan</div>
-                        </td>
-                        <td>
-                            <a href="/koordinator/jadwal-pengecekan-kelas/penugasan" class="btn btn-dark tugaskanButton">Tugaskan</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>103</td>
-                        <td>29/09/2023</td>
-                        <td>255</td>
-                        <td>
-                            <div class="bg-rounded-status-pengecekan rounded-pill">Sudah dikerjakan</div>
-                        </td>
-                        <td>
-                            <a href="" class="btn btn-outline-dark disabled">Tugaskan</a>
-                        </td>
-                    </tr>
-                </tbody>
                 <tfoot>
                     <tr>
                         <th>Nomor</th>
                         <th>Tanggal</th>
                         <th>Ruang</th>
+                        <th>Admin</th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
@@ -73,4 +48,63 @@
             </table>
         </div>
     </div>
+@endsection
+
+@section('additional-js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: '{{ session('success') }}',
+                });
+            @endif
+
+            @if (session('error'))
+                Swal.fire({
+                    icon: "error",
+                    title: "Terjadi kesalahan",
+                    text: '{{ session('error') }}',
+                });
+            @endif
+        });
+
+        $(document).ready(function() {
+            $('#tabelPengecekan').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('koordinator.jadwal-pengecekan-kelas.view') }}",
+                columns: [{
+                        data: 'nomor',
+                        name: 'nomor'
+                    },
+                    {
+                        data: 'tanggal',
+                        name: 'tanggal'
+                    },
+                    {
+                        data: 'nama_ruang',
+                        name: 'nama_ruang'
+                    },
+                    {
+                        data: 'admin',
+                        name: 'admin'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ]
+            });
+        });
+
+
+    </script>
 @endsection

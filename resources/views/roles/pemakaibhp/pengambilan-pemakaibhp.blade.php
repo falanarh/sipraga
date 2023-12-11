@@ -19,7 +19,6 @@
                 FORM PENGAMBILAN BARANG BHP </a>
             <form class="mt-4" action ="{{ route('pemakaibhp.pengambilan.ambil') }}" method="POST">
                 @csrf
-
                 <div class="mb-3">
                     <label for="jenis_barang" class="form-label">Barang yang diambil</label>
                     <select type="text" name="jenis_barang" class="form-select" id="jenis_barang">

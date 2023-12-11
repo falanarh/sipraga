@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Laravel\Sanctum\HasApiTokens;
 use App\Models\AmbilBarangHabisPakai;
+use App\Models\Role;
+use App\Models\PengecekanKelas;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,10 +23,11 @@ class User extends Authenticatable
     protected $table = 'users';
     protected $primaryKey = 'user_id';
     protected $fillable = [
+        'google_id',
         'name',
         'email',
         'password',
-        'role'
+        'picture_link'
     ];
 
     /**
@@ -49,6 +52,25 @@ class User extends Authenticatable
     public function ambil_barang_habis_pakais()
     {
         return $this->hasMany(AmbilBarangHabisPakai::class, 'pemakai_bhp_id', 'user_id');
+    }
+    public function pengecekan_kelass()
+    {
+        return $this->hasMany(PengecekanKelas::class);
+    }
+
+    public function jadwalPemeliharaanAcs()
+    {
+        return $this->hasMany(JadwalPemeliharaanAc::class, 'teknisi_id', 'user_id');
+    }
+  
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
+    }
+
+    public function mahasiswa()
+    {
+        return $this->hasOne(Mahasiswa::class, 'user_id', 'user_id');
     }
 }
 

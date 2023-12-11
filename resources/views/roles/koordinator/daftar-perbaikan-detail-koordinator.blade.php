@@ -17,11 +17,15 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <p class="table-title text-dark" style="font-weight: 600;">
-                LAPORAN PERBAIKAN SARANA DAN PRASARANA KELAS 
-                <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="arrow-right" width="33px" height="25px">
-                29/11/2023-10113
-            </p>
+            <div class="title d-flex mb-4">
+                <a href="/koordinator/daftar-perbaikan" class="table-title d-flex" style="font-weight: 700; color: #818181">
+                    LAPORAN PERBAIKAN SARANA DAN PRASARANA KELAS 
+                </a>
+                <img class="mx-2" src="{{ asset('images/icons/chevron-right.svg') }}" alt="">
+                <a href="/koordinator/daftar-perbaikan/detail" class="table-title d-flex text-dark" style="font-weight: 700">
+                    29/11/2023-10113
+                </a>
+            </div>
             <table class="table table-striped mt-5" style="width: 100%;">
                 <tr>
                     <th class="fw-bolder col-3">Tanggal Selesai</th>

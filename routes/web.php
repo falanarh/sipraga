@@ -2,18 +2,36 @@
 
 use App\Models\BarangHabisPakai;
 use App\Models\AmbilBarangHabisPakai;
+use App\Models\Mahasiswa;
+use App\Rules\EmailChecker;
+use App\Models\PengecekanKelas;
+use App\Helpers\UserInformation;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AsetController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RuangController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\DosenController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\PelaporController;
 use App\Http\Controllers\TeknisiController;
+use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\ImportAsetController;
 use App\Http\Controllers\PemakaiBHPController;
+use App\Http\Controllers\ImportRuangController;
 use App\Http\Controllers\KoordinatorController;
 use App\Http\Controllers\BarangHabisPakaiController;
 use App\Http\Controllers\AmbilBarangHabisPakaiController;
+use App\Http\Controllers\PengecekanKelasController;
+use App\Http\Controllers\PeminjamanRuanganController;
+use App\Http\Controllers\JadwalPemeliharaanAcController;    
+use App\Http\Controllers\PemeliharaanAcController;
+use App\Http\Controllers\StaffController;
+use App\Models\Dosen;
+use App\Models\Staff;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,23 +46,94 @@ use App\Http\Controllers\AmbilBarangHabisPakaiController;
 //Login
 Route::middleware(['guest'])->group(function () {
     Route::get('/', function () {
-       return redirect('/home');
+        return redirect('/home');
     });
     Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
+    Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
 });
 
 Route::middleware(['auth'])->group(function () {
     //Logout
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('authenticated', [LoginController::class, 'authenticated'])->name('authenticated');
+    Route::get('profiling', function () {
+        $user = Auth::user();
+        $emailChecker = new EmailChecker();
+        $user_email = $user->email;
+
+        $roles = $user->roles->pluck('name')->toArray();
+
+        if (in_array('Admin', $roles) || in_array('Teknisi', $roles) || in_array('Koordinator', $roles)) {
+            return redirect('staff');
+        } else {
+            if ($emailChecker->isNumericEmailCharacters($user_email)) {
+                return redirect('mahasiswa');
+            } else {
+                return redirect('dosen');
+            }
+        }
+    });
+    Route::get('mahasiswa', [MahasiswaController::class, 'store'])->name('mahasiswa');
+    Route::get('dosen', [DosenController::class, 'store'])->name('dosen');
+    Route::get('staff', [StaffController::class, 'store'])->name('staff');
+    Route::get('/home', [LoginController::class, 'authenticated'])->name('home');
+    Route::get('pilih-peran', function () {
+        return view('roles.pilih-peran');
+    });
+    Route::get('/{role}/profil', function ($role) {
+        $userInfoManager = new UserInformation();
+        $userInfo = $userInfoManager->getUserInfo();
+        $loggedInUser = Auth::user();
+        $user = User::where('user_id', $loggedInUser->user_id)->first();
+        $userRoles = $user->roles()->pluck('name')->toArray(); // Ambil nama-nama role
+
+        $mahasiswa = Mahasiswa::where('user_id', $user->user_id)->first();
+        $dosen = Dosen::where('user_id', $user->user_id)->first();
+        $staff = Staff::where('user_id', $user->user_id)->first();
+
+        if ($mahasiswa) {
+            $posisi = "Mahasiswa";
+        } elseif ($dosen) {
+            $posisi = "Dosen";
+        } else {
+            $posisi = "Staff";
+        }
+
+        // Memeriksa apakah role user termasuk dalam daftar yang diizinkan
+        $allowedRoles = ['Admin', 'Teknisi', 'Koordinator', 'Pelapor', 'Pemakai BHP'];
+        if (!empty(array_intersect($userRoles, $allowedRoles))) {
+            // Jika termasuk, kembalikan view yang sesuai
+            if ($posisi == 'Mahasiswa') {
+                return view('roles.profile', compact('userInfo', 'user', 'mahasiswa', 'role', 'posisi'));
+            } elseif ($posisi == 'Dosen') {
+                return view('roles.profile', compact('userInfo', 'user', 'dosen', 'role', 'posisi'));
+            } else {
+                return view('roles.profile', compact('userInfo', 'user', 'staff', 'role', 'posisi'));
+            }
+        } else {
+            // Jika tidak termasuk, Anda dapat mengarahkan ke halaman lain atau memberikan respons sesuai kebutuhan
+            abort(403, 'Unauthorized');
+        }
+    })->name('profil');
+    Route::patch('edit/mahasiswa/{user_id}', [MahasiswaController::class, 'edit'])->name('edit-profil-mahasiswa');
+    Route::patch('edit/dosen/{user_id}', [DosenController::class, 'edit'])->name('edit-profil-dosen');
+    Route::patch('edit/staff/{user_id}', [StaffController::class, 'edit'])->name('edit-profil-staff');
+
+    Route::get('ruangsForCalendar', [RuangController::class, 'getRuangsForCalendar'])->name('getRuangsForCalendar');
 
     // Route untuk Teknisi
     Route::middleware(['userAkses:Teknisi'])->group(function () {
         Route::get('/teknisi/daftar-pengaduan', [TeknisiController::class, 'daftarPengaduan']);
         Route::get('/teknisi/daftar-pengaduan/detail', [TeknisiController::class, 'daftarPengaduanDetail']);
-        Route::get('/teknisi/jadwal-pemeliharaan', [TeknisiController::class, 'jadwalPemeliharaan']);
-        Route::get('/teknisi/jadwal-pemeliharaan/pemeliharaan', [TeknisiController::class, 'pemeliharaan']);
-        Route::get('/teknisi/daftar-pemeliharaan', [TeknisiController::class, 'daftarPemeliharaan']);
+        Route::get('/teknisi/jadwal-pemeliharaan', [TeknisiController::class, 'jadwalPemeliharaan'])->name('teknisi.jadwal');
+        Route::get('/teknisi/jadwal-pemeliharaan/set/{jadwal_pemeliharaan_ac_id}/{teknisi_id}', [JadwalPemeliharaanAcController::class, 'setTeknisiId'])->name('teknisi.jadwal.set');
+        Route::get('/teknisi/jadwal-pemeliharaan/generate', [JadwalPemeliharaanAcController::class, 'generateJadwal'])->name('teknisi.jadwal.generate');
+        Route::get('/teknisi/jadwal-pemeliharaan/ac', [JadwalPemeliharaanAcController::class, 'data'])->name('teknisi.jadwal.ac');
+        Route::get('/teknisi/jadwal-pemeliharaan/pemeliharaan/{jadwal_pemeliharaan_ac_id}/edit', [TeknisiController::class, 'pemeliharaan'])->name('teknisi.jadwal.pemeliharaan-form');
+        Route::post('/teknisi/jadwal-pemeliharaan/pemeliharaan/{jadwal_pemeliharaan_ac_id}/edit', [PemeliharaanAcController::class, 'store'])->name('teknisi.jadwal.pemeliharaan.store');
+        Route::get('/teknisi/daftar-pemeliharaan', [TeknisiController::class, 'daftarPemeliharaan'])->name('teknisi.daftar-pemeliharaan');
         Route::get('/teknisi/daftar-pemeliharaan/detail', [TeknisiController::class, 'daftarPemeliharaanDetail']);
         Route::get('/teknisi/daftar-pengaduan/detail/catat', [TeknisiController::class, 'perbaikan']);
         Route::get('/teknisi/daftar-perbaikan', [TeknisiController::class, 'daftarPerbaikan']);
@@ -55,17 +144,21 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['userAkses:Admin'])->group(function () {
         Route::get('/admin/data-ruangan', [AdminController::class, 'dataRuangan'])->name('admin.data-ruangan');
         Route::get('/admin/data-ruangan/view', [RuangController::class, 'data'])->name('admin.data-ruangan.view');
-        Route::get('/admin/data-ruangan/{kode}/edit', [AdminController::class, 'editRuangan'])->name('admin.data-ruangan.edit');
-        Route::put('/admin/data-ruangan/{kode}/edit', [RuangController::class, 'update'])->name('admin.data-ruangan.edit');
-        Route::get('/admin/data-ruangan/{kode}/hapus', [RuangController::class, 'remove'])->name('admin.data-ruangan.hapus');
+        Route::get('/admin/data-ruangan/{kode_ruang}/edit', [AdminController::class, 'editRuangan'])->name('admin.data-ruangan.edit');
+        Route::put('/admin/data-ruangan/{kode_ruang}/edit', [RuangController::class, 'update'])->name('admin.data-ruangan.edit');
+        Route::get('/admin/data-ruangan/{kode_ruang}/hapus', [RuangController::class, 'remove'])->name('admin.data-ruangan.hapus');
         Route::get('/admin/ketersediaan-ruangan', [AdminController::class, 'ketersediaanRuangan']);
         Route::get('/admin/ketersediaan-ruangan/detail', [AdminController::class, 'ketersediaanRuanganDetail']);
         // Route::get('/admin/data-ruangan/edit-ruang', [AdminController::class, 'editRuangan']);
+
+        //Route::post('api/peminjaman-ruangan/store', [PeminjamanRuanganController::class, 'store']);
         Route::get('/admin/data-ruangan/tambah-ruang', [AdminController::class, 'tambahRuangan']);
+        Route::post('/admin/data-ruangan/tambah-ruang/impor', [ImportRuangController::class, 'import'])->name('admin.data-ruangan.impor');
         Route::post('/admin/data-ruangan/tambah-ruang', [RuangController::class, 'store'])->name('admin.data-ruangan.store');
         Route::get('/admin/pengelolaan-peminjaman', [AdminController::class, 'pengelolaanPeminjaman']);
         Route::get('/admin/pengelolaan-peminjaman/detail', [AdminController::class, 'pengelolaanPeminjamanDetail']);
         Route::get('/admin/data-master', [AdminController::class, 'dataMaster'])->name('admin.data-master');
+        Route::get('/admin/data-master/view-dbr', [AsetController::class, 'eksporDbr'])->name('admin.data-master.dbr');
         Route::get('/admin/data-master/{kode_barang}/edit', [AdminController::class, 'editJenis'])->name('admin.data-master.jenis.edit-form');
         Route::put('/admin/data-master/{kode_barang}/edit', [BarangController::class, 'update'])->name('admin.data-master.jenis.edit');
         Route::get('/admin/data-master/{kode_barang}/hapus', [BarangController::class, 'remove'])->name('admin.data-master.jenis.hapus');
@@ -73,6 +166,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/data-master/sarpras', [AsetController::class, 'data'])->name('admin.data-master.sarpras');
         Route::get('/admin/data-master/tambah-sarpras', [AdminController::class, 'tambahSarpras'])->name('admin.tambah-sarpras');
         Route::post('/admin/data-master/tambah-sarpras', [AsetController::class, 'store'])->name('admin.tambah-sarpras.store');
+        Route::post('/admin/data-master/impor-sarpras', [ImportAsetController::class, 'import'])->name('admin.impor-sarpras');
         Route::get('/admin/data-master/tambah-jenis', [AdminController::class, 'tambahJenis'])->name('admin.tambah-jenis');
         Route::post('/admin/data-master/tambah-jenis', [BarangController::class, 'store'])->name('admin.tambah-jenis.store');
         Route::get('/admin/data-master/{kode_barang}/{nup}/edit', [AdminController::class, 'editSarpras'])->name('admin.data-master.sarpras.edit-form');
@@ -101,13 +195,17 @@ Route::middleware(['auth'])->group(function () {
         });
         
         //{id} itu merupakan parameter yang dikirimkan
-       
     });
 
     // Route untuk Koordinator
     Route::middleware(['userAkses:Koordinator'])->group(function () {
-        Route::get('/koordinator/jadwal-pengecekan-kelas', [KoordinatorController::class, 'jadwalPengecekanKelas']);
-        Route::get('/koordinator/jadwal-pengecekan-kelas/penugasan', [KoordinatorController::class, 'penugasan']);
+        Route::get('/koordinator/jadwal-pengecekan-kelas', [KoordinatorController::class, 'jadwalPengecekanKelas'])->name('koordinator.jadwal-pengecekan-kelas');
+        Route::get('/koordinator/jadwal-pengecekan-kelas/view', [PengecekanKelasController::class, 'dataKoordinator'])->name('koordinator.jadwal-pengecekan-kelas.view');
+        Route::get('/koordinator/jadwal-pengecekan-kelas/tambah', [KoordinatorController::class, 'tambahJadwal'])->name('koordinator.jadwal-pengecekan-kelas.tambah-form');
+        Route::post('/koordinator/jadwal-pengecekan-kelas/tambah-awal', [PengecekanKelasController::class, 'store'])->name('koordinator.jadwal-pengecekan-kelas.store');
+        Route::post('/koordinator/jadwal-pengecekan-kelas/tambah-baru', [PengecekanKelasController::class, 'generate'])->name('koordinator.jadwal-pengecekan-kelas.generate');
+        Route::get('/koordinator/jadwal-pengecekan-kelas/penugasan/{pengecekan_kelas_id}', [KoordinatorController::class, 'penugasan'])->name('koordinator.jadwal-pengecekan-kelas.penugasan-form');
+        Route::post('/koordinator/jadwal-pengecekan-kelas/penugasan/{pengecekan_kelas_id}', [PengecekanKelasController::class, 'tugaskanAdmin'])->name('koordinator.jadwal-pengecekan-kelas.penugasan');
         Route::get('/koordinator/daftar-pengaduan', [KoordinatorController::class, 'daftarPengaduan']);
         Route::get('/koordinator/daftar-pengaduan/detail', [KoordinatorController::class, 'daftarPengaduanDetail']);
         Route::get('/koordinator/daftar-perbaikan', [KoordinatorController::class, 'daftarPerbaikan']);
@@ -127,8 +225,6 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/pemakaibhp/pengambilan', [AmbilBarangHabisPakaiController::class, 'store'])->name('pemakaibhp.pengambilan.ambil');
         // Route::get('/admin/barang-habis-pakai/view/AmbilBHP', [AmbilBarangHabisPakaiController::class, 'data'])->name('admin.bhp.view.ambilbhp');
     });
-
-    Route::get('/home', [LoginController::class, 'authenticated']);
 });
 
 // //Falana
