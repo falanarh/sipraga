@@ -23,7 +23,6 @@ use App\Http\Controllers\KoordinatorController;
 use App\Http\Controllers\PengecekanKelasController;
 use App\Http\Controllers\JadwalPemeliharaanAcController;    
 use App\Http\Controllers\PemeliharaanAcController;
-use App\Models\PengecekanKelas;
 use App\Http\Controllers\StaffController;
 use App\Models\Dosen;
 use App\Models\Staff;

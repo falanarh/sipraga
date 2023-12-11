@@ -53,7 +53,9 @@ class TeknisiController extends Controller
     {
         $userInfo = $this->getUserInfo();
         $ruangOptions = Ruang::all();
-        $teknisiOptions = User::where('role', 'Teknisi')->get(); // Sesuaikan dengan kolom yang sesuai
+        $teknisiOptions = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Teknisi');
+        })->get(); 
         
         return view('roles.teknisi.jadwal-pemeliharaan-teknisi', compact('userInfo', 'ruangOptions', 'teknisiOptions'));
     }
