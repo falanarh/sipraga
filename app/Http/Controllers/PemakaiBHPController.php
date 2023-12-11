@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Auth;
 
 class PemakaiBHPController extends Controller
 {
-    private function getUserInfo() {
+    private function getUserInfo()
+    {
         $userInfo = [
             'name' => Auth::user()->name,
             'role' => Auth::user()->role,
@@ -17,7 +18,8 @@ class PemakaiBHPController extends Controller
         return $userInfo;
     }
 
-    private function getTimeOfDay() {
+    private function getTimeOfDay()
+    {
         $now = Carbon::now('Asia/Jakarta'); // Set zona waktu ke WIB
         $hour = $now->hour;
 
@@ -32,7 +34,8 @@ class PemakaiBHPController extends Controller
         }
     }
 
-    public function pengambilan(){
+    public function pengambilan()
+    {
         $userInfo = $this->getUserInfo();
         return view('roles.pemakaibhp.pengambilan-pemakaibhp', compact('userInfo'));
     }
