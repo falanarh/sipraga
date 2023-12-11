@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\BarangHabisPakai;
+use App\Models\AmbilBarangHabisPakai;
 use App\Models\Mahasiswa;
 use App\Rules\EmailChecker;
 use App\Models\PengecekanKelas;
@@ -20,6 +22,8 @@ use App\Http\Controllers\ImportAsetController;
 use App\Http\Controllers\PemakaiBHPController;
 use App\Http\Controllers\ImportRuangController;
 use App\Http\Controllers\KoordinatorController;
+use App\Http\Controllers\BarangHabisPakaiController;
+use App\Http\Controllers\AmbilBarangHabisPakaiController;
 use App\Http\Controllers\PengecekanKelasController;
 use App\Http\Controllers\PeminjamanRuanganController;
 use App\Http\Controllers\JadwalPemeliharaanAcController;    
@@ -169,11 +173,28 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/admin/data-master/{kode_barang}/{nup}/edit', [AsetController::class, 'update'])->name('admin.data-master.sarpras.edit');
         Route::get('/admin/data-master/{kode_barang}/{nup}/hapus', [AsetController::class, 'remove'])->name('admin.data-master.sarpras.hapus');
         Route::get('/admin/data-master/{kode_barang}/{nup}/detail', [AdminController::class, 'dataMasterDetail'])->name('admin.data-master.sarpras.detail');
-        Route::get('/admin/jadwal-pengecekan-kelas', [AdminController::class, 'jadwalPengecekanKelas'])->name('admin.jadwal-pengecekan-kelas');
-        Route::get('/admin/jadwal-pengecekan-kelas/view', [PengecekanKelasController::class, 'dataAdmin'])->name('admin.jadwal-pengecekan-kelas.view');
-        Route::get('/admin/jadwal-pengecekan-kelas/penugasan/{pengecekan_kelas_id}', [PengecekanKelasController::class, 'selesaikan'])->name('admin.jadwal-pengecekan-kelas.selesaikan');
-        Route::get('/admin/barang-habis-pakai', [AdminController::class, 'barangHabisPakai']);
-        Route::get('/admin/barang-habis-pakai/tambah-bhp', [AdminController::class, 'tambahBHP']);
+        Route::get('/admin/jadwal-pengecekan-kelas', [AdminController::class, 'jadwalPengecekanKelas']);
+        Route::get('/admin/barang-habis-pakai', [AdminController::class, 'barangHabisPakai'])->name('admin.bhp');
+        Route::get('/admin/barang-habis-pakai/view/bhp', [BarangHabisPakaiController::class, 'dataBHP'])->name('admin.bhp.view.dataBHP');
+        Route::get('/admin/barang-habis-pakai/view/ambil-bhp', [AmbilBarangHabisPakaiController::class, 'dataAmbilBHP'])->name('admin.bhp.view.dataAmbilBHP');
+        Route::get('/admin/barang-habis-pakai/view/transaksi-bhp', [BarangHabisPakaiController::class, 'dataTransaksiBHP'])->name('admin.bhp.view.dataTransaksiBHP');
+        Route::get('/admin/barang-habis-pakai/tambah-bhp', [AdminController::class, 'tambahBHP'])->name('admin.bhp.tambah-form');
+        // Route::get('/admin/barang-habis-pakai/notifikasi', [BarangHabisPakaiController::class, 'notifikasi'])->name('admin.bhp.notifikasi');
+        Route::post('/admin/barang-habis-pakai/tambah-bhp', [BarangHabisPakaiController::class, 'store'])->name('admin.bhp.tambah');
+        Route::get('/admin/barang-habis-pakai/tambah-jenis-bhp', [AdminController::class, 'tambahJenisBHP'])->name('admin.bhp.tambah-jenis-form');
+        Route::post('/admin/barang-habis-pakai/tambah-jenis-bhp', [BarangHabisPakaiController::class, 'jenisBHP'])->name('admin.bhp.tambah-jenis-bhp');
+        Route::get('/admin/barang-habis-pakai/{pengambilan_bhp_id}/hapus-pengambilan-bhp', [AmbilBarangHabisPakaiController::class, 'hapusPengambilanBHP'])->name('admin.bhp.hapus-pengambilan-bhp');
+        Route::get('/admin/barang-habis-pakai/{id}/edit-form', [AdminController::class, 'showBhpEditForm'])->name('admin.bhp.edit-form');
+        Route::patch('/admin/barang-habis-pakai/{id}/edit', [BarangHabisPakaiController::class, 'editTransaksiBHP'])->name('admin.bhp.edit');
+        Route::get('/admin/barang-habis-pakai/{id}/hapus-transaksi-bhp', [BarangHabisPakaiController::class, 'hapusTransaksiBHP'])->name('admin.bhp.hapus-transaksi-bhp');
+        Route::get('/admin/barang-habis-pakai/{jenis_barang}/hapus-bhp', [BarangHabisPakaiController::class, 'hapusBHP'])->name('admin.bhp.hapus-bhp');
+        Route::post('/admin/barang-habis-pakai/print-pengambilan-bhp', [AmbilBarangHabisPakaiController::class, 'eksporBHP'])->name('admin.bhp.print-pengambilan-bhp');
+        Route::post('/admin/barang-habis-pakai/print-pengambilan-bhp', [AmbilBarangHabisPakaiController::class, 'eksporBHP'])->name('admin.bhp.print-pengambilan-bhp');
+        Route::get('/cetak-bhp',function(){
+           return view('export.format-bhp');
+        });
+        
+        //{id} itu merupakan parameter yang dikirimkan
     });
 
     // Route untuk Koordinator
@@ -200,7 +221,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Route untuk Pemakai BHP
     Route::middleware(['userAkses:PemakaiBHP'])->group(function () {
-        Route::get('/pemakaibhp/pengambilan', [PemakaiBHPController::class, 'pengambilan']);
+        Route::get('/pemakaibhp/pengambilan', [PemakaiBHPController::class, 'pengambilan'])->name('pemakaibhp.pengambilan');
+        Route::post('/pemakaibhp/pengambilan', [AmbilBarangHabisPakaiController::class, 'store'])->name('pemakaibhp.pengambilan.ambil');
+        // Route::get('/admin/barang-habis-pakai/view/AmbilBHP', [AmbilBarangHabisPakaiController::class, 'data'])->name('admin.bhp.view.ambilbhp');
     });
 });
 
