@@ -114,7 +114,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/koordinator/daftar-perbaikan/view', [PerbaikanController::class, 'dataKoordinator'])->name('koordinator.daftar-perbaikan.view');
         Route::get('/koordinator/daftar-perbaikan/detail/{tiket}', [KoordinatorController::class, 'daftarPerbaikanDetail'])->name('koordinator.daftar-perbaikan-detail');
         Route::get('/koordinator/daftar-perbaikan/detail/print/{tiket}', [PerbaikanController::class, 'printPerbaikan'])->name('teknisi.daftar-perbaikan.print');
-
     });
 
     // Route untuk Pelapor

@@ -171,7 +171,7 @@ class PengaduanController extends Controller
 
         // Filter data berdasarkan inputan user
         if ($request->filter_ruang != null) {
-            $pengaduans->where('kode_ruang', $request->filter_ruang);
+            $pengaduans->where('pengaduans.kode_ruang', $request->filter_ruang);
         }
         if ($request->filter_status != null) {
             $pengaduans->where('status', $request->filter_status);
@@ -257,6 +257,8 @@ class PengaduanController extends Controller
                     return '<button class="btn btn-dark" disabled>Detail</button>';
                     // You can customize the disabled button appearance or provide a different message
                 }
+
+                // return '<a href="/koordinator/daftar-pengaduan/detail/'.$pengaduans->tiket.'" class="btn btn-dark">Detail</a>';
             })            
             ->rawColumns(['prioritas', 'status', 'action'])
             ->make(true);

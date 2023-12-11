@@ -23,7 +23,7 @@
                     <select id="filterRuang" name="filter_ruang" class="form-select filter-dropdown">
                         <option value="">Pilih Ruang</option>
                             @foreach ($ruangOption as $option)
-                                <option value="{{ $option->nama }}">{{ $option->nama }}</option>
+                                <option value="{{ $option->kode_ruang }}">{{ $option->nama }}</option>
                             @endforeach
                     </select>
                 </div>
@@ -101,7 +101,7 @@
                         }
                     },
                     { data: 'jenis_barang', name: 'jenis_barang' },
-                    { data: 'nama_ruang', name: 'nama_ruang' },
+                    { data: 'nama_ruang', name: 'kode_ruang' },
                     { data: 'prioritas', name: 'prioritas' },
                     { data: 'status', name: 'status' },
                     { data: 'teknisi_name', name: 'teknisi_name' },

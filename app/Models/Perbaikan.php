@@ -23,4 +23,5 @@ class perbaikan extends Model
     public function pengaduan(){
         return $this->belongsTo(Pengaduan::class, 'pengaduan_id', 'pengaduan_id');
     }
+    
 }

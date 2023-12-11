@@ -31,13 +31,13 @@
             <table id="example" class="table table-striped responsive" style="width: 100%;">
                 <thead class="text-dark" style="border: 1px solid #000;">
                     <tr>
-                        <th>Tiket</th>
+                        <th>Nomor</th>
                         <th>Tanggal Selesai</th>
                         <th>Kode Barang</th>
                         <th>NUP</th>
                         <th>Jenis Barang</th>
                         <th>Ruang</th>
-                        <th>Teknisi</th>
+                        <th>Keterangan</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>        
@@ -48,6 +48,23 @@
 
 @section('additional-js')
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: '{{ session('success') }}',
+                });
+            @endif
+
+            @if (session('error'))
+                Swal.fire({
+                    icon: "error",
+                    title: "Terjadi kesalahan",
+                    text: '{{ session('error') }}',
+                });
+            @endif
+        });
 
         var tabelPerbaikan
 
@@ -80,8 +97,8 @@
                 { data: 'kode_barang', name: 'kode_barang' },
                 { data: 'nup', name: 'nup' },
                 { data: 'jenis_barang', name: 'jenis_barang' },
-                { data: 'nama_ruang', name: 'nama_ruang' },
-                { data: 'teknisi_name', name: 'teknisi_name' },
+                { data: 'kode_ruang', name: 'kode_ruang' },
+                { data: 'keterangan', name: 'keterangan' },
                 { data: 'action', name: 'action', orderable: false, searchable: false},
             ],
         });

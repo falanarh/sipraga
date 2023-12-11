@@ -98,7 +98,7 @@
                     }
                 },
                 { data: 'jenis_barang', name: 'jenis_barang' },
-                { data: 'nama_ruang', name: 'nama_ruang' },
+                { data: 'nama_ruang', name: 'kode_ruang' },
                 { data: 'prioritas', name: 'prioritas' },
                 { data: 'status', name: 'status' },
                 { data: 'action', name: 'action', orderable: false, searchable: false},

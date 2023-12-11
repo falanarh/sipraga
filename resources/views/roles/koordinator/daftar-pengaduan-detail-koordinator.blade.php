@@ -51,7 +51,7 @@
                     <tr>
                         <th class="fw-bolder">Teknisi</th>
                         <td>
-                            <select name="teknisi_id" class="form-select border-0 px-0">
+                            <select name="teknisi_id" class="form-select border-0 px-0" required>
                                 <option value="">Pilih Nama Teknisi</option>
                                 @foreach ($teknisis as $teknisi)
                                     <option value="{{ $teknisi->user_id }}" @if ($pengaduans->teknisi_id == $teknisi->user_id) selected @endif>{{ $teknisi->name }}</option>

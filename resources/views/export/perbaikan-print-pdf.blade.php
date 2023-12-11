@@ -356,20 +356,6 @@
                         <td class="property">Keterangan</td>
                         <td class="value">{{ $perbaikan->keterangan }}</td>
                     </tr>
-                    <tr>
-                        <td class="property">Lampiran</td>
-                        <td class="value">
-                            @php
-                                $imageData = file_get_contents($lampiranPath);
-                                $base64 = 'data:image/';
-                                $imageInfo = getimagesize($lampiranPath);
-                                $imageType = image_type_to_mime_type($imageInfo[2]);
-                                $base64 .= $imageType;
-                                $base64 .= ';base64,' . base64_encode($imageData);
-                            @endphp
-                            <img src="{{ $base64 }}" alt="Bukti Perbaikan" style="width: 500px; height: 300px;">
-                        </td>
-                    </tr>
                 </tbody>
             </table>
         </div>

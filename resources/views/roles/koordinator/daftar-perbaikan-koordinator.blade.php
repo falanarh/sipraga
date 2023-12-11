@@ -81,7 +81,7 @@
                     { data: 'kode_barang', name: 'kode_barang' },
                     { data: 'nup', name: 'nup' },
                     { data: 'jenis_barang', name: 'jenis_barang' },
-                    { data: 'nama_ruang', name: 'nama_ruang' },
+                    { data: 'kode_ruang', name: 'kode_ruang' },
                     { data: 'teknisi_name', name: 'teknisi_name' },
                     { data: 'action', name: 'action', orderable: false, searchable: false},
                 ],
