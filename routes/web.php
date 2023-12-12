@@ -1,10 +1,7 @@
 <?php
 
-use App\Models\BarangHabisPakai;
-use App\Models\AmbilBarangHabisPakai;
 use App\Models\Mahasiswa;
 use App\Rules\EmailChecker;
-use App\Models\PengecekanKelas;
 use App\Helpers\UserInformation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;

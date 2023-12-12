@@ -18,7 +18,7 @@ class AdminController extends Controller
     {
         $userInfo = [
             'name' => Auth::user()->name,
-            'role' => Auth::user()->role,
+            'photo' => Auth::user()->picture_link,
             'timeOfDay' => $this->getTimeOfDay(),
         ];
         return $userInfo;

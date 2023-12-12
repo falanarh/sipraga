@@ -19,6 +19,7 @@ class UserInformation
     {
         $userInfo = [
             'name' => $this->user->name,
+            'photo' => $this->user->picture_link,
             'timeOfDay' => $this->getTimeOfDay(),
         ];
         return $userInfo;
