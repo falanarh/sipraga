@@ -19,7 +19,7 @@
                 <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="" style="width: 25px;height: 25px;">
                 FORM PEMELIHARAAN AC
             </p>
-            <form method="POST" action="{{ 'teknisi.jadwal.update',[$jadwalPemeliharaanAc->nup,$jadwalPemeliharaanAc->ruang->nama] }}">
+            <form method="POST" action="{{ route('teknisi.jadwal.update', [$jadwalPemeliharaanAc->nup, $jadwalPemeliharaanAc->ruang->nama]) }}">
                 @csrf
                 @method('PATCH')
                 <div class="mb-3">
