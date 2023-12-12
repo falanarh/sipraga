@@ -35,18 +35,20 @@
         <div class="card-body">
             <div class="row-card d-flex justify-content-between">
                 <p class="table-title text-dark mb-4">DAFTAR KETERSEDIAAN BARANG HABIS PAKAI</p>
-                <div>
-                    <a href="{{ route('admin.bhp.tambah-jenis-form') }}"
-                        class="btn btn-dark text-white d-flex align-items-center">
-                        <img src="{{ asset('images/icons/plus.svg') }}" alt="" class="mr-2 add-icon img-fluid">
-                        Tambah Barang
-                    </a>
-                </div>
-                <div>
-                    <a href="{{ route('admin.bhp.tambah-form') }}" class="btn btn-dark text-white d-flex align-items-center">
-                        <img src="{{ asset('images/icons/plus.svg') }}" alt="" class="mr-2 add-icon img-fluid">
-                        Tambah Stok
-                    </a>
+                <div class="btn-group">
+                    <div class="mx-2">
+                        <a href="{{ route('admin.bhp.tambah-jenis-form') }}"
+                            class="btn btn-dark text-white d-flex align-items-center">
+                            <img src="{{ asset('images/icons/plus.svg') }}" alt="" class="mr-2 add-icon img-fluid">
+                            BHP Baru
+                        </a>
+                    </div>
+                    <div>
+                        <a href="{{ route('admin.bhp.tambah-form') }}" class="btn btn-dark text-white d-flex align-items-center">
+                            <img src="{{ asset('images/icons/plus.svg') }}" alt="" class="mr-2 add-icon img-fluid">
+                            Stok
+                        </a>
+                    </div>
                 </div>
             </div>
 

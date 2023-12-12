@@ -24,7 +24,7 @@ class CreateAmbilBarangHabisPakaisTable extends Migration
             $table->string('satuan');
             $table->text('keterangan')->nullable(true);
             $table->enum('jenis_transaksi', ['Masuk', 'Keluar'])->default('Keluar');
-            $table->date('tgl_pengambilan_bhp');
+            // $table->date('tgl_pengambilan_bhp');
             $table-> timestamps();
             $table->foreign('pemakai_bhp_id')->references('user_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('nama_ruang')->references('nama')->on('ruangs')->onDelete('cascade')->onUpdate('cascade');

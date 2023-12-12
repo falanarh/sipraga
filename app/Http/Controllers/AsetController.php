@@ -147,7 +147,7 @@ class AsetController extends Controller
         return DataTables::of($aset)
             ->addColumn('tanggal_masuk', function ($row) {
                 // Format tanggal sesuai kebutuhan Anda
-                return $row->tanggal_masuk->format('d-m-Y');
+                return $row->tanggal_masuk->format('d/m/Y');
             })
             ->addColumn('jenis_barang', function ($row) {
                 return '<div class="rounded-background rounded-pill" style="background-color: ' . $row->barang->warna . ';">' . $row->barang->nama . '</div>';

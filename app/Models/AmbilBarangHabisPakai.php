@@ -16,7 +16,7 @@ class AmbilBarangHabisPakai extends Model
 
     public function ruang()
     {
-        return $this->belongsTo(Ruang::class, 'kode_ruang', 'nama');
+        return $this->belongsTo(Ruang::class, 'nama_ruang', 'nama');
     }
 
     public function user()

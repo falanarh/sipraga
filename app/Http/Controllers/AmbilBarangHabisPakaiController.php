@@ -4,20 +4,21 @@ namespace App\Http\Controllers;
 
 use id;
 use Dompdf\Dompdf;
+use App\Models\User;
+use App\Models\Ruang;
+use App\Rules\NotTomorrow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\BarangHabisPakai;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AmbilBarangHabisPakai;
-use App\Models\Ruang;
-use App\Models\User;
-use App\Rules\NotTomorrow;
-use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Session;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Validation\ValidationException;
 
 class AmbilBarangHabisPakaiController extends Controller
 {
@@ -32,7 +33,6 @@ class AmbilBarangHabisPakaiController extends Controller
     public function store(Request $request)
     {
         $barang = BarangHabisPakai::where('jenis_barang', $request->jenis_barang)->first();
-
 
 
         $request->validate([
@@ -73,7 +73,7 @@ class AmbilBarangHabisPakaiController extends Controller
             //  if($stokTersedia<5){
             //     notify()->success('Laravel Notify is awesome!');
             //  }
-            
+
 
             if ($stokTersedia == null) {
                 throw new \Exception('Stok barang belum tersedia. Silakan hubungi pihak administrasi BAU');
@@ -82,15 +82,15 @@ class AmbilBarangHabisPakaiController extends Controller
             }
         } catch (\Exception $e) {
             // Jika terjadi kesalahan, simpan pesan kesalahan dalam session
-            
+
             return redirect()->back()->with('error', $e->getMessage());
         }
 
 
         $user = Auth::user();
-        $jenis_barang_bhp = BarangHabisPakai::where('jenis_barang',$request->jenis_barang)->first();
-        $bhp_id = $jenis_barang_bhp -> bhp_id;
-        $satuan = $jenis_barang_bhp-> satuan;
+        $jenis_barang_bhp = BarangHabisPakai::where('jenis_barang', $request->jenis_barang)->first();
+        $bhp_id = $jenis_barang_bhp->bhp_id;
+        $satuan = $jenis_barang_bhp->satuan;
 
         $request->merge(['pemakai_bhp_id' => $user->user_id]);
         $request->merge(['bhp_id' => $bhp_id]);
@@ -100,6 +100,11 @@ class AmbilBarangHabisPakaiController extends Controller
         // Menambahkan kolom nomor
         $request->merge(['nomor' => $jumlahBarisData + 1]);
 
+        // Set zona waktu ke GMT+7
+    $now = Carbon::now('Asia/Jakarta');
+
+    $request->merge(['created_at' => $now, 'updated_at' => $now]);
+
         // AmbilBarangHabisPakai::create($request->all());
         // Buat data untuk AmbilBarangHabisPakai
         $ambilBarang = AmbilBarangHabisPakai::create($request->all());
@@ -108,6 +113,10 @@ class AmbilBarangHabisPakaiController extends Controller
         // Buat data untuk BarangHabisPakai
         // Menghitung jumlah baris data yang sudah ada
         $jumlahBarisData = BarangHabisPakai::count();
+
+        // Set zona waktu ke GMT+7
+        $now = Carbon::now('Asia/Jakarta');
+
         BarangHabisPakai::create([
             'bhp_id' => $ambilBarang->bhp_id,
             'jenis_barang' => $ambilBarang->jenis_barang,
@@ -115,12 +124,12 @@ class AmbilBarangHabisPakaiController extends Controller
             'satuan' => $ambilBarang->satuan,
             'jenis_transaksi' => 'Keluar',
             'nomor' => $jumlahBarisData + 1,
-            'satuan'=> $ambilBarang -> satuan,
+            'created_at' => $now,
+            'updated_at' => $now,
+            // tambahkan kolom lain yang mungkin Anda miliki
         ]);
 
-        
         return redirect()->route('pemakaibhp.pengambilan')->with('success', 'Pengambilan Barang Habis Pakai, berhasil!');
-        
     }
 
 
@@ -167,15 +176,24 @@ class AmbilBarangHabisPakaiController extends Controller
 
         $tanggalprint = \Carbon\Carbon::now()->setTimezone('Asia/Jakarta');
 
-        $request->validate([
-            'pengambil' => 'required',
-            'tanggal' => 'required', 'date', new NotTomorrow
-        ], [
-            'pengambil.required' => 'Pengambil wajid diisi!',
-            'tanggal.required' => 'Tanggal wajib diisi',
-            'tanggal.date' => 'Format Tanggal tidak valid!',
-        ]);
+        try {
+            $request->validate([
+                'pengambil' => 'required',
+                'tanggal' => ['required', 'date', new NotTomorrow],
+            ], [
+                'pengambil.required' => 'Pengambil wajib diisi!',
+                'tanggal.required' => 'Tanggal wajib diisi',
+            ]);
+        } catch (ValidationException $e) {
+            $errorMsgs = '';
+            foreach ($e->errors() as $fieldName => $messages) {
+                foreach ($messages as $message) {
+                    $errorMsgs = $message;
+                }
+            }
 
+            return redirect()->back()->with('error', $errorMsgs);
+        }
 
         $tanggal = Carbon::parse($request->tanggal)->format('Y-m-d');
         // Ambil satu objek

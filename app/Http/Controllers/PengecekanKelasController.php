@@ -103,7 +103,7 @@ class PengecekanKelasController extends Controller
         return Datatables::of($pengecekanKelas)
             ->addColumn('tanggal', function ($pengecekanKelas) {
                 // Format tanggal sesuai kebutuhan Anda
-                return $pengecekanKelas->tanggal->format('d-m-Y');
+                return $pengecekanKelas->tanggal->format('d/m/Y');
             })
             ->addColumn('nama_ruang', function ($pengecekanKelas) {
                 return $pengecekanKelas->ruang->nama;
@@ -115,6 +115,14 @@ class PengecekanKelasController extends Controller
                     return $pengecekanKelas->user->name;
                 }
             })
+            ->addColumn('status', function($pengecekanKelas) {
+                if($pengecekanKelas->status == "Belum Dikerjakan") {
+                    $color = "#F8DE22";
+                } else {
+                    $color = "#13DEB9";
+                }
+                return '<div class="rounded-background rounded-pill" style="background-color:' . $color .';">' . $pengecekanKelas->status . '</div>';
+            })
             ->addColumn('action', function ($pengecekanKelas) {
                 if ($pengecekanKelas->admin_id != null || $pengecekanKelas->status == "Sudah Dikerjakan") {
                     return '<a class="btn btn-outline-dark disabled">Tugaskan</a>';
@@ -122,6 +130,7 @@ class PengecekanKelasController extends Controller
                     return '<a href="' . route("koordinator.jadwal-pengecekan-kelas.penugasan-form", ['pengecekan_kelas_id' => $pengecekanKelas->pengecekan_kelas_id]) . '" class="btn btn-dark tugaskanButton">Tugaskan</a>';
                 }
             })
+            ->rawColumns(['status', 'action'])
             ->make(true);
     }
 
@@ -139,10 +148,18 @@ class PengecekanKelasController extends Controller
         return Datatables::of($pengecekanKelas)
             ->addColumn('tanggal', function ($pengecekanKelas) {
                 // Format tanggal sesuai kebutuhan Anda
-                return $pengecekanKelas->tanggal->format('d-m-Y');
+                return $pengecekanKelas->tanggal->format('d/m/Y');
             })
             ->addColumn('nama_ruang', function ($pengecekanKelas) {
                 return $pengecekanKelas->ruang->nama;
+            })
+            ->addColumn('status', function($pengecekanKelas) {
+                if($pengecekanKelas->status == "Belum Dikerjakan") {
+                    $color = "#F8DE22";
+                } else {
+                    $color = "#13DEB9";
+                }
+                return '<div class="rounded-background rounded-pill" style="background-color:' . $color .';">' . $pengecekanKelas->status . '</div>';
             })
             ->addColumn('action', function ($pengecekanKelas) {
                 if ( $pengecekanKelas->status == "Sudah Dikerjakan") {
@@ -155,8 +172,16 @@ class PengecekanKelasController extends Controller
                     return '<a href="' . $url . '" class="btn btn-dark tugaskanButton">Ubah</a>';
                 }
             })
+            ->rawColumns(['status', 'action'])
             ->make(true);
     }
+
+    // if (element.textContent === "Menunggu") {
+    //     element.style.backgroundColor = "#F8DE22";
+    // } else if (element.textContent === "Dikerjakan") {
+    //     element.style.backgroundColor = "#539BFF";
+    // } else if (element.textContent === "Selesai") {
+    //     element.style.backgroundColor = "#13DEB9";
 
     // public function data()
     // {

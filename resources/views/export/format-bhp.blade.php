@@ -544,12 +544,12 @@
                         @foreach ($ambilbhps as $row)
                             <tr>
                                 <td>{{ $no++ }}</td>
-                                <td>{{ isset($row->jenis_barang) ? $row->jenis_barang : 'Data Tidak Tersedia' }}
+                                <td>{{ isset($row->jenis_barang) ? $row->jenis_barang : '' }}
                                 </td>
-                                <td>{{ isset($row->jumlah_ambilBHP) ? $row->jumlah_ambilBHP : 'Data Tidak Tersedia' }}
+                                <td>{{ isset($row->jumlah_ambilBHP) ? $row->jumlah_ambilBHP : '' }}
                                 </td>
-                                <td>{{ isset($row->satuan) ? $row->satuan : 'Data Tidak Tersedia' }}</td>
-                                <td>{{ isset($row->keterangan) ? $row->keterangan : 'Data Tidak Tersedia' }}</td>
+                                <td>{{ isset($row->satuan) ? $row->satuan : '' }}</td>
+                                <td>{{ isset($row->keterangan) ? $row->keterangan : '' }}</td>
                             </tr>
                         @endforeach
                     @else

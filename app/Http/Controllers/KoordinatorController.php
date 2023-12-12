@@ -49,7 +49,10 @@ class KoordinatorController extends Controller
         // Mengambil semua data pengguna
         $pengecekanKelas = PengecekanKelas::find($pengecekan_kelas_id);
         // Mengambil semua pengguna dengan peran "admin"
-        $adminUsers = User::where('role', 'Admin')->get();
+        $adminUsers = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Admin');
+        })->get();
+        
         return view('roles.koordinator.penugasan-admin', compact('userInfo', 'adminUsers', 'pengecekanKelas'));
     }
 

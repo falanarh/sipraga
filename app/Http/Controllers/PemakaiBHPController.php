@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Ruang;
-use Illuminate\Http\Request;
 use App\Models\BarangHabisPakai;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
 
 class PemakaiBHPController extends Controller
@@ -16,7 +15,7 @@ class PemakaiBHPController extends Controller
     {
         $userInfo = [
             'name' => Auth::user()->name,
-            'role' => Auth::user()->role,
+            // 'role' => Auth::user()->role,
             'timeOfDay' => $this->getTimeOfDay(),
         ];
         return $userInfo;
@@ -40,8 +39,10 @@ class PemakaiBHPController extends Controller
 
     public function pengambilan(){
         $userInfo = $this->getUserInfo();
-        $users = User::where('role', 'PemakaiBHP')
-            ->get();
+        $users = User::whereHas('roles', function ($query) {
+            $query->where('name', 'PemakaiBHP');
+        })->get();        
+        // dd("Test");
         $ruangOptions = Ruang::all();
         $bhps = BarangHabisPakai::select([
             'jenis_barang'])

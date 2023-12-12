@@ -3993,8 +3993,6 @@
             "time": "2022-09-06T12:16:56+00:00"
         },
         {
-            "name": "phpoffice/phpspreadsheet",
-            "version": "1.29.0",
             "name": "paragonie/constant_time_encoding",
             "version": "v2.6.3",
             "source": {

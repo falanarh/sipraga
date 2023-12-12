@@ -173,7 +173,9 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/admin/data-master/{kode_barang}/{nup}/edit', [AsetController::class, 'update'])->name('admin.data-master.sarpras.edit');
         Route::get('/admin/data-master/{kode_barang}/{nup}/hapus', [AsetController::class, 'remove'])->name('admin.data-master.sarpras.hapus');
         Route::get('/admin/data-master/{kode_barang}/{nup}/detail', [AdminController::class, 'dataMasterDetail'])->name('admin.data-master.sarpras.detail');
-        Route::get('/admin/jadwal-pengecekan-kelas', [AdminController::class, 'jadwalPengecekanKelas']);
+        Route::get('/admin/jadwal-pengecekan-kelas', [AdminController::class, 'jadwalPengecekanKelas'])->name('admin.jadwal-pengecekan-kelas');
+        Route::get('/admin/jadwal-pengecekan-kelas/view', [PengecekanKelasController::class, 'dataAdmin'])->name('admin.jadwal-pengecekan-kelas.view');
+        Route::get('/admin/jadwal-pengecekan-kelas/penugasan/{pengecekan_kelas_id}', [PengecekanKelasController::class, 'selesaikan'])->name('admin.jadwal-pengecekan-kelas.selesaikan');
         Route::get('/admin/barang-habis-pakai', [AdminController::class, 'barangHabisPakai'])->name('admin.bhp');
         Route::get('/admin/barang-habis-pakai/view/bhp', [BarangHabisPakaiController::class, 'dataBHP'])->name('admin.bhp.view.dataBHP');
         Route::get('/admin/barang-habis-pakai/view/ambil-bhp', [AmbilBarangHabisPakaiController::class, 'dataAmbilBHP'])->name('admin.bhp.view.dataAmbilBHP');

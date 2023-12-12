@@ -143,12 +143,13 @@ class AdminController extends Controller
     }
 
     public function barangHabisPakai()
-    {
-       
+    {       
         $userInfo = $this->getUserInfo();
-        $users = User::where('role', 'PemakaiBHP')
-            ->get();
+        $users = User::whereHas('roles', function ($query) {
+            $query->where('name', 'PemakaiBHP');
+        })->get();
         $ruangOptions = Ruang::all();
+        // dd($users);        
         $bhps = BarangHabisPakai::select([
             'jenis_barang'])
             ->groupBy('jenis_barang')
@@ -157,7 +158,6 @@ class AdminController extends Controller
             'jenis_barang'])
             ->groupBy('jenis_barang')
             ->get();
-        
         
         return view('roles.admin.barang-habis-pakai-admin', compact('userInfo', 'users', 'bhps','ambil_bhps', 'ruangOptions'));
     }
@@ -198,62 +198,3 @@ class AdminController extends Controller
         return view('roles.admin.barang-habis-pakai-admin', compact('userInfo'));
     }
 }
-
-// class AdminController extends Controller
-// {
-//     public function ketersediaanRuangan(){
-//         return view('roles.admin.ketersediaan-ruangan-admin');
-//     }
-    
-//     public function ketersediaanRuanganDetail(){
-//         return view('roles.admin.ketersediaan-ruangan-detail-admin');
-//     }
-        
-//     public function dataRuangan(){
-//         return view('roles.admin.data-ruangan-admin');
-//     }
-
-//     public function editRuangan(){
-//         return view('roles.admin.edit-ruangan-admin');
-//     }
-
-//     public function tambahRuangan(){
-//         return view('roles.admin.tambah-ruangan-admin');
-//     }
-
-//     public function pengelolaanPeminjaman(){
-//         return view('roles.admin.pengelolaan-peminjaman-admin');
-//     }
-
-//     public function pengelolaanPeminjamanDetail(){
-//         return view('roles.admin.pengelolaan-peminjaman-detail-admin');
-//     }
-
-//     public function dataMaster(){
-//         return view('roles.admin.data-master-admin');
-//     }
-
-//     public function dataMasterDetail(){
-//         return view('roles.admin.data-master-detail-admin');
-//     }
-
-//     public function tambahSarpras(){
-//         return view('roles.admin.tambah-sarpras-admin');
-//     }
-
-//     public function editSarpras(){
-//         return view('roles.admin.edit-sarpras-admin');
-//     }
-
-//     public function jadwalPengecekanKelas(){
-//         return view('roles.admin.jadwal-pengecekan-kelas-admin');
-//     }
-
-//     public function barangHabisPakai(){
-//         return view('roles.admin.barang-habis-pakai-admin');
-//     }
-
-//     public function tambahBHP(){
-//         return view('roles.admin.tambah-bhp-admin');
-//     }
-// }

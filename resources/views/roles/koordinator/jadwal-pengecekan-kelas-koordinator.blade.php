@@ -18,9 +18,8 @@
             <div class="row-card d-flex justify-content-between">
                 <p class="table-title text-dark" style="font-size:18px; font-weight: 600;">JADWAL PENGECEKAN KELAS</p>
                 <div>
-                    <a href="{{ route('koordinator.jadwal-pengecekan-kelas.tambah-form') }}" class="btn btn-dark text-white d-flex align-items-center">
+                    <a href="{{ route('koordinator.jadwal-pengecekan-kelas.tambah-form') }}" class="btn btn-dark text-white d-flex align-items-center p-1">
                         <img src="{{ asset('images/icons/plus.svg') }}" alt="" class="mr-2 add-icon img-fluid">
-                        Tambah
                     </a>
                 </div>
             </div>

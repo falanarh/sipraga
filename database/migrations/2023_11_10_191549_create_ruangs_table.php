@@ -16,7 +16,7 @@ class CreateRuangsTable extends Migration
     Schema::create('ruangs', function (Blueprint $table) {
         $table->bigInteger('nomor');
         $table->string('kode_ruang')->primary();
-        $table->string('nama')->unique();
+        $table->string('nama');
         $table->integer('gedung'); // Tambahkan atribut gedung
         $table->integer('lantai'); // Tambahkan atribut lantai
         $table->integer('kapasitas'); // Tambahkan atribut kapasitas

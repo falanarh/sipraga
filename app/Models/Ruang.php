@@ -34,6 +34,10 @@ class Ruang extends Model
 
     public function peminjamanRuangs()
     {
-    return $this->hasMany(PeminjamanRuangan::class, 'kode_ruang', 'kode_ruang');
+        return $this->hasMany(PeminjamanRuangan::class, 'kode_ruang', 'kode_ruang');
+    }
+
+    public function ambil_barang_habis_pakais(){
+        return $this->hasMany(Ruang::class, 'nama_ruang', 'nama');
     }
 }

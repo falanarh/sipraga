@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DateTime;
+use Carbon\Carbon;
 use Dompdf\Dompdf;
 use App\Models\Barang;
 use Illuminate\Http\Request;
@@ -47,10 +48,12 @@ class BarangHabisPakaiController extends Controller
             // Menambahkan jenis transaksi
         ]);
 
+        $now = Carbon::now('Asia/Jakarta');
 
+        $request->merge(['created_at' => $now, 'updated_at' => $now]);
 
         BarangHabisPakai::create($request->all());
-        notify()->success('Laravel Notify is awesome!');
+        // notify()->success('Laravel Notify is awesome!');
 
         return redirect()->route('admin.bhp')->with('success', 'Barang habis pakai berhasil ditambahkan!');
     }
@@ -169,6 +172,10 @@ class BarangHabisPakaiController extends Controller
             'nomor' => $jumlahBarisData + 1,
             'jenis_transaksi' => 'Masuk', // Menambahkan jenis transaksi
         ]);
+
+        $now = Carbon::now('Asia/Jakarta');
+
+        $request->merge(['created_at' => $now, 'updated_at' => $now]);
 
         BarangHabisPakai::create($request->all());
 
