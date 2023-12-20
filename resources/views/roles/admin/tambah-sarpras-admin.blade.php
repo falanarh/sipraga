@@ -94,7 +94,7 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="deskripsi" class="form-label">Deskripsi Barang (Opsional)</label>
+                    <label for="deskripsi" class="form-label">Deskripsi Barang</label>
                     <input type="text" class="form-control" name="deskripsi" id="deskripsi" value="{{ old('deskripsi') }}">
                     @error('deskripsi')
                         <div class="alert alert-danger">{{ $message }}</div>

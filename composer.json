@@ -21,7 +21,9 @@
         "mckenziearts/laravel-notify": "^2.3",
         "mpdf/mpdf": "^8.2",
         "phpoffice/phpspreadsheet": "^1.12",
-        "yajra/laravel-datatables-oracle": "^9.21"
+        "setasign/fpdi": "^2.6",
+        "yajra/laravel-datatables-oracle": "^9.21",
+        "clegginabox/pdf-merger": "dev-master"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

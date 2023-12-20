@@ -16,6 +16,9 @@
         @php
         // dd($userInfo);
         @endphp
+        @php
+         $profile = $userInfo['photo'] ?? 'images/icons/default-profile.png';
+         @endphp
         <div class="navbar-collapse justify-content-end mx-2 px-0 d-flex align-items-center justify-content-between"
             id="navbarNav">
             <ul class="navbar-nav d-flex align-items-center justify-content-end">
@@ -25,7 +28,7 @@
             <ul class="navbar-nav flex-row align-items-center justify-content-end">
                 <p class="fluid-text-display m-0 text-dark" id="roleParagraph"></p>
                 <a href="#" class="ms-3">
-                    <img src="{{ asset($userInfo['photo']) }}" alt="" width="35" height="35"
+                    <img src="{{ asset($profile) }}" alt="" width="35" height="35"
                         class="rounded-circle" style="object-fit: cover;">
                 </a>
             </ul>            

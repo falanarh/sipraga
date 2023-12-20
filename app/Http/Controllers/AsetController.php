@@ -166,6 +166,28 @@ class AsetController extends Controller
                  <img src="' . asset('images/icons/eye.svg') . '" alt="">
              </a>';
             })
+
+            ->filterColumn('tanggal', function ($query, $keyword) {
+                $query->whereDate('tanggal_selesai', 'like', '%' . $keyword . '%');
+            })
+            ->filterColumn('kode_barang', function ($query, $keyword) {
+                $query->whereHas('jadwalPemeliharaanAc', function ($query) use ($keyword) {
+                    $query->where('kode_barang', 'like', '%' . $keyword . '%');
+                });
+            })
+            ->filterColumn('nup', function ($query, $keyword) {
+                $query->whereHas('jadwalPemeliharaanAc', function ($query) use ($keyword) {
+                    $query->where('nup', 'like', '%' . $keyword . '%');
+                });
+            })
+            ->filterColumn('ruang', function ($query, $keyword) {
+                $query->whereHas('jadwalPemeliharaanAc', function ($query) use ($keyword) {
+                    $query->whereHas('ruang', function ($query) use ($keyword) {
+                        $query->where('nama', 'like', '%' . $keyword . '%');
+                    });
+                });
+            })
+
             ->rawColumns(['jenis_barang', 'action'])
             ->make(true);
     }
