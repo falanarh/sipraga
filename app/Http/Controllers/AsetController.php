@@ -166,31 +166,76 @@ class AsetController extends Controller
                  <img src="' . asset('images/icons/eye.svg') . '" alt="">
              </a>';
             })
+            ->order(function ($query) use ($request) {
+                if ($request->has('order')) {
+                    $order = $request->order[0];
+                    $columnIndex = $order['column'];
+                    $columnName = $request->columns[$columnIndex]['name'];
+                    $sortDirection = $order['dir'];
 
-            ->filterColumn('tanggal', function ($query, $keyword) {
-                $query->whereDate('tanggal_selesai', 'like', '%' . $keyword . '%');
+                    if ($columnName == 'nomor') {
+                        $query->orderBy('asets.nomor', $sortDirection);
+                    } elseif ($columnName == 'tanggal_masuk') {
+                        $query->orderBy('asets.tanggal_masuk', $sortDirection);
+                    } elseif ($columnName == 'kode_barang') {
+                        $query->orderBy('asets.kode_barang', $sortDirection);
+                    } elseif ($columnName == 'nup') {
+                        $query->orderBy('asets.nup', $sortDirection);
+                    } elseif ($columnName == 'jenis_barang') {
+                        $query->orderBy('barangs.nama', $sortDirection)
+                            ->join('barangs', 'barangs.kode_barang', '=', 'asets.kode_barang');
+                    } elseif ($columnName == 'nama_ruang') {
+                        $query->orderBy('ruangs.nama', $sortDirection)
+                            ->join('ruangs', 'ruangs.kode_ruang', '=', 'asets.kode_ruang');
+                    }
+                    // } elseif ($columnName == 'nup') {
+                    //     $query->orderBy('jadwal_pemeliharaan_acs.nup', $sortDirection)
+                    //         ->join('jadwal_pemeliharaan_acs', 'jadwal_pemeliharaan_acs.jadwal_pemeliharaan_ac_id', '=', 'pemeliharaan_acs.jadwal_pemeliharaan_ac_id');
+                    // } elseif ($columnName == 'ruang') {
+                    //     $query->orderBy('ruangs.nama', $sortDirection)
+                    //         ->join('jadwal_pemeliharaan_acs', 'jadwal_pemeliharaan_acs.jadwal_pemeliharaan_ac_id', '=', 'pemeliharaan_acs.jadwal_pemeliharaan_ac_id')
+                    //         ->join('ruangs', 'ruangs.kode_ruang', '=', 'jadwal_pemeliharaan_acs.kode_ruang');
+                    // } else {
+                    //     $query->orderBy('pemeliharaan_acs.' . $columnName, $sortDirection);
+                    // }
+                }
+            })
+            ->filterColumn('tanggal_masuk', function ($query, $keyword) {
+                $query->whereDate('tanggal_masuk', 'like', '%' . $keyword . '%');
             })
             ->filterColumn('kode_barang', function ($query, $keyword) {
-                $query->whereHas('jadwalPemeliharaanAc', function ($query) use ($keyword) {
-                    $query->where('kode_barang', 'like', '%' . $keyword . '%');
-                });
+                $query->where('kode_barang', 'like', '%' . $keyword . '%');
             })
             ->filterColumn('nup', function ($query, $keyword) {
-                $query->whereHas('jadwalPemeliharaanAc', function ($query) use ($keyword) {
-                    $query->where('nup', 'like', '%' . $keyword . '%');
+                $query->where('nup', 'like', '%' . $keyword . '%');
+            })
+            ->filterColumn('jenis_barang', function ($query, $keyword) {
+                $query->whereHas('barang', function ($query) use ($keyword) {
+                    $query->where('nama', 'like', '%' . $keyword . '%');
                 });
             })
-            ->filterColumn('ruang', function ($query, $keyword) {
-                $query->whereHas('jadwalPemeliharaanAc', function ($query) use ($keyword) {
-                    $query->whereHas('ruang', function ($query) use ($keyword) {
-                        $query->where('nama', 'like', '%' . $keyword . '%');
-                    });
+            ->filterColumn('nama_ruang', function ($query, $keyword) {
+                $query->whereHas('ruang', function ($query) use ($keyword) {
+                    $query->where('nama', 'like', '%' . $keyword . '%');
                 });
             })
-
             ->rawColumns(['jenis_barang', 'action'])
             ->make(true);
     }
+
+    // ->filterColumn('ruang', function ($query, $keyword) {
+    //     $query->whereHas('ruang', function ($query) use ($keyword) {
+    //         $query->where('nama', 'like', '%' . $keyword . '%');
+    //     });
+    // })
+
+    // ->filterColumn('ruang', function ($query, $keyword) {
+    //     $query->whereHas('jadwalPemeliharaanAc', function ($query) use ($keyword) {
+    //         $query->whereHas('ruang', function ($query) use ($keyword) {
+    //             $query->where('nama', 'like', '%' . $keyword . '%');
+    //         });
+    //     });
+    // })
 
 
 
@@ -238,25 +283,25 @@ class AsetController extends Controller
             // Jika tidak ada aset, kembalikan pesan kesalahan
             return redirect()->back()->with('error', 'Tidak ditemukan aset untuk ruang ini!');
         }
-        
+
         // instantiate and use the dompdf class
         $dompdf = new Dompdf();
         $dompdf->loadHtml(view('export.format-dbr', compact('asets', 'ruang', 'created_at')));
-        
+
         // (Optional) Setup the paper size and orientation
         $dompdf->setPaper('A4', 'portrait');
-        
+
         // Render the HTML as PDF
         $dompdf->render();
-        
+
         // Set the file name
         $filename = 'dbr-' . $ruang->kode_ruang . '.pdf';
-        
+
         // Output the generated PDF to Browser with the specified filename
         return $dompdf->stream($filename, [
-                'Attachment' => 1, // 0: Inline, 1: Attachment (download)
-            ]);
-        }
-        
-        // return view('export.format-dbr', compact('asets', 'ruang', 'created_at'));
+            'Attachment' => 1, // 0: Inline, 1: Attachment (download)
+        ]);
+    }
+
+    // return view('export.format-dbr', compact('asets', 'ruang', 'created_at'));
 }

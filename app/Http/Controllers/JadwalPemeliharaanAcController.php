@@ -189,6 +189,9 @@ class JadwalPemeliharaanAcController extends Controller
                     $query->where('nama', 'like', '%' . $keyword . '%');
                 });
             })
+            ->filterColumn('status', function ($query, $keyword) {
+                $query->where('status', 'like', '%' . $keyword . '%');
+            })
             ->filterColumn('teknisi', function ($query, $keyword) {
                 $query->whereHas('user', function ($query) use ($keyword) {
                     $query->where('name', 'like', '%' . $keyword . '%');
