@@ -498,10 +498,12 @@
                         <div class="wrap d-flex flex-wrap">
                             <div class="foto-profil card mt-5" style="height: fit-content;">
                                 <div class="card-body">
-                                    <img src="{{ asset($profile) }}" width="250px" height="250px" alt=""
-                                        style="border-radius: 100%; border: 5px solid #e5e5e8;">
+                                    <div style="width: 250px; height: 250px; overflow: hidden; border-radius: 50%; border: 5px solid #e5e5e8;">
+                                        <img src="{{ asset($profile) }}" alt=""
+                                            style="width: 100%; height: 100%; object-fit: cover;">
+                                    </div>
                                 </div>
-                            </div>
+                            </div>                            
                             <div class="deskripsi-profil col-8 d-flex">
                                 <table class="table table-striped profile-table m-5">
                                     <tr>

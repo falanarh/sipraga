@@ -55,6 +55,7 @@ Route::middleware(['guest'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/storage/{filename}', 'StorageController@show')->name('storage.show');
     //Logout
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('authenticated', [LoginController::class, 'authenticated'])->name('authenticated');

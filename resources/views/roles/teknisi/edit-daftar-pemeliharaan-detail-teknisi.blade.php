@@ -20,13 +20,13 @@ div{{-- Mewarisi semua konten dari view dashboard --}}
                     LAPORAN PEMELIHARAAN DAN PERBAIKAN AC
                 </a>
                 <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
+                <a href="/teknisi/daftar-pemeliharaan/detail/{{ $pemeliharaanAc->pemeliharaan_ac_id }}/edit" class="table-title d-flex text-dark">
+                    EDIT
+                </a>    
+                <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
                 <a href="/teknisi/daftar-pemeliharaan/detail/{{ $pemeliharaanAc->pemeliharaan_ac_id }}" class="table-title d-flex text-dark">
                     {{ $pemeliharaanAc->tanggal_selesai->format('d/m/Y') . '-' . $pemeliharaanAc->jadwalPemeliharaanAc->nup }}
                 </a>
-                <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="">
-                <a href="/teknisi/daftar-pemeliharaan/detail/{{ $pemeliharaanAc->pemeliharaan_ac_id }}/edit" class="table-title d-flex text-dark">
-                    EDIT
-                </a>            
             </div>
             <form class="row" method="POST" action="{{ route('teknisi.daftar-pemeliharaan-detail.edit', $pemeliharaanAc->pemeliharaan_ac_id) }}" enctype="multipart/form-data"> 
                 @csrf

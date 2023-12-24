@@ -83,8 +83,8 @@
                 <tr>
                     <th class="fw-bolder col-3">Lampiran</th>
                     <td>
-                        <img class="img-fluid" src="{{ asset('storage/' . $pengaduan->lampiran) }}" alt="lampiran" width="300px" height="300px">
-
+                        {{-- <img class="img-fluid" src="{{ asset('storage/' . $pengaduan->lampiran) }}" alt="lampiran" width="300px" height="300px"> --}}
+                        <img class="img-fluid" src="{{ route('storage.show', ['filename' => $pengaduan->lampiran]) }}" alt="lampiran" width="300px" height="300px">
                     </td class="col-9">
                 </tr>
                 <tr>
