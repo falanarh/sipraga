@@ -27,7 +27,7 @@ class PengaduanController extends Controller
             'kode_ruang' => 'required',
             'prioritas' => 'required',
             'deskripsi' => 'required',
-            'lampiran' => 'required|image|mimes:jpeg,png|max:2048', 
+            'lampiran' => 'required|image|mimes:jpeg,png|max:2048',
         ], [
             'jenis_barang.required'  => 'Jenis Barang wajib diisi!',
             'kode_ruang.required' => 'Ruang wajib diisi!',
@@ -61,12 +61,17 @@ class PengaduanController extends Controller
         ]);
 
         // Anda juga dapat menambahkan pesan berhasil atau pesan error sesuai kebutuhan
-        return redirect()->route('pelapor.daftar-pengaduan')->with('success', 'Pengaduan berhasil disimpan.');
+        return redirect()->route('pelapor.daftar-pengaduan')->with('success', 'Pengaduan berhasil dibuat!');
     }
 
     public function data(Request $request)
     {
         $pengaduans = Pengaduan::with(['ruang']);
+
+        // Menambahkan orderBy untuk tanggal_pengaduan dan status
+        $pengaduans->orderBy('tanggal', 'desc')
+            ->orderByRaw("FIELD(status, 'Ditolak', 'Menunggu', 'Dikerjakan', 'Selesai')");
+
         // Filter data berdasarkan inputan user
         if ($request->filter_ruang != null) {
             $pengaduans->where('kode_ruang', $request->filter_ruang);
@@ -76,7 +81,7 @@ class PengaduanController extends Controller
         }
         if ($request->filter_prioritas != null) {
             $pengaduans->where('prioritas', $request->filter_prioritas);
-            };
+        };
 
         // Handle sorting based on the request
         if ($request->has('order')) {
@@ -105,19 +110,19 @@ class PengaduanController extends Controller
             ->addColumn('nama_ruang', function ($row) {
                 return $row->ruang ? $row->ruang->nama : '-';
             })
-            ->addColumn('prioritas', function($pengaduans) {
+            ->addColumn('prioritas', function ($pengaduans) {
                 $prioritasClass = ''; // Default class
                 $prioritasText = $pengaduans->prioritas; // Default prioritas text
 
                 switch ($pengaduans->prioritas) {
                     case 'Sedang':
-                        $prioritasClass = 'bg-rounded-prior rounded-pill bg-warning';
+                        $prioritasClass = 'rounded-background rounded-pill bg-warning';
                         break;
                     case 'Rendah':
-                        $prioritasClass = 'bg-rounded-prior rounded-pill bg-primary';
+                        $prioritasClass = 'rounded-background rounded-pill bg-primary';
                         break;
                     case 'Tinggi':
-                        $prioritasClass = 'bg-rounded-prior rounded-pill bg-danger';
+                        $prioritasClass = 'rounded-background rounded-pill bg-danger';
                         break;
 
                     default:
@@ -125,7 +130,7 @@ class PengaduanController extends Controller
                 }
                 return '<div class="' . $prioritasClass . '">' . $prioritasText . '</div>';
             })
-            ->addColumn('status', function($pengaduans) {
+            ->addColumn('status', function ($pengaduans) {
                 $statusClass = ''; // Default class
                 $statusText = $pengaduans->status; // Default status text
 
@@ -147,8 +152,8 @@ class PengaduanController extends Controller
                 }
                 return '<div class="' . $statusClass . '">' . $statusText . '</div>';
             })
-            ->addColumn('action', function($pengaduans) {
-                return '<a href="/pelapor/daftar-pengaduan/detail/'.$pengaduans->tiket.'" class="btn btn-dark">Detail</a>';
+            ->addColumn('action', function ($pengaduans) {
+                return '<a href="/pelapor/daftar-pengaduan/detail/' . $pengaduans->tiket . '" class="btn btn-dark">Detail</a>';
             })
             ->rawColumns(['prioritas', 'status', 'action'])
             ->make(true);
@@ -156,7 +161,7 @@ class PengaduanController extends Controller
 
     public function dataKoordinator(Request $request)
     {
-    
+
         $pengaduans = Pengaduan::select([
             'pengaduans.tiket',
             'pengaduans.tanggal',
@@ -167,8 +172,12 @@ class PengaduanController extends Controller
             'pengaduans.status',
             'users.name as teknisi_name',
         ])
-        ->leftJoin('users', 'pengaduans.teknisi_id', '=', 'users.user_id')
-        ->leftJoin('ruangs', 'pengaduans.kode_ruang', '=', 'ruangs.kode_ruang'); // Add a left join with the 'ruangs' table
+            ->leftJoin('users', 'pengaduans.teknisi_id', '=', 'users.user_id')
+            ->leftJoin('ruangs', 'pengaduans.kode_ruang', '=', 'ruangs.kode_ruang'); // Add a left join with the 'ruangs' table
+
+        // Menambahkan orderBy untuk tanggal_pengaduan dan status
+        $pengaduans->orderBy('tanggal', 'desc')
+            ->orderByRaw("FIELD(status, 'Ditolak', 'Menunggu', 'Dikerjakan', 'Selesai')");
 
 
         // Filter data berdasarkan inputan user
@@ -180,7 +189,7 @@ class PengaduanController extends Controller
         }
         if ($request->filter_prioritas != null) {
             $pengaduans->where('prioritas', $request->filter_prioritas);
-            };
+        };
 
         // Handle sorting based on the request
         if ($request->has('order')) {
@@ -204,10 +213,10 @@ class PengaduanController extends Controller
         }
 
         return Datatables::of($pengaduans)
-            ->addColumn('teknisi_name', function($pengaduans) {
+            ->addColumn('teknisi_name', function ($pengaduans) {
                 return $pengaduans->teknisi_name ?: 'N/A';
             })
-            ->addColumn('prioritas', function($pengaduans) {
+            ->addColumn('prioritas', function ($pengaduans) {
                 $prioritasClass = ''; // Default class
                 $prioritasText = $pengaduans->prioritas; // Default prioritas text
 
@@ -227,7 +236,7 @@ class PengaduanController extends Controller
                 }
                 return '<div class="' . $prioritasClass . '">' . $prioritasText . '</div>';
             })
-            ->addColumn('status', function($pengaduans) {
+            ->addColumn('status', function ($pengaduans) {
                 $statusClass = ''; // Default class
                 $statusText = $pengaduans->status; // Default status text
 
@@ -250,10 +259,10 @@ class PengaduanController extends Controller
                 }
                 return '<div class="' . $statusClass . '">' . $statusText . '</div>';
             })
-            ->addColumn('action', function($pengaduans) {
+            ->addColumn('action', function ($pengaduans) {
                 // Check if the status is "Menunggu" before rendering the button
                 if ($pengaduans->status === 'Menunggu') {
-                    return '<a href="/koordinator/daftar-pengaduan/detail/'.$pengaduans->tiket.'" class="btn btn-dark">Detail</a>';
+                    return '<a href="/koordinator/daftar-pengaduan/detail/' . $pengaduans->tiket . '" class="btn btn-dark">Detail</a>';
                 } else {
                     // If status is not "Menunggu," return a disabled button or other content
                     return '<button class="btn btn-dark" disabled>Detail</button>';
@@ -261,7 +270,7 @@ class PengaduanController extends Controller
                 }
 
                 // return '<a href="/koordinator/daftar-pengaduan/detail/'.$pengaduans->tiket.'" class="btn btn-dark">Detail</a>';
-            })            
+            })
             ->rawColumns(['prioritas', 'status', 'action'])
             ->make(true);
     }
@@ -279,20 +288,24 @@ class PengaduanController extends Controller
             'pengaduans.status',
             'users.name as teknisi_name',
         ])
-        ->leftJoin('users', 'pengaduans.teknisi_id', '=', 'users.user_id')
-        ->leftJoin('ruangs', 'pengaduans.kode_ruang', '=', 'ruangs.kode_ruang')
-        ->where('pengaduans.teknisi_id', Auth::id());
+            ->leftJoin('users', 'pengaduans.teknisi_id', '=', 'users.user_id')
+            ->leftJoin('ruangs', 'pengaduans.kode_ruang', '=', 'ruangs.kode_ruang')
+            ->where('pengaduans.teknisi_id', Auth::id());
+
+            // Menambahkan orderBy untuk tanggal_pengaduan dan status
+        $pengaduans->orderBy('tanggal', 'desc')
+        ->orderByRaw("FIELD(status, 'Ditolak', 'Menunggu', 'Dikerjakan', 'Selesai')");
 
         // Filter data berdasarkan inputan user
         if ($request->filter_ruang != null) {
             $pengaduans->where('ruangs.kode_ruang', $request->filter_ruang);
-        }        
+        }
         if ($request->filter_status != null) {
             $pengaduans->where('status', $request->filter_status);
         }
         if ($request->filter_prioritas != null) {
             $pengaduans->where('prioritas', $request->filter_prioritas);
-            };
+        };
 
         // Handle sorting based on the request
         if ($request->has('order')) {
@@ -317,7 +330,7 @@ class PengaduanController extends Controller
         }
 
         return Datatables::of($pengaduans)
-            ->addColumn('prioritas', function($pengaduans) {
+            ->addColumn('prioritas', function ($pengaduans) {
                 $prioritasClass = ''; // Default class
                 $prioritasText = $pengaduans->prioritas; // Default prioritas text
 
@@ -337,7 +350,7 @@ class PengaduanController extends Controller
                 }
                 return '<div class="' . $prioritasClass . '">' . $prioritasText . '</div>';
             })
-            ->addColumn('status', function($pengaduans) {
+            ->addColumn('status', function ($pengaduans) {
                 $statusClass = ''; // Default class
                 $statusText = $pengaduans->status; // Default status text
 
@@ -360,11 +373,10 @@ class PengaduanController extends Controller
                 }
                 return '<div class="' . $statusClass . '">' . $statusText . '</div>';
             })
-            ->addColumn('action', function($pengaduans) {
-                return '<a href="/teknisi/daftar-pengaduan/detail/'.$pengaduans->tiket.'" class="btn btn-dark">Detail</a>';
-            })            
+            ->addColumn('action', function ($pengaduans) {
+                return '<a href="/teknisi/daftar-pengaduan/detail/' . $pengaduans->tiket . '" class="btn btn-dark">Detail</a>';
+            })
             ->rawColumns(['prioritas', 'status', 'action'])
             ->make(true);
     }
-
 }

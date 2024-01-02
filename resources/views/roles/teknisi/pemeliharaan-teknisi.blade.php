@@ -15,10 +15,6 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            {{-- <p class="table-title text-dark d-flex" style="font-size:18px; font-weight: 600;"> JADWAL PEMELIHARAAN AC 
-                <img src="{{ asset('images/icons/arrow-right.svg') }}" alt="" style="width: 25px;height: 25px;">
-                FORM PEMELIHARAAN AC
-            </p> --}}
             <div class="title d-flex mb-4">
                 <a href="/teknisi/jadwal-pemeliharaan" class="table-title d-flex" style="font-weight: 700; color: #818181">
                     JADWAL PEMELIHARAAN AC 

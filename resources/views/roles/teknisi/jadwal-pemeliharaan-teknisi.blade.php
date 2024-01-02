@@ -60,7 +60,6 @@
             <table id="tabeljadwal" class="table table-striped responsive" style="width: 100%">
                 <thead class="text-dark" style="border: 1px solid #000;">
                     <tr>
-                        <th>No</th>
                         <th>Tanggal</th>
                         <th>Kode Barang</th>
                         <th>NUP</th>
@@ -72,7 +71,6 @@
                 </thead>
                 <tfoot>
                     <tr>
-                        <th>No</th>
                         <th>Tanggal</th>
                         <th>Kode Barang</th>
                         <th>NUP</th>
@@ -167,14 +165,10 @@
                         d.filter_teknisi = $('#filterTeknisi').val(); // Ambil nilai dropdown filter
                     }
                 },
-                columns: [{
-                        data: 'nomor',
-                        name: 'nomor',
-                        orderable: true,
-                    },
+                columns: [
                     {
-                        data: 'tanggal',
-                        name: 'tanggal',
+                        data: 'tanggal_pelaksanaan',
+                        name: 'tanggal_pelaksanaan',
                         orderable: true,
                     },
                     {

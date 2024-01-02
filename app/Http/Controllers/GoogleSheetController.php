@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use DateTime;
 use Exception;
-use DatePeriod;
-use DateInterval;
 use App\Models\Ruang;
 use Illuminate\Http\Request;
 use App\Helpers\TimeFormatter;
@@ -24,56 +22,82 @@ use Google\Service\Sheets\BatchUpdateSpreadsheetRequest as Google_Service_Sheets
 
 class GoogleSheetController extends Controller
 {
-    // public function getKetersediaanRuangs(Request $req)
-    // {
-    //     try {
-    //         $timeFormatter = new TimeFormatter();
+    // Definisi array of string (bersifat global dalam controller)
+    public $kodeRuangsForKelasG2 = [
+        "2501",
+        "2502",
+        "2503",
+        "2504",
+        "2505",
+        "2506",
+        "2507",
+        "2601",
+        "2602",
+        "2603",
+        "2604",
+        "2605",
+        "2606",
+        "2607",
+    ];
 
-    //         // Ekstrak komponen tanggal dari request
-    //         $startDate = $req->startDate;
-    //         $endDate = $req->endDate;
+    public $kodeRuangsForKelasG3 = [
+        "3201",
+        "3202",
+        "3203",
+        "3204",
+        "3205",
+        "3206",
+        "3207",
+        "3208",
+        "3301",
+        "3302",
+        "3303",
+        "3304",
+        "3305",
+        "3306",
+        "3307",
+        "3308",
+        "3401",
+        "3402",
+        "3403",
+        "3404",
+        "3405",
+        "3406",
+        "3407",
+        "3408"
+    ];
 
-    //         // Tentukan waktu awal dan waktu akhir dari rentang waktu
-    //         $startTime = $req->startTime;
-    //         $endTime = $req->endTime;
+    public function fetchKetersediaanRuangsPerHari(Request $request)
+    {
+        try {
+            // Retrieve query parameters
+            $hariBulanTahun = $request->query('hariBulanTahun');
+            $waktu = $request->query('waktu');
 
-    //         // Inisialisasi array untuk menyimpan data ketersediaan ruangan
-    //         $ketersediaanRuangs = [];
+            // Mengambil semua data ruangan dengan hanya field kode_ruang dan nama, diurutkan secara ascending berdasarkan kode_ruang
+            $ruangs = Ruang::select('kode_ruang', 'nama')->orderBy('kode_ruang', 'asc')->get();
+            $json_data = $this->getKetersediaanRuangsPerTanggal($hariBulanTahun, $waktu, $ruangs);
 
-    //         // Iterasi untuk setiap tanggal dalam rentang waktu
-    //         $currentDate = $startDate;
-    //         while ($currentDate <= $endDate) {
-    //             // Format tanggal ke format yang diinginkan (d-m-Y)
-    //             $formattedDate = $timeFormatter->formatDateDMY($currentDate);
+            // Mengonversi JSON ke array asosiatif
+            $res = json_decode($json_data->getContent(), true);
+            $data = $res['data'];
 
-    //             // Panggil fungsi getKetersediaanRuangsPerTanggal untuk mendapatkan data ketersediaan ruangan pada tanggal tersebut
-    //             $response = $this->getKetersediaanRuangsPerTanggal($formattedDate, $startTime . '-' . $endTime);
+            $response = [
+                'status_code' => 200,
+                'message' => 'Berhasil mendapatkan data ketersediaan ruangan pada tanggal ' . $hariBulanTahun . '!',
+                'data' => $data,
+            ];
 
-    //             // Tambahkan data ketersediaan ruangan ke dalam array utama
-    //             $ketersediaanRuangs[$formattedDate] = $response['data'];
+            return response()->json($response, 200);
+        } catch (Exception $e) {
+            $response = [
+                'status_code' => 500,
+                'error' => $e->getMessage(),
+            ];
 
-    //             // Pindahkan ke tanggal berikutnya
-    //             $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'));
-    //         }
-
-    //         $response = [
-    //             'status_code' => 200,
-    //             'message' => 'Berhasil mendapatkan data ketersediaan ruangan!',
-    //             'data' => $ketersediaanRuangs,
-    //         ];
-
-    //         return response()->json($response, 200);
-    //     } catch (Exception $e) {
-    //         $response = [
-    //             'status_code' => 500,
-    //             'error' => $e->getMessage(),
-    //         ];
-
-    //         return response()->json($response, 500);
-    //     }
-    // }
-
-    // 
+            return response()->json($response, 500);
+        }
+    }
 
     public function getKetersediaanRuangs(Request $req)
     {
@@ -103,16 +127,19 @@ class GoogleSheetController extends Controller
             $startTime = $req->startTime;
             $endTime = $req->endTime;
 
-            $param_kode_ruangs = Ruang::select('kode_ruang')->get();
+            // $param_kode_ruangs = Ruang::select('kode_ruang')->get();
+
+            // dd($param_kode_ruangs);
 
             $matriksRuangs = [];
-            // Mengambil seluruh data kode ruang
-            $kode_ruangs = Ruang::pluck('kode_ruang');
+            // Mengambil semua data ruangan dengan hanya field kode_ruang dan nama, diurutkan secara ascending berdasarkan kode_ruang
+            $ruangs = Ruang::select('kode_ruang', 'nama')->orderBy('kode_ruang', 'asc')->get();
+            // dd($kode_ruangs[0]);
 
             // Iterasi sebanyak hari dalam rentang tanggal
             for ($currentDate = $startDate; $currentDate <= $endDate; $currentDate->modify('+1 day')) {
                 // Mendapatkan data JSON dari suatu sumber, misalnya, metode getKetersediaanRuangsPerTanggal
-                $json_data = $this->getKetersediaanRuangsPerTanggal($currentDate->format('d-m-Y'), $startTime . '-' . $endTime, $param_kode_ruangs);
+                $json_data = $this->getKetersediaanRuangsPerTanggal($currentDate->format('d-m-Y'), $startTime . '-' . $endTime, $ruangs);
 
                 // Mengonversi JSON ke array asosiatif
                 $res = json_decode($json_data->getContent(), true);
@@ -122,16 +149,16 @@ class GoogleSheetController extends Controller
                 // Menggunakan format tanggal sebagai kunci array
                 $currentDateString = $currentDate->format('d-m-Y');
 
-                foreach ($kode_ruangs as $kode_ruang) {
-                    $matriksRuangs[$currentDateString][$kode_ruang]['availability'] = $data[$kode_ruang]['availability'];
+                foreach ($ruangs as $ruang) {
+                    $matriksRuangs[$currentDateString][$ruang['kode_ruang']]['availability'] = $data[$ruang['kode_ruang']]['availability'];
                 }
 
                 $ketersediaanRuangs = [];
 
                 // Iterasi melalui tanggal-tanggal
-                foreach ($matriksRuangs as $tanggal => $ruangs) {
+                foreach ($matriksRuangs as $tanggal => $ruangs2) {
                     // Iterasi melalui ruang-ruang pada setiap tanggal
-                    foreach ($ruangs as $kode_ruang => $data) {
+                    foreach ($ruangs2 as $kode_ruang => $data) {
                         // Inisialisasi status ruang
                         $ruangTersedia = true;
 
@@ -173,29 +200,7 @@ class GoogleSheetController extends Controller
         }
     }
 
-
-
-    // try {
-    //     // $timeFormatter = new TimeFormatter();
-
-    //     // // Ekstrak komponen tanggal dari request
-    //     // $startDate = $req->startDate;
-    //     // $endDate = $req->endDate;
-
-    //     // // Tentukan waktu awal dan waktu akhir dari rentang waktu
-    //     // $startTime = $req->startTime;
-    //     // $endTime = $req->endTime;
-    // } catch (Exception $e) {
-    //     $response = [
-    //         'status_code' => 500,
-    //         'error' => $e->getMessage(),
-    //     ];
-
-    //     return response()->json($response, 500);
-    // }
-
-
-    public function getKetersediaanRuangsPerTanggal($hariBulanTahun, $waktu, $kode_ruangs)
+    public function getKetersediaanRuangsPerTanggal($hariBulanTahun, $waktu, $ruangs)
     {
         try {
             $timeFormatter = new TimeFormatter();
@@ -281,14 +286,16 @@ class GoogleSheetController extends Controller
                 }
 
                 // Menambahkan data ke dalam array utama dengan nama kode ruang sebagai kunci
-                $data[$kode_ruangs[$rowIndex - 1]->kode_ruang] = $rowData;
+                // $data[$ruangs[$rowIndex - 1]->kode_ruang] = $rowData;
+                $data[$ruangs[$rowIndex - 1]['kode_ruang']] = $rowData;
             }
 
             $ruangs_pertanggal = [];
             for ($baris = 0; $baris < count($data); $baris++) {
                 // Pastikan kode ruang pada indeks $baris tersedia
-                if (isset($kode_ruangs[$baris])) {
-                    $kode_ruang = $kode_ruangs[$baris]->kode_ruang;
+                if (isset($ruangs[$baris]['kode_ruang'])) {
+                    $kode_ruang = $ruangs[$baris]['kode_ruang'];
+                    $nama_ruang = $ruangs[$baris]['nama'];
 
                     // Pastikan data pada indeks $baris dan tanggal yang diinginkan tersedia
                     if (isset($data[$kode_ruang][(int)$date['day']])) {
@@ -297,6 +304,7 @@ class GoogleSheetController extends Controller
 
                         // Tambahkan ke array hasil
                         $ruangs_pertanggal[$kode_ruang] = [
+                            'nama_ruang' => $nama_ruang,
                             'schedule' => $nilai_kolom['schedule'],
                             'availability' => $nilai_kolom['availability'],
                         ];
@@ -311,6 +319,31 @@ class GoogleSheetController extends Controller
             ];
 
             return response()->json($response, 200);
+        } catch (Exception $e) {
+            $response = [
+                'status_code' => 500,
+                'error' => $e->getMessage(),
+            ];
+
+            return response()->json($response, 500);
+        }
+    }
+
+    public function buatPengajuanRuangan(Request $req)
+    {
+        try {
+            $request = new Request();
+            $request->merge([
+                'startDate' => $req->startDate, // Set your desired start date
+                'endDate' => $req->endDate,   // Set your desired end date
+                'startTime' => $req->startTime,
+                'endTime' => $req->endTime,
+                'kodeRuang' => $req->kodeRuang,
+                'note' => $req->alasanPeminjaman,
+                'peminjam' => $req->namaUser,
+            ]);
+
+            return $this->setToUnavailable($request);
         } catch (Exception $e) {
             $response = [
                 'status_code' => 500,
@@ -367,17 +400,61 @@ class GoogleSheetController extends Controller
                 return response()->json($response, 404);
             }
 
-            // Simpan data ke dalam database menggunakan Eloquent
-            $peminjaman = new PeminjamanRuangan([
-                'nomor' => PeminjamanRuangan::count() + 1,
-                'tgl_mulai' => $startDate,
-                'tgl_selesai' => $endDate,
-                'waktu_mulai' => $startTime,
-                'waktu_selesai' => $endTime,
-                'kode_ruang' => $selectedRuang,
-                'keterangan' => $note,
-                'peminjam' => $peminjam
+            // Create a new instance of the Request class
+            $request = new Request();
+            // Set the parameters in the request
+            $request->merge([
+                'startDate' => $req->startDate, // Set your desired start date
+                'endDate' => $req->endDate,   // Set your desired end date
+                'startTime' => $req->startTime,
+                'endTime' => $req->endTime,
             ]);
+            $json_data = $this->getKetersediaanRuangs($request);
+            // Mengonversi JSON ke array asosiatif
+            $res = json_decode($json_data->getContent(), true);
+            $data = $res['data'];
+
+            if ($data[$selectedRuang]['availability'] == "Tidak Tersedia") {
+                $response = [
+                    'status_code' => 409,
+                    'message' => 'Peminjaman ruangan sudah ada sebelumnya!',
+                ];
+
+                return response()->json($response, 409);
+            }
+
+            // Memeriksa apakah $selectedRuang ada dalam $kodeRuangsForKelasG2
+            if (in_array($selectedRuang, $this->kodeRuangsForKelasG2)) {
+                if ($this->getAvailableKelasG3($data)) {
+                    $selectedRuang = $this->getAvailableKelasG3($data);
+
+                    // Simpan data ke dalam database menggunakan Eloquent
+                    $peminjaman = new PeminjamanRuangan([
+                        'nomor' => PeminjamanRuangan::count() + 1,
+                        'tgl_mulai' => $startDate,
+                        'tgl_selesai' => $endDate,
+                        'waktu_mulai' => $startTime,
+                        'waktu_selesai' => $endTime,
+                        'kode_ruang' => $selectedRuang,
+                        'keterangan' => $note,
+                        'status' => "Dialihkan",
+                        'tanggapan' => "Dialihkan karena diprioritaskan mengisi blok ruangan kelas di gedung 3",
+                        'peminjam' => $peminjam
+                    ]);
+                }
+            } else {
+                // Simpan data ke dalam database menggunakan Eloquent
+                $peminjaman = new PeminjamanRuangan([
+                    'nomor' => PeminjamanRuangan::count() + 1,
+                    'tgl_mulai' => $startDate,
+                    'tgl_selesai' => $endDate,
+                    'waktu_mulai' => $startTime,
+                    'waktu_selesai' => $endTime,
+                    'kode_ruang' => $selectedRuang,
+                    'keterangan' => $note,
+                    'peminjam' => $peminjam
+                ]);
+            }
 
             $peminjaman->save();
 
@@ -385,10 +462,18 @@ class GoogleSheetController extends Controller
                 $this->setToUnavailablePerHari($currentDate->format('d-m-Y'), $startTime . '-' . $endTime, $selectedRuang, $note, $randomColor);
             }
 
-            $response = [
-                'status_code' => 200,
-                'message' => 'Berhasil mengisi blok ruangan!',
-            ];
+
+            if ($selectedRuang != $req->kodeRuang) {
+                $response = [
+                    'status_code' => 200,
+                    'message' => 'Berhasil mengisi blok ruangan dengan ruangan dialihkan ke ' . $selectedRuang . '!',
+                ];
+            } else {
+                $response = [
+                    'status_code' => 200,
+                    'message' => 'Berhasil mengisi blok ruangan di ' . $selectedRuang . '!',
+                ];
+            }
 
             return response()->json($response, 200);
         } catch (\Exception $e) {
@@ -401,7 +486,45 @@ class GoogleSheetController extends Controller
         }
     }
 
+    public function updateCells(Request $request)
+    {
+        try {
+            $peminjaman_ruangan_id = $request->peminjaman_ruangan_id;
+            $startDate = new DateTime($request->tgl_mulai);
+            $endDate = new DateTime($request->tgl_selesai);
+            $startTime = date('H:i', strtotime($request->waktu_mulai));
+            $endTime = date('H:i', strtotime($request->waktu_selesai));
+            $selectedRuang = $request->kodeRuangBaru;
+            $note = $request->keterangan;
+            $tanggapan = $request->tanggapanBaru;
+            $randomColor = $this->generateRandomColor();
 
+            // Ambil peminjaman ruangan berdasarkan ID
+            $peminjaman_ruangan = PeminjamanRuangan::where('peminjaman_ruangan_id', $peminjaman_ruangan_id)->first();
+
+            if (!$peminjaman_ruangan) {
+                // Peminjaman tidak ditemukan, berikan respons error
+                return response('Peminjaman tidak ditemukan.', 404);
+            }
+
+            // Lakukan update atribut yang diinginkan
+            $peminjaman_ruangan->status = "Dialihkan";
+            $peminjaman_ruangan->kode_ruang = $selectedRuang;
+            $peminjaman_ruangan->tanggapan = $tanggapan;
+            $peminjaman_ruangan->save();
+
+            // Loop untuk setiap hari antara tanggal mulai dan selesai
+            for ($currentDate = $startDate; $currentDate <= $endDate; $currentDate->modify('+1 day')) {
+                $this->setToUnavailablePerHari($currentDate->format('d-m-Y'), $startTime . '-' . $endTime, $selectedRuang, $note, $randomColor);
+            }
+
+            // Berikan respons sukses
+            return redirect()->route('admin.pengelolaan-peminjaman.detail', ['peminjaman_ruangan_id' => $peminjaman_ruangan->peminjaman_ruangan_id])->with('success', 'Peminjaman ruangan berhasil diupdate!');
+        } catch (\Exception $e) {
+            // Tangani exception, berikan respons error
+            return response('Terjadi kesalahan saat update: ' . $e->getMessage(), 500);
+        }
+    }
 
     public function setToUnavailablePerHari($hariBulanTahun, $waktu, $kode_ruang, $note, $randomColor)
     {
@@ -552,56 +675,15 @@ class GoogleSheetController extends Controller
 
         return $data;
     }
+
+    public function getAvailableKelasG3(array $dataRuangs)
+    {
+        for ($i = 0; $i < 24; $i++) {
+            if ($dataRuangs[$this->kodeRuangsForKelasG3[$i]]['availability'] == "Tersedia") {
+                return $this->kodeRuangsForKelasG3[$i];
+            }
+        }
+
+        return null;
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // Inisialisasi data ketersediaan ruang
-// $ketersediaan_ruangs = [];
-
-// // Iterasi untuk setiap kode ruang
-// foreach ($kode_ruangs as $ruang) {
-//     $kode_ruang = $ruang->kode_ruang;
-//     $ketersediaan_per_tanggal = [];
-
-//     // Iterasi untuk setiap tanggal
-//     for ($tanggal = 1; $tanggal <= count($data[$kode_ruang]); $tanggal++) {
-//         // Ambil data dari $data berdasarkan kode ruang dan tanggal
-//         $data_ruang_tanggal = $data[$kode_ruang][$tanggal] ?? null;
-
-//         // Tentukan status ketersediaan ruangan
-//         $status = $data_ruang_tanggal ? $data_ruang_tanggal['availability'] : 'Tersedia';
-
-//         // Simpan status ke dalam array
-//         $ketersediaan_per_tanggal[$tanggal] = $status;
-//     }
-
-//     // Simpan array status ke dalam array utama
-//     $ketersediaan_ruangs[$kode_ruang] = $ketersediaan_per_tanggal;
-// }

@@ -19,7 +19,7 @@ class CreatePeminjamanRuangansTable extends Migration
         $table->string('kode_ruang');
         $table->string('peminjam');
         $table->text('keterangan');
-        $table->enum('status', ['Menunggu', 'Disetujui', 'Dialihkan', 'Ditolak'])->default('Menunggu');
+        $table->enum('status', ['Diterima', 'Dialihkan', 'Ditolak'])->default('Diterima');
         $table->text('tanggapan')->nullable();
         $table->date('tgl_mulai');
         $table->date('tgl_selesai');

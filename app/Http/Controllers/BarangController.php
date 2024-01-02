@@ -99,7 +99,6 @@ class BarangController extends Controller
         }
     }
 
-
     public function data()
     {
         $barang = Barang::select(['nomor', 'kode_barang', 'nama', 'warna']);

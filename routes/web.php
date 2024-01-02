@@ -7,6 +7,7 @@ use App\Models\Mahasiswa;
 use App\Rules\EmailChecker;
 use App\Models\PengecekanKelas;
 use App\Helpers\UserInformation;
+use App\Models\PeminjamanRuangan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AsetController;
@@ -29,9 +30,10 @@ use App\Http\Controllers\KoordinatorController;
 use App\Http\Controllers\PemeliharaanAcController;
 use App\Http\Controllers\PengecekanKelasController;
 use App\Http\Controllers\BarangHabisPakaiController;
+use App\Http\Controllers\PeminjamanRuanganController;
 use App\Http\Controllers\JadwalPemeliharaanAcController;
 use App\Http\Controllers\AmbilBarangHabisPakaiController;
-
+use App\Http\Controllers\GoogleSheetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -169,8 +171,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/data-ruangan/tambah-ruang', [AdminController::class, 'tambahRuangan']);
         Route::post('/admin/data-ruangan/tambah-ruang/impor', [ImportRuangController::class, 'import'])->name('admin.data-ruangan.impor');
         Route::post('/admin/data-ruangan/tambah-ruang', [RuangController::class, 'store'])->name('admin.data-ruangan.store');
-        Route::get('/admin/pengelolaan-peminjaman', [AdminController::class, 'pengelolaanPeminjaman']);
-        Route::get('/admin/pengelolaan-peminjaman/detail', [AdminController::class, 'pengelolaanPeminjamanDetail']);
+        Route::get('/admin/pengelolaan-peminjaman', [AdminController::class, 'pengelolaanPeminjaman'])->name('admin.pengelolaan-peminjaman');
+        Route::get('/admin/pengelolaan-peminjaman/view', [PeminjamanRuanganController::class, 'data'])->name('admin.pengelolaan-peminjaman.view');
+        Route::get('/admin/pengelolaan-peminjaman/{peminjaman_ruangan_id}/detail', [AdminController::class, 'pengelolaanPeminjamanDetail'])->name('admin.pengelolaan-peminjaman.detail');
+        Route::patch('/admin/pengelolaan-peminjaman/update', [GoogleSheetController::class, 'updateCells'])->name('admin.pengelolaan-peminjaman.update');
         Route::get('/admin/data-master', [AdminController::class, 'dataMaster'])->name('admin.data-master');
         Route::get('/admin/data-master/view-dbr', [AsetController::class, 'eksporDbr'])->name('admin.data-master.dbr');
         Route::get('/admin/data-master/{kode_barang}/edit', [AdminController::class, 'editJenis'])->name('admin.data-master.jenis.edit-form');

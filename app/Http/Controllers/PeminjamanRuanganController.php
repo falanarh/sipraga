@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Ruang;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\PeminjamanRuangan;
 use Illuminate\Routing\Controller;
+use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\StorePeminjamanRuanganRequest;
 use App\Http\Requests\UpdatePeminjamanRuanganRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
 class PeminjamanRuanganController extends Controller
@@ -85,6 +88,99 @@ class PeminjamanRuanganController extends Controller
             ];
 
             return response()->json($response, Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function data(Request $request)
+    {
+        $peminjamanRuangans = PeminjamanRuangan::with(['ruang']);
+
+        $peminjamanRuangans->orderBy('tgl_mulai', 'desc')->orderByRaw("FIELD(status, 'Ditolak', 'Dialihkan', 'Diterima')");
+
+        return Datatables::of($peminjamanRuangans)
+            ->addColumn('tanggal_peminjaman', function ($row) {
+                if ($row->tgl_mulai == $row->tgl_selesai) {
+                    return $row->tgl_mulai->format('d/m/Y');
+                } else {
+                    return $row->tgl_mulai->format('d/m/Y') . '-' . $row->tgl_selesai->format('d/m/Y');
+                }
+            })
+            ->addColumn('waktu', function ($row) {
+                return date('H:i', strtotime($row->waktu_mulai)) . '-' . date('H:i', strtotime($row->waktu_selesai));
+            })
+            ->addColumn('nama_ruang', function ($row) {
+                return $row->ruang->nama;
+            })
+            ->addColumn('status', function ($row) {
+                $statusClass = ''; // Default class
+                $statusText = $row->status; // Default status text
+
+                switch ($row->status) {
+                    case 'Diterima':
+                        $statusClass = 'bg-rounded-status-monitoring rounded-pill bg-success';
+                        break;
+                    case 'Dialihkan':
+                        $statusClass = 'bg-rounded-status-monitoring rounded-pill bg-warning';
+                        break;
+                    case 'Ditolak':
+                        $statusClass = 'bg-rounded-status-monitoring rounded-pill bg-danger';
+                        break;
+
+                    default:
+                        // Handle other cases or leave as is
+                }
+                return '<div class="' . $statusClass . '">' . $statusText . '</div>';
+            })
+            ->addColumn('action', function ($row) {
+                // Menggunakan fungsi route dengan menyertakan peminjaman_ruangan_id
+                return '<a href="' . route('admin.pengelolaan-peminjaman.detail', ['peminjaman_ruangan_id' => $row->peminjaman_ruangan_id]) . '" class="btn btn-dark">Detail</a>';
+            })
+            ->rawColumns(['status', 'action'])
+            ->make(true);
+    }
+
+    public function getPeminjamanRuangUser(Request $request)
+    {
+        try {
+            $peminjam = $request->query('namaUser');
+            $dataPeminjaman = PeminjamanRuangan::join('ruangs', 'peminjaman_ruangans.kode_ruang', '=', 'ruangs.kode_ruang')
+                ->where('peminjam', $peminjam)
+                ->orderBy('tgl_mulai', 'asc') // Urutkan secara ascending berdasarkan tgl_mulai
+                ->orderByRaw("FIELD(status, 'Ditolak', 'Dialihkan', 'Diterima')")
+                ->get([
+                    'peminjaman_ruangans.peminjam',
+                    'peminjaman_ruangans.keterangan',
+                    'peminjaman_ruangans.status',
+                    'ruangs.kode_ruang',
+                    'ruangs.nama as nama_ruang'
+                ]);
+
+            // Cek apakah peminjam ditemukan
+            if ($dataPeminjaman->isEmpty()) {
+                throw new ModelNotFoundException("Data peminjaman ruangan tidak ditemukan untuk peminjam: $peminjam");
+            }
+
+            $response = [
+                'status_code' => 200,
+                'message' => 'Berhasil mendapatkan data peminjaman ruangan dari ' . $peminjam . '!',
+                'data' => $dataPeminjaman,
+            ];
+
+            return response()->json($response, 200);
+        } catch (ModelNotFoundException $e) {
+            $response = [
+                'status_code' => 404,
+                'error' => $e->getMessage(),
+            ];
+
+            return response()->json($response, 404);
+        } catch (Exception $e) {
+            $response = [
+                'status_code' => 500,
+                'error' => $e->getMessage(),
+            ];
+
+            return response()->json($response, 500);
         }
     }
 }

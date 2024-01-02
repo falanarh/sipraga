@@ -13,7 +13,7 @@ class PeminjamanRuangan extends Model
     protected $primaryKey = 'peminjaman_ruangan_id';
 
     protected $guarded = [];
-    protected $dates = ['tgl_peminjaman'];
+    protected $dates = ['tgl_mulai', 'tgl_selesai'];
     public $timestamps = true;
 
     public function ruang(){

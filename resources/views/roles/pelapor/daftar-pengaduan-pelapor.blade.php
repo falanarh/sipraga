@@ -68,6 +68,25 @@ This is the original text
 
 @section('additional-js')
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: '{{ session('success') }}',
+                });
+            @endif
+
+            @if (session('error'))
+                Swal.fire({
+                    icon: "error",
+                    title: "Terjadi kesalahan",
+                    text: '{{ session('error') }}',
+                });
+            @endif
+        });
+
+
         var tabelPengaduan
         $(document).ready(function() {
             // Check if DataTable is already initialized

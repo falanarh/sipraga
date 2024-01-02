@@ -31,7 +31,7 @@ class PerbaikanController extends Controller
         // Validate the request data
         $request->validate([
             //'pengaduan_id' => 'required|exists:pengaduans,pengaduan_id',
-            'tanggal_selesai' => 'required',
+            'tanggal_selesai' => ['required', 'date', new NotTomorrow],
             'kode_barang' => 'required',
             'nup' => 'required',
             'perbaikan' => 'required',

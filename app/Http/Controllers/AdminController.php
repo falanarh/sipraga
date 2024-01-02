@@ -11,6 +11,7 @@ use App\Models\BarangHabisPakai;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AmbilBarangHabisPakai;
+use App\Models\PeminjamanRuangan;
 
 class AdminController extends Controller
 {
@@ -77,10 +78,14 @@ class AdminController extends Controller
         return view('roles.admin.pengelolaan-peminjaman-admin', compact('userInfo'));
     }
 
-    public function pengelolaanPeminjamanDetail()
+    public function pengelolaanPeminjamanDetail($peminjaman_ruangan_id)
     {
         $userInfo = $this->getUserInfo();
-        return view('roles.admin.pengelolaan-peminjaman-detail-admin', compact('userInfo'));
+
+        $peminjaman_ruangan = PeminjamanRuangan::where('peminjaman_ruangan_id', $peminjaman_ruangan_id)->firstOrFail();
+        $ruangOptions = Ruang::all();
+
+        return view('roles.admin.pengelolaan-peminjaman-detail-admin', compact('userInfo', 'peminjaman_ruangan', 'ruangOptions'));
     }
 
     public function dataMaster()
@@ -161,8 +166,6 @@ class AdminController extends Controller
         
         return view('roles.admin.barang-habis-pakai-admin', compact('userInfo', 'users', 'bhps','ambil_bhps', 'ruangOptions'));
     }
-
-    
 
     public function tambahBHP()
     {

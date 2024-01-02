@@ -32,7 +32,7 @@ class PemeliharaanAcController extends Controller
     {
         // Validasi input
         $request->validate([
-            'tanggal_selesai' => ['required', 'date', new NotTomorrow], // Use the custom rule
+            'tanggal_selesai' => ['required', 'date', new NotTomorrow],
             'judul_pemeliharaan' => 'required|string|max:255',
             'judul_perbaikan' => 'required|string|max:255',
             'keterangan' => 'required|string|max:255',
@@ -164,7 +164,6 @@ class PemeliharaanAcController extends Controller
     {
 
         $pemeliharaanAc = PemeliharaanAc::with(['jadwalPemeliharaanAc']);
-
         // Filter data berdasarkan inputan user
         if ($request->filled('filter_tanggal')) {
             $tanggalFilter = Carbon::createFromFormat('d/m/Y', $request->filter_tanggal)->format('Y-m-d');

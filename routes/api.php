@@ -23,9 +23,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('ketersediaan-ruangs', [GoogleSheetController::class, 'getKetersediaanRuangs']);
-Route::post('ketersediaan-ruangs-pertanggal/{hariBulanTahun}/{waktu}', [GoogleSheetController::class, 'getKetersediaanRuangsPerTanggal']);
+Route::get('ketersediaan-ruangs-pertanggal', [GoogleSheetController::class, 'fetchKetersediaanRuangsPerHari']);
 Route::post('ketersediaan-ruangs/setToUnavailablePerHari', [GoogleSheetController::class, 'setToUnavailablePerHari']);
 Route::post('ketersediaan-ruangs/setToUnavailable', [GoogleSheetController::class, 'setToUnavailable']);
+Route::post('pengajuan-ruangan/create', [GoogleSheetController::class, 'buatPengajuanRuangan']);
+Route::get('pengajuan-ruangan/fetch', [PeminjamanRuanganController::class, 'getPeminjamanRuangUser']);
 Route::get('ruangs', [RuangController::class, 'getRuangs']);
 Route::post('coba', function(){
     $response = [

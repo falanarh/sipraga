@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Aset;
-use App\Models\JadwalPemeliharaanAc;
 use Carbon\Carbon;
+use App\Models\Aset;
+use Illuminate\Http\Request;
+use App\Models\JadwalPemeliharaanAc;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class JadwalPemeliharaanAcController extends Controller
@@ -70,6 +71,9 @@ class JadwalPemeliharaanAcController extends Controller
     public function data(Request $request)
     {
         $jadwalPemeliharaanAc = JadwalPemeliharaanAc::with(['ruang', 'user']);
+        
+        $jadwalPemeliharaanAc->orderBy('tanggal_pelaksanaan', 'desc')
+        ->orderByRaw("FIELD(status, 'Belum Dikerjakan', 'Sedang Dikerjakan', 'Selesai Dikerjakan')");
 
         // Filter data berdasarkan inputan user
         if ($request->filter_ruang != null) {
@@ -117,7 +121,7 @@ class JadwalPemeliharaanAcController extends Controller
         }
 
         return DataTables::of($jadwalPemeliharaanAc)
-            ->addColumn('tanggal', function ($row) {
+            ->addColumn('tanggal_pelaksanaan', function ($row) {
                 return $row->tanggal_pelaksanaan->format('d/m/Y');
             })
             ->addColumn('kode_barang', function ($row) {
@@ -131,7 +135,7 @@ class JadwalPemeliharaanAcController extends Controller
             })
             ->addColumn('teknisi', function ($row) {
                 if ($row->user == null)
-                    return "-";
+                    return "N/A";
                 else
                     return $row->user->name;
             })
@@ -157,22 +161,32 @@ class JadwalPemeliharaanAcController extends Controller
             })
 
             ->addColumn('action', function ($row) {
+                // Ambil ID teknisi yang sedang login dan tampilkan namanya di kolom "Teknisi"
+                $idTeknisiLogin = auth()->user()->user_id;
+
                 if ($row->status == "Selesai Dikerjakan") {
                     return '
                                 <a class="btn btn-outline-secondary disabled">Ubah</a>
-                                <a class="btn btn-outline-success disabled">Catat</a>
+                                <a class="btn btn-outline-success disabled ms-2">Catat</a>
                             ';
                 }
                 if ($row->status == "Sedang Dikerjakan") {
-                    return '
+
+                    if($row->user->user_id == $idTeknisiLogin) {
+                        return '
                                 <a class="btn btn-outline-secondary disabled">Ubah</a>
-                                <a href="/teknisi/jadwal-pemeliharaan/pemeliharaan/' . $row->jadwal_pemeliharaan_ac_id . '/edit" class="btn btn-success">Catat</a>
+                                <a href="/teknisi/jadwal-pemeliharaan/pemeliharaan/' . $row->jadwal_pemeliharaan_ac_id . '/edit" class="btn btn-success ms-2">Catat</a>
                             ';
+                    } else {
+                        return '
+                                <a class="btn btn-outline-secondary disabled">Ubah</a>
+                                <a class="btn btn-outline-success disabled ms-2">Catat</a>
+                            ';
+                    }
                 } else {
-                    // Ambil ID teknisi yang sedang login dan tampilkan namanya di kolom "Teknisi"
-                    $idTeknisiLogin = auth()->user()->user_id;
+                    
                     return '<a href="' . route('teknisi.jadwal.set', ['jadwal_pemeliharaan_ac_id' => $row->jadwal_pemeliharaan_ac_id, 'teknisi_id' => $idTeknisiLogin]) . '" class="btn btn-secondary" id="ubah">Ubah</a>' .
-                        '<a class="btn btn-outline-success disabled">Catat</a>';
+                        '<a class="btn btn-outline-success disabled ms-2">Catat</a>';
                 }
             })
             ->filterColumn('tanggal', function ($query, $keyword) {
