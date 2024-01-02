@@ -175,6 +175,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/pengelolaan-peminjaman/view', [PeminjamanRuanganController::class, 'data'])->name('admin.pengelolaan-peminjaman.view');
         Route::get('/admin/pengelolaan-peminjaman/{peminjaman_ruangan_id}/detail', [AdminController::class, 'pengelolaanPeminjamanDetail'])->name('admin.pengelolaan-peminjaman.detail');
         Route::patch('/admin/pengelolaan-peminjaman/update', [GoogleSheetController::class, 'updateCells'])->name('admin.pengelolaan-peminjaman.update');
+        Route::patch('/admin/pengelolaan-peminjaman/tolak', [PeminjamanRuanganController::class, 'tolakPeminjamanRuangan'])->name('admin.pengelolaan-peminjaman.tolak');
         Route::get('/admin/data-master', [AdminController::class, 'dataMaster'])->name('admin.data-master');
         Route::get('/admin/data-master/view-dbr', [AsetController::class, 'eksporDbr'])->name('admin.data-master.dbr');
         Route::get('/admin/data-master/{kode_barang}/edit', [AdminController::class, 'editJenis'])->name('admin.data-master.jenis.edit-form');

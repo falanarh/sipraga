@@ -183,4 +183,29 @@ class PeminjamanRuanganController extends Controller
             return response()->json($response, 500);
         }
     }
+
+    public function tolakPeminjamanRuangan(Request $request)
+    {
+        try {
+            $peminjaman_ruangan_id = $request->peminjaman_ruangan_id;
+            $tanggapan = $request->tanggapanBaru2;
+
+            // Ambil peminjaman ruangan berdasarkan ID
+            $peminjaman_ruangan = PeminjamanRuangan::where('peminjaman_ruangan_id', $peminjaman_ruangan_id)->firstOrFail();
+
+            // Lakukan update atribut yang diinginkan
+            $peminjaman_ruangan->status = "Ditolak";
+            $peminjaman_ruangan->tanggapan = $tanggapan;
+            $peminjaman_ruangan->save();
+
+            // Berikan respons sukses
+            return redirect()->route('admin.pengelolaan-peminjaman.detail', ['peminjaman_ruangan_id' => $peminjaman_ruangan->peminjaman_ruangan_id])->with('success', 'Peminjaman ruangan telah ditolak!');
+        } catch (ModelNotFoundException $e) {
+            // Handle jika peminjaman ruangan tidak ditemukan
+            return redirect()->route('admin.pengelolaan-peminjaman.detail', ['peminjaman_ruangan_id' => $peminjaman_ruangan->peminjaman_ruangan_id])->with('error', 'Peminjaman ruangan tidak ditemukan.');
+        } catch (Exception $e) {
+            // Handle exception lainnya
+            return redirect()->route('admin.pengelolaan-peminjaman.detail', ['peminjaman_ruangan_id' => $peminjaman_ruangan->peminjaman_ruangan_id])->with('error', $e->getMessage());
+        }
+    }
 }

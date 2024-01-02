@@ -131,7 +131,9 @@
                 </div>
             </form>
 
-            <form action="">
+            <form action="{{ route('admin.pengelolaan-peminjaman.tolak') }}" method="POST">
+                @csrf
+                @method('PATCH')
                 <!-- Modal -->
                 <div class="modal fade" id="modal-tolak" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                     aria-labelledby="modal-tolakLabel" aria-hidden="true">
@@ -146,8 +148,10 @@
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label for="tanggapan" class="form-label">Alasan</label>
-                                    <textarea class="form-control" name="tanggapanBaru" id="tanggapan" rows="5"></textarea>
+                                    <textarea class="form-control" name="tanggapanBaru2" id="tanggapan" rows="5"></textarea>
                                 </div>
+                                <!-- Input hidden untuk variabel-variabel -->
+                                <input type="hidden" name="peminjaman_ruangan_id" value="{{ $peminjaman_ruangan->peminjaman_ruangan_id }}">
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-warning">Kirim</button>
