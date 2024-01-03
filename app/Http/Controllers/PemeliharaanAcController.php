@@ -283,11 +283,6 @@ class PemeliharaanAcController extends Controller
         // $jadwalPemeliharaanAc = JadwalPemeliharaanAc::with(['ruang', 'user']);
         $created_at = \Carbon\Carbon::now()->setTimezone('Asia/Jakarta')->format('d/m/Y');
 
-        // Mencari data pemeliharaan AC berdasarkan filter tanggal_selesai jika disertakan
-        // if ($request->filled('filter_tanggal_selesai')) {
-        //     $pemeliharaanAc->where('tanggal_selesai', $request->filter_tanggal_selesai);
-        // }
-
         // Mendapatkan data pemeliharaan AC
         $dataPemeliharaan = $pemeliharaanAc->get();
         $dataAset = [];
@@ -325,46 +320,8 @@ class PemeliharaanAcController extends Controller
         return $dompdf->stream($filename, [
             'Attachment' => 1, // 0: Inline, 1: Attachment (download)
         ]);
-    }
+    }   
 
-    // public function eksporPemeliharaanDetail(Request $request, $pemeliharaan_ac_id)
-    // {
-    //     // Find the PemeliharaanAc based on the provided $pemeliharaan_ac_id
-    //     $pemeliharaanAc = PemeliharaanAc::with(['jadwalPemeliharaanAc'])->find($pemeliharaan_ac_id);
-
-    //     $ac = Aset::where('kode_barang', $pemeliharaanAc->jadwalPemeliharaanAc->kode_barang)
-    //                 ->where('nup', $pemeliharaanAc->jadwalPemeliharaanAc->nup)
-    //                 ->first();
-
-    //     // Check if the PemeliharaanAc is not found
-    //     if (!$pemeliharaanAc) {
-    //         return redirect()->back()->with('error', 'Data pemeliharaan tidak ditemukan!');
-    //     }
-
-    //     // Get the creation date in the specified timezone
-    //     $created_at = \Carbon\Carbon::now()->setTimezone('Asia/Jakarta')->format('d/m/Y');
-
-    //     // Access data from jadwalPemeliharaanAc
-    //     $jadwalPemeliharaanAc = $pemeliharaanAc->jadwalPemeliharaanAc;
-
-    //     // instantiate and use the dompdf class
-    //     $dompdf = new Dompdf();
-    //     $dompdf->loadHtml(view('export.format-pemeliharaan-detail', compact('pemeliharaanAc', 'created_at', 'jadwalPemeliharaanAc', 'ac')));
-
-    //     // (Optional) Setup the paper size and orientation
-    //     $dompdf->setPaper('A4', 'portrait');
-
-    //     // Render the HTML as PDF
-    //     $dompdf->render();
-
-    //     // Set the file name
-    //     $filename = 'pemeliharaan-detail-export.pdf';
-
-    //     // Output the generated PDF to Browser with the specified filename
-    //     return $dompdf->stream($filename, [
-    //         'Attachment' => 1, // 0: Inline, 1: Attachment (download)
-    //     ]);
-    // }    
     public function eksporPemeliharaanDetail(Request $request, $pemeliharaan_ac_id)
     {
         // Find the PemeliharaanAc based on the provided $pemeliharaan_ac_id
@@ -410,7 +367,7 @@ class PemeliharaanAcController extends Controller
     
         // Get the absolute path to the image file
         $lampiranPath = public_path('storage/' . $pemeliharaanAc->file_path);
-    
+        
         // Check if the image file exists
         if (!file_exists($lampiranPath)) {
             return redirect()->back()->with('error', 'Bukti Pemeliharaan Image not found');
@@ -436,6 +393,7 @@ class PemeliharaanAcController extends Controller
             'Attachment' => 1, // 0: Inline, 1: Attachment (download)
         ]);
     }
+
     public function printPemeliharaanPdf($pemeliharaan_ac_id)
     {
         // Fetch the Perbaikan data for the given $tiket

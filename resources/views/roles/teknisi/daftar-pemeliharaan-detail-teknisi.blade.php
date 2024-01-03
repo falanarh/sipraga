@@ -92,29 +92,6 @@
             </div>            
             {{-- <a href="" class="btn btn-success mt-4">Cetak</a> --}}
         </div>
-        <!-- Modal -->
-        {{-- <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <form action="{{ route('teknisi.daftar-pemeliharaan-detail.ekspor', ['pemeliharaan_ac_id' => $pemeliharaan_ac_id]) }}" class="modal-dialog" method="GET">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">CETAK LAPORAN DETAIL PEMELIHARAAN AC</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body py-0">
-                        @csrf
-                        <div class="mb-4">
-                            <label class="mb-1 fw-bold" for="filterTanggalSelesai">Tanggal Selesai:</label>
-                            <input type="date" id="filterTanggalSelesai" name="filter_tanggal_selesai" class="form-control" required>
-                        </div>
-                    </div>
-                    <!-- Input hidden untuk menyimpan nilai pemeliharaan_ac_id -->
-                    <input type="hidden" name="pemeliharaan_ac_id" value="{{ $pemeliharaanAc->pemeliharaan_ac_id }}">
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Ekspor</button>
-                    </div>
-                </div>
-            </form>
-        </div> --}}
     </div>
 @endsection
 
